@@ -10,9 +10,9 @@ SRC      = \
 	source/Lib/DecLib/BinDecoder.cpp \
 	source/Lib/CommonLib/ContextModel.cpp \
 	source/Lib/CommonLib/ContextModeler.cpp \
-    source/Lib/Test/test_encweights.cpp
+    source/Lib/Test/test_enclayer.cpp
 
-TARGET = test_encweights
+TARGET = test_enclayer
 
 all: $(TARGET)
 

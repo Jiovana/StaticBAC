@@ -64,7 +64,7 @@ public:
     int32_t  iae_v                 ( uint8_t v );
     uint32_t uae_v                 ( uint8_t v );
 
-    uint64_t    decodeTensorHeader     ( uint32_t* shape, uint32_t& numDims );
+    uint64_t    decodeTensorHeader     ( uint32_t* shape, uint32_t& numDims, TensorMeta &tensor );
     uint64_t    decodeWeights          ( int32_t* pWeights, uint32_t numWeights );
     
     uint32_t  getBytesRead();

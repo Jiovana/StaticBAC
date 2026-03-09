@@ -1,21 +1,21 @@
 #include "CABACDecoder.h"
 #include <iostream>
-#include "Utils/global_logger.h"
+//#include "Utils/global_logger.h"
 #include <sstream>
 
 void CABACDecoder::startCabacDecoding(uint8_t* pBytestream)
 {
-  g_logger->setTensorName("CABACDecoder_log");
+  //g_logger->setTensorName("CABACDecoder_log");
   m_BinDecoder.setByteStreamBuf(pBytestream);
   m_BinDecoder.startBinDecoder();
-  printf("CABACDecoder: Started decoding\n");
+  //printf("CABACDecoder: Started decoding\n");
 }
 
 void CABACDecoder::initCtxModels(uint32_t cabac_unary_length)
 {
   m_NumGtxFlags = cabac_unary_length;
   m_CtxModeler.init(cabac_unary_length);
-  printf("CABACDecoder: Context models initialized with cabac_unary_length=%d\n", cabac_unary_length);
+  //printf("CABACDecoder: Context models initialized with cabac_unary_length=%d\n", cabac_unary_length);
 }
 
 
@@ -31,23 +31,28 @@ uint32_t CABACDecoder::uae_v(uint8_t v)
 }
 
 
-uint64_t CABACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims)
+uint64_t CABACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, TensorMeta &tensor)
 {
   uint64_t binsRead = 0;
-  printf("==> decodeTensorHeader called\n");
+ // //printf("==> decodeTensorHeader called\n");
+  // decode tensor id
+  tensor.tensorId = m_BinDecoder.decodeBinsEP(10);
   // decode tensor type
   m_tensorType = static_cast<TensorType>(m_BinDecoder.decodeBinEP());
-  printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
+  tensor.tensorType = m_tensorType;
+//  //printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
   binsRead += 1; // 1 bit for tensor type
 
   // decode bitwidth
   m_tensorBitwidth = static_cast<TensorBitwidth>(m_BinDecoder.decodeBinsEP(3));
-  printf("Decoded tensor bitwidth: %d\n", static_cast<uint32_t>(m_tensorBitwidth));
+  tensor.tensorBitwidth = m_tensorBitwidth;
+ // //printf("Decoded tensor bitwidth: %d\n", static_cast<uint32_t>(m_tensorBitwidth));
   binsRead += 3; // 3 bits for bitwidth
 
   // decode number of dimensions
   numDims = m_BinDecoder.decodeBinsEP(3);
-  printf("Decoded number of dimensions: %d\n", numDims);
+  tensor.numDims = numDims;
+ // //printf("Decoded number of dimensions: %d\n", numDims);
   binsRead += 3; // 3 bits for numDims
 
   // decode shape of each dimension
@@ -58,10 +63,10 @@ uint64_t CABACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims)
     //bitlenMinus1 = uae_v(5);
     bitlenMinus1 = m_BinDecoder.decodeBinsEP(5);
     bitlen = bitlenMinus1 + 1;
-    printf("Decoded bitlen for dimension %d: %d, -1:%d\n", i, bitlen, bitlenMinus1);
+   // //printf("Decoded bitlen for dimension %d: %d, -1:%d\n", i, bitlen, bitlenMinus1);
     //shape[i] = uae_v(bitlen);
     shape[i] = m_BinDecoder.decodeBinsEP(bitlen);
-    printf("Decoded dimension %d size: %d\n", i, shape[i]);
+  //  //printf("Decoded dimension %d size: %d\n", i, shape[i]);
     binsRead += 5 + bitlen; // bits used to decode this dimension
   }
 
@@ -73,10 +78,10 @@ uint64_t CABACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims)
       int bitwidth = getBitwidthFromEnum(m_tensorBitwidth);
       m_TensorMean = iae_v(bitwidth); // read mean value
       binsRead += bitwidth; // account for bits used to decode mean
-      printf("Decoded mean: %d\n", m_TensorMean);
+   //   //printf("Decoded mean: %d\n", m_TensorMean);
     } else {
       m_TensorMean = 0; // if mean not used, set it to zero for decoding residuals
-      printf("Mean not used, mean value set to: %d\n", m_TensorMean);
+    //  //printf("Mean not used, mean value set to: %d\n", m_TensorMean);
     }
 
 
@@ -87,7 +92,7 @@ uint64_t CABACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims)
      << ", numDims=" << numDims
      << ", use mean=" << m_useMean
      << ", mean=" << m_TensorMean;
-  LOG_LINE(g_logger, ss.str());
+  //LOG_LINE(g_logger, ss.str());
 
   return binsRead;
 }
@@ -99,11 +104,11 @@ uint64_t CABACDecoder::decodeWeightsBase(int32_t* pWeights , uint32_t numWeights
 
 
   uint64_t scaledBits = 0;
-  printf("==> decodeWeightsBase called with numWeights=%d\n", numWeights);
+ // //printf("==> decodeWeightsBase called with numWeights=%d\n", numWeights);
   m_CtxModeler.resetNeighborCtx();
  
-  const uint32_t chunkSize = 256 ; // small chunk for low RAM = for 32bits = 1KB
-  uint32_t numChunks = (numWeights + chunkSize - 1) >> 8;;
+  const uint32_t chunkSize = 1024 ; // small chunk for low RAM = for 32bits = 8KB
+  uint32_t numChunks = (numWeights + chunkSize - 1) >> 10;
 
   for (uint32_t c = 0; c < numChunks; c++)
   {
@@ -111,30 +116,30 @@ uint64_t CABACDecoder::decodeWeightsBase(int32_t* pWeights , uint32_t numWeights
     uint32_t end   = std::min(start + chunkSize, numWeights);
     uint32_t len = end - start;
 
-    printf("Decoding chunk %d/%d: start=%d, end=%d, len=%d\n", c+1, numChunks, start, end, len);
+    ////printf("Decoding chunk %d/%d: start=%d, end=%d, len=%d\n", c+1, numChunks, start, end, len);
 
     // read k parameter for Exp-Golomb coding
     uint8_t k = 0;
     k = uae_v(2); // read k as 2-bit fixed length for simplicity
-    printf("Decoded k for chunk %d: %d\n", c, k);
+   // //printf("Decoded k for chunk %d: %d\n", c, k);
     scaledBits += 2;
 
     // read shift for scaling
     uint8_t shift = getShiftFromMeanAndK(m_tensorBitwidth, m_TensorMean, k);
-    printf("Calculated shift for chunk %d: %d\n", c, shift);
+   // //printf("Calculated shift for chunk %d: %d\n", c, shift);
 
     // decode weights
     for (uint32_t i = start; i < end; i++)
     {
       int32_t decodedVal = 0;
       scaledBits += decodeWeightVal(decodedVal, k); 
-     // printf("Decoded weight %d: decodedVal=%d\n", i, decodedVal);
+     // //printf("Decoded weight %d: decodedVal=%d\n", i, decodedVal);
       int32_t residual = shift > 0 ? (decodedVal << shift) : decodedVal;
 
 
-      //printf("Decoded weight %d: residual=%d\n", i, residual);
+      ////printf("Decoded weight %d: residual=%d\n", i, residual);
       pWeights[i] =  residual + m_TensorMean;
-     // printf("Decoded weight %d: value=%d\n", i,  pWeights[i]);
+     // //printf("Decoded weight %d: value=%d\n", i,  pWeights[i]);
 
       m_CtxModeler.updateNeighborCtx(decodedVal);
         std::ostringstream ss;
@@ -146,7 +151,7 @@ uint64_t CABACDecoder::decodeWeightsBase(int32_t* pWeights , uint32_t numWeights
             << ", k=" << (int)k
             << " m_tensorType=" << (int)m_tensorType
             << " scaledBits=" << scaledBits;
-            LOG_LINE(g_logger, ss.str());
+            //LOG_LINE(g_logger, ss.str());
 
     }
 std::ostringstream ss;
@@ -155,7 +160,7 @@ std::ostringstream ss;
        << ", k=" << (int)k
        << ", shift=" << (int)shift
        << ", scaledBits=" << scaledBits;
-      LOG_LINE(g_logger, ss.str());
+      //LOG_LINE(g_logger, ss.str());
   }
   return scaledBits;
 }
@@ -172,10 +177,10 @@ uint64_t CABACDecoder::decodeWeights(int32_t *pWeights, uint32_t numWeights)
 uint64_t CABACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
 { 
   uint64_t bitsUsed = 0;
- // printf("==> decodeWeightVal called with k=%d\n", k);
+ // //printf("==> decodeWeightVal called with k=%d\n", k);
   int32_t sigctx = m_CtxModeler.getSigCtxId();
   uint32_t sigFlag = m_BinDecoder.decodeBin(m_CtxStore, sigctx, m_tensorType);
- // printf("Decoded sigFlag: %d\n", sigFlag);
+ // //printf("Decoded sigFlag: %d\n", sigFlag);
   bitsUsed += 1; // 1 bit for sigFlag
 
   decodedIntVal = 0;
@@ -187,7 +192,7 @@ uint64_t CABACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
   // sign 
   int32_t signCtx = m_CtxModeler.getSignFlagCtxId();
   uint32_t signFlag = m_BinDecoder.decodeBin(m_CtxStore, signCtx, m_tensorType);
-//  printf("Decoded signFlag: %d\n", signFlag);
+//  //printf("Decoded signFlag: %d\n", signFlag);
   bitsUsed += 1; // 1 bit for signFlag
 
   // branch flag
@@ -208,7 +213,7 @@ uint64_t CABACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
         << ", k=" << (int)k
         << ", bitsUsed=" << bitsUsed
         << " m_tensorType=" << (int)m_tensorType;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
     return bitsUsed;
   } else {
     // small residual case, decode gtx flags first
@@ -224,7 +229,7 @@ uint64_t CABACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
         remAbsLevel++;
       numGreaterFlagsDecoded++;
 
-      //printf("Decoded grXFlag: %d (numGreaterFlagsDecoded=%d)\n", grXFlag, numGreaterFlagsDecoded);
+      ////printf("Decoded grXFlag: %d (numGreaterFlagsDecoded=%d)\n", grXFlag, numGreaterFlagsDecoded);
     } while (grXFlag && numGreaterFlagsDecoded < m_NumGtxFlags);
 
     if (grXFlag) { // last grxFlag means decoded value greater than four
@@ -234,7 +239,7 @@ uint64_t CABACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
     decodedIntVal = remAbsLevel + 1; // add 1 to get the original abs value
     decodedIntVal = signFlag ? -decodedIntVal : decodedIntVal;
 
-  // printf("Decoded weight value: %d\n", decodedIntVal);
+  // //printf("Decoded weight value: %d\n", decodedIntVal);
 
       std::ostringstream ss;
       ss << "decodeWeightVal: sigFlag=" << sigFlag
@@ -243,7 +248,7 @@ uint64_t CABACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
           << ", k=" << (int)k
           << ", bitsUsed=" << bitsUsed
           << " m_tensorType=" << (int)m_tensorType;
-      LOG_LINE(g_logger, ss.str());
+      //LOG_LINE(g_logger, ss.str());
     return bitsUsed;
   }
 }
@@ -334,7 +339,7 @@ int32_t CABACDecoder::decodeRemAbsLevel(uint32_t& remainder, uint32_t k)
        << ", r=" << r
        << ", k_upd=" << (int)k_upd
        << ", binsUsed=" << binsUsed;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
 
   return binsUsed;
 }

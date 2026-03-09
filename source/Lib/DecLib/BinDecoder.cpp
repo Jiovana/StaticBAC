@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include "BinDecoder.h"
-#include "Utils/global_logger.h"
+//#include "Utils/global_logger.h"
 
 
 inline uint32_t clz32(uint32_t x)
@@ -76,10 +76,10 @@ uint32_t BinDec::decodeBinold( StaticCtx &ctxMdl, uint8_t ctxId, TensorType para
 
     std::ostringstream ss;
     ss << "decodeBin: ctxId=" << (int)ctxId << " paramType=" << (int)paramType << " rlps=" << rlps << " mps=" << mps << " bin=" << bin;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
     ss .str("");
     ss << "m_Range: " << m_Range << " m_Value: " << m_Value << " m_BitsNeeded: " << m_BitsNeeded;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
 
 
     return bin;
@@ -92,7 +92,7 @@ uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramTyp
 
     std::ostringstream ss;
     ss << "===> Inside decodeBin: start with Range=" << m_Range << " Value=" << m_Value << " Bits needed=" << m_BitsNeeded;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
 
     uint32_t rmps = m_Range - rlps;
 
@@ -128,7 +128,7 @@ uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramTyp
     ss << "decodeBin: ctxId=" << (int)ctxId << " rlps=" << rlps << " mps=" << mps
        << " bin=" << bin << " m_Range=" << m_Range << " m_Value=" << m_Value
        << " m_BitsNeeded=" << m_BitsNeeded;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
 
     return bin;
 }
@@ -176,7 +176,7 @@ uint32_t BinDec::decodeBinsEP( uint32_t numBins )
         }
             std::ostringstream ss;
     ss << "===> Inside decodeBinsEP  Range=" << m_Range << " Value=" << m_Value << " Bits needed=" << m_BitsNeeded << " bins=" << bins;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
 
         return bins;
     }
@@ -222,7 +222,7 @@ uint32_t BinDec::decodeBinsEP( uint32_t numBins )
 
     std::ostringstream ss;
     ss << "===> Inside decodeBinsEP  Range=" << m_Range << " Value=" << m_Value << " Bits needed=" << m_BitsNeeded << " bins=" << bins;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
 
     return bins;
 }

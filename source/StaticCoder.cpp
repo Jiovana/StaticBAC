@@ -5,7 +5,7 @@
 #include "StaticCoder.h"
 
 
-uint64_t Encoder::encodeLayer(const TensorMeta& tensor)
+uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId)
 {
     const std::vector<int32_t>& qindex = tensor.data;
     const uint32_t* shape = tensor.shape.data();
@@ -14,17 +14,12 @@ uint64_t Encoder::encodeLayer(const TensorMeta& tensor)
     uint32_t numWeights = qindex.size();
     uint64_t bitsUsed = 0;
 
-    printf("==> encodeLayer called with numWeights=%zu, tensor_name=%s\n", qindex.size(), tensor_name.c_str());
-
-
-    m_CABACEncoder.setBitwidthAndType(tensor.tensorBitwidth, tensor.TensorType);
-
+    //printf("==> encodeLayer called with numWeights=%zu, tensor_name=%s\n", qindex.size(), tensor_name.c_str());
+    m_CABACEncoder.setBitwidthAndType(tensor.tensorBitwidth, tensor.tensorType);
     // encode tensor header
-    bitsUsed += m_CABACEncoder.encodeTensorHeader(qindex.data(), numWeights, shape, numDims, tensor_name);
-
+    bitsUsed += m_CABACEncoder.encodeTensorHeader(qindex.data(), numWeights, shape, numDims, tensor_name, tensorId);
     // encode weights
     bitsUsed += m_CABACEncoder.encodeWeights(qindex.data(), numWeights);
-
     return bitsUsed;
 }
 
@@ -34,9 +29,14 @@ const std::vector<uint8_t>&  Encoder::finishEncoding()
   return m_Bytestream;
 }
 
+// bitstream structure
+//numTensors
+//[tensorHeader][tensorPayload]
+//[tensorHeader][tensorPayload]...
 const std::vector<uint8_t>& Encoder::encodeModel(const std::vector<TensorMeta>& modelTensors)
 {
     uint64_t totalBits = 0;
+    uint16_t tensorId = 0;
 
     //encode number of tensors
     uint32_t numTensors = modelTensors.size();
@@ -45,54 +45,48 @@ const std::vector<uint8_t>& Encoder::encodeModel(const std::vector<TensorMeta>& 
 
     for (const auto& tensor : modelTensors)
     {
-      totalBits += this->encodeLayer(tensor);
+      totalBits += this->encodeLayer(tensor, tensorId);
+      tensorId++;
     }
 
-  printf("Finished encodig model. Total encoded bits: %lld\n", totalBits);
+  //printf("Finished encodig model. Total encoded bits: %lld\n", totalBits);
   return this->finishEncoding();
 }
 
 
-
-
-
-
-//void encodeModel(const std::vector<TensorMeta>& modelTensors);
-//numTensors
-//[tensorHeader][tensorPayload]
-//[tensorHeader][tensorPayload]
-
-
-///////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////// DECODER /////////////////////////////////////////////////////
 
 void Decoder::setStream( std::vector<uint8_t>& Bytestream )
 {
   m_CABACDecoder.startCabacDecoding( Bytestream.data() );
 }
 
-void Decoder::decodeLayer( std::vector<int32_t>& Weights )     
+void Decoder::decodeLayer(TensorMeta& tensor)
 {
-  printf("==> decodeLayer called \n");
-  int32_t* pWeights   = Weights.data();
+    //printf("==> decodeLayer called\n");
 
-  uint32_t shape[8] = {0}; // assuming max 8 dimensions
-  uint32_t numDims = 0;
+    uint32_t shape[8] = {0}; // assuming max 8 dimensions
+    uint32_t numDims = 0;
+    
+    // Decode header
+    m_CABACDecoder.decodeTensorHeader(shape,numDims,tensor);
+    // Copy shape array into vector
+    tensor.shape.assign(shape, shape + numDims);
 
-  m_CABACDecoder.decodeTensorHeader(shape, numDims); // we can ignore shape and numDims for now since we have numWeights, but this can be extended to fill shape and numDims if needed
+    // Compute number of weights
+    uint32_t numWeights = 1;
+    for (uint32_t i = 0; i < numDims; i++)
+        numWeights *= shape[i];
 
-  uint32_t numWeights = 1;
-  for (uint32_t i = 0; i < numDims; i++)
-      numWeights *= shape[i];
+    //printf("Decoded tensor header: numDims=%u, numWeights=%u\n", numDims, numWeights);
 
-  printf("Decoded tensor header: numDims=%d, numWeights=%d\n", numDims, numWeights);
-  
-  Weights.resize(numWeights); // ensure Weights vector is sized to hold all decoded weights
-  pWeights = Weights.data(); // update pWeights in case resize caused reallocation
+    // Resize tensor data to hold decoded weights
+    tensor.data.resize(numWeights);
+    int32_t* pWeights = tensor.data.data();
 
-  uint64_t decodedBins = 0;
-  decodedBins = m_CABACDecoder.decodeWeights(pWeights, numWeights );
-  printf("Total decoded  bins: %d\n", decodedBins);
-
+    // Decode weights
+    uint64_t decodedBins = m_CABACDecoder.decodeWeights(pWeights, numWeights);
+    //printf("Total decoded bins: %llu\n", decodedBins);
 }
 
 uint32_t Decoder::finishDecoding()
@@ -106,19 +100,19 @@ uint32_t Decoder::finishDecoding()
 void Decoder::decodeModel(std::vector<TensorMeta>& modelTensors)
 {
     // Decode number of tensors first
-    uint32_t numTensors = m_CABACDecoder.uae_v(8);
+    uint32_t numTensors = m_CABACDecoder.uae_v(10); // up to 1024 tensors
+
+    //printf("Decoding model with %u tensors\n", numTensors);
+
     modelTensors.resize(numTensors);
 
     for (uint32_t i = 0; i < numTensors; i++)
     {
-        std::vector<int32_t> decodedData;
-        decodeLayer(decodedData); // reads tensor header + weights
+        //printf("Decoding tensor %u\n", i);
 
-        modelTensors[i].data = decodedData;
-        // Optionally fill shape/numDims if decodeLayer fills it
+        decodeLayer(modelTensors[i]);   // fills TensorMeta directly
     }
 
     this->finishDecoding();
 }
-
 

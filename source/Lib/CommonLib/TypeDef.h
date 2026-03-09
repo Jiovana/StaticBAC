@@ -97,6 +97,25 @@ enum class TensorBitwidth : uint8_t
     BW_32 = 6
 };
 
+inline TensorBitwidth bitwidthFromLiteral(uint32_t bw)
+{
+    switch (bw)
+    {
+        case 4:  return TensorBitwidth::BW_4;
+        case 8:  return TensorBitwidth::BW_8;
+        case 12: return TensorBitwidth::BW_12;
+        case 16: return TensorBitwidth::BW_16;
+        case 20: return TensorBitwidth::BW_20;
+        case 24: return TensorBitwidth::BW_24;
+        case 32: return TensorBitwidth::BW_32;
+
+        default:
+            throw std::runtime_error("Unsupported tensor bitwidth");
+    }
+}
+
+
+
 inline uint32_t getBitwidthFromEnum (TensorBitwidth bw)
 {
     uint32_t tensorwidth = 0;
@@ -144,41 +163,56 @@ inline uint8_t getShiftFromMeanAndK(TensorBitwidth bw, int32_t mean, uint32_t k)
     int shift = meanBits - 6;
     if (shift < 0) shift = 0;
 
-    printf("Calculated base shift from mean: %d (mean=%d)\n", shift, mean);
+   // printf("Calculated base shift from mean: %d (mean=%d)\n", shift, mean);
     // scale positively with k
     shift += static_cast<int>(k+1);
 
     // cap to safe values
     if (shift > shiftMax) shift = shiftMax;
 
-    printf("Final calculated shift after adding k and capping: %d\n", shift);
+   // printf("Final calculated shift after adding k and capping: %d\n", shift);
 
     return static_cast<uint8_t>(shift);
 }
 
-enum class TensorRole {
-    UNKNOWN,
-    WEIGHT_CONV,       // convolution weights
-    WEIGHT_FC,         // fully connected / linear layer
-    WEIGHT_ATT_Q,      // attention query
-    WEIGHT_ATT_K,      // attention key
-    WEIGHT_ATT_V,      // attention value
-    WEIGHT_ATT_O,      // attention output
-    WEIGHT_EMBEDDING,  // embeddings
-    WEIGHT_NORM,       // LayerNorm / BatchNorm
-    WEIGHT_CLASSIFIER, // classifier head
-    BIAS,              // biases for any layer
-    OTHER
-};
 
-
-// for future use
 struct TensorMeta
 {
-    TensorType type;
-    TensorBitwidth bitwidth;
-    uint32_t numDims;
-    const uint32_t* shape;
+    std::string name;                 // Tensor name (e.g., "encoder_layer_0_weight")
+    uint16_t tensorId;                // Optional ID to preserve tensor mapping
+
+    std::vector<int32_t> data;        // Tensor payload data (weights or biases)
+    std::vector<uint32_t> shape;      // Shape of the tensor (1D, 2D, etc.)
+
+    uint32_t numDims;                 // Number of dimensions
+
+    TensorType tensorType;            // weight, bias, other
+    TensorBitwidth tensorBitwidth;    // b4, b8, b12, b16...
+
+    // Default constructor
+    TensorMeta()
+        : name(""),
+          tensorId(0),
+          numDims(0),
+          tensorType(TensorType::Weight),
+          tensorBitwidth(TensorBitwidth::BW_8)
+    {}
+
+    // Constructor with main parameters
+    TensorMeta(const std::string& n,
+               uint16_t id,
+               const std::vector<int32_t>& d,
+               const std::vector<uint32_t>& s,
+               TensorType type,
+               TensorBitwidth bw)
+        : name(n),
+          tensorId(id),
+          data(d),
+          shape(s),
+          numDims(static_cast<uint32_t>(s.size())),
+          tensorType(type),
+          tensorBitwidth(bw)
+    {}
 };
 
 //using namespace pybind11::literals;

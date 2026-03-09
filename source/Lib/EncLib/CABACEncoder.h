@@ -51,7 +51,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <limits>
 #include <iostream>
 #include <algorithm>
-#include "Utils/global_logger.h" 
+//#include "Utils/global_logger.h" 
 #include <sstream>
 #include <cstdint>
 #include <cmath>
@@ -152,7 +152,7 @@ protected:
        << ", kupd=" << (int)k_upd
        << " minusBits=" << (int)minusBits
        << " scaledBits=" << scaledBits;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
     return scaledBits;
   }
 
@@ -185,7 +185,7 @@ protected:
           << ", k=" << (int)k
           << ", remAbsLevel=" << remAbsLevel
           << "m_tensorType=" << (int)m_tensorType;
-        LOG_LINE(g_logger, ss.str()); 
+        //LOG_LINE(g_logger, ss.str()); 
       } else {
         scaledBits += (m_BinEncoder.*FuncBinEnc)(0, m_CtxStore, 12, m_tensorType); // set branch flag to 0 to indicate small residual
 
@@ -215,7 +215,7 @@ protected:
           << ", k=" << (int)k
           << ", remAbsLevel=" << remAbsLevel
           << "m_tensorType=" << (int)m_tensorType;
-        LOG_LINE(g_logger, ss.str());
+        //LOG_LINE(g_logger, ss.str());
       }
       
       
@@ -251,7 +251,7 @@ public:
   void      iae_v                   (uint8_t v,int32_t value);
   void      uae_v                   (uint8_t v,uint32_t value);
 
-  uint64_t     encodeTensorHeader       ( const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name = "");
+  uint64_t     encodeTensorHeader       ( const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name = "", const uint16_t tensorId = 0);
 
   void      encodeWeightDirect(int32_t weight, uint16_t k = 2) { return encodeWeightVal(weight, k); }
 
@@ -272,9 +272,9 @@ private:
   }
 
 template <class trellisDef >
-uint64_t EncodeWeightsBase( int32_t* pWeights, uint32_t numWeights)
+uint64_t EncodeWeightsBase( const int32_t* pWeights, uint32_t numWeights)
   {
-    { printf("==> encodeTensorbase: numWeights=%d\n", numWeights);
+    { //printf("==> encodeTensorbase: numWeights=%d\n", numWeights);
 
     uint64_t scaledBits = 0;
     int32_t localMean = 0;
@@ -282,8 +282,8 @@ uint64_t EncodeWeightsBase( int32_t* pWeights, uint32_t numWeights)
 
     bool useDelta = false;
 
-    const uint32_t chunkSize = 256 ; // small chunk for low RAM = for 32bits = 1KB 
-    uint32_t numChunks = (numWeights + chunkSize - 1) >> 8;;
+    const uint32_t chunkSize = 1024 ; // small chunk for low RAM = for 32bits = 8KB 
+    uint32_t numChunks = (numWeights + chunkSize - 1) >> 10;
 
     for (uint32_t c = 0; c < numChunks; c++)
     {
@@ -291,7 +291,7 @@ uint64_t EncodeWeightsBase( int32_t* pWeights, uint32_t numWeights)
         uint32_t end   = std::min(start + chunkSize, numWeights);
         uint32_t len   = end - start;
 
-        printf("Processing chunk %d/%d: start=%d, end=%d, len=%d\n", c+1, numChunks, start, end, len);
+       // printf("Processing chunk %d/%d: start=%d, end=%d, len=%d\n", c+1, numChunks, start, end, len);
 
         localMean = m_TensorMean;
 
@@ -306,7 +306,7 @@ uint64_t EncodeWeightsBase( int32_t* pWeights, uint32_t numWeights)
 
         int32_t meanRes = sumRes >> 8; // meanRes = sumRes / len, using shift for efficiency (len is 256)
         if (meanRes == 0) meanRes = 1; // to avoid division by zero
-        printf("Chunk %d: localMean=%d, meanRes=%d\n", c, localMean, meanRes);
+       // printf("Chunk %d: localMean=%d, meanRes=%d\n", c, localMean, meanRes);
 
         // compute k per chunk
         int k = 0;
@@ -344,7 +344,7 @@ uint64_t EncodeWeightsBase( int32_t* pWeights, uint32_t numWeights)
                << ", k=" << k
                << " m_tensorType=" << (int)m_tensorType
                << " scaledBits=" << scaledBits;
-               LOG_LINE(g_logger, ss.str());
+               //LOG_LINE(g_logger, ss.str());
 
         }
 
@@ -357,7 +357,7 @@ uint64_t EncodeWeightsBase( int32_t* pWeights, uint32_t numWeights)
        << " chunksize=" << len
        << " scaledBits=" << scaledBits
        ;
-      LOG_LINE(g_logger, ss.str());
+      //LOG_LINE(g_logger, ss.str());
     }
 
     return scaledBits;

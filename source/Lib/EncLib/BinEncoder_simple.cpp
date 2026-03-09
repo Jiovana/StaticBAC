@@ -4,7 +4,7 @@
 #include "BinEncoder_simple.h"
 #include <bitset>
 #include <iostream>
-#include "Utils/global_logger.h"
+//#include "Utils/global_logger.h"
 #include <sstream>
 
 
@@ -86,10 +86,10 @@ uint32_t BinEnc::encodeBinold( uint32_t bin, const StaticCtx &ctxMdl, uint8_t ct
   
   std::ostringstream ss;
   ss << "m_Range: " << m_Range << " m_Low: " << m_Low << " m_BitsLeft: " << m_BitsLeft;
-  LOG_LINE(g_logger, ss.str());
+  //LOG_LINE(g_logger, ss.str());
   ss.str("");
   ss << "==> encodeBin called with bin: " << bin << " ctxId: " << (int)ctxId << " paramType: " << (int)paramType << " rlps: " << (uint32_t)rlps;
-  LOG_LINE(g_logger, ss.str());
+  //LOG_LINE(g_logger, ss.str());
   return 1;
 }
 
@@ -101,7 +101,7 @@ uint32_t BinEnc::encodeBin(uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId,
 
     std::ostringstream ss;
     ss << "===> Inside encodeBin: start with Range=" << m_Range << " Low=" << m_Low << " Bits left=" << m_BitsLeft;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
 
     uint32_t rmps = m_Range - rlps;
 
@@ -131,7 +131,7 @@ uint32_t BinEnc::encodeBin(uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId,
        << " rlps=" << rlps << " mps=" << mps
        << " m_Range=" << m_Range << " m_Low=" << m_Low
        << " m_BitsLeft=" << m_BitsLeft;
-    LOG_LINE(g_logger, ss.str());
+    //LOG_LINE(g_logger, ss.str());
 
     return 1;
 }
@@ -158,10 +158,10 @@ uint32_t BinEnc::encodeBinEP( uint32_t bin )
 uint32_t BinEnc::encodeBinsEP( uint32_t bins, uint32_t numBins )
 {
     CHECK( bins >= ( 1u << numBins ), printf( "%i can not be coded with %i EP-Bins", bins, numBins ) )
-  printf("Inside encodeBinsEP. Range=%d, low=%d, bits left=%d, bins=%d\n", m_Range, m_Low, m_BitsLeft, bins);
+ // printf("Inside encodeBinsEP. Range=%d, low=%d, bits left=%d, bins=%d\n", m_Range, m_Low, m_BitsLeft, bins);
     std::ostringstream ss;
     ss << "===> Inside encodeBinsEP=" << m_Range << " Low=" << m_Low << " Bits left=" << m_BitsLeft << " bins=" << bins;
-    LOG_LINE(g_logger, ss.str());
+   // LOG_LINE(g_logger, ss.str());
 
     if (m_Range == 256)
     {
@@ -181,10 +181,10 @@ uint32_t BinEnc::encodeBinsEP( uint32_t bins, uint32_t numBins )
                 }
             }
         }
-        printf("Inside encodeBinsEP. Range=%d, low=%d, bits left=%d, bins=%d\n", m_Range, m_Low, m_BitsLeft, bins);
+      //  printf("Inside encodeBinsEP. Range=%d, low=%d, bits left=%d, bins=%d\n", m_Range, m_Low, m_BitsLeft, bins);
         std::ostringstream ss;
         ss << "===> Inside encodeBinsEP=" << m_Range << " Low=" << m_Low << " Bits left=" << m_BitsLeft << " bins=" << bins;
-        LOG_LINE(g_logger, ss.str());
+       // LOG_LINE(g_logger, ss.str());
 
         return 0;
     }
@@ -212,11 +212,11 @@ uint32_t BinEnc::encodeBinsEP( uint32_t bins, uint32_t numBins )
         write_out();
         }
     }
-    printf("Inside encodeBinsEP. Range=%d, low=%d, bits left=%d, bins=%d\n", m_Range, m_Low, m_BitsLeft, bins);
+  //  printf("Inside encodeBinsEP. Range=%d, low=%d, bits left=%d, bins=%d\n", m_Range, m_Low, m_BitsLeft, bins);
     
      ss .str("");
     ss << "===> Inside encodeBinsEP=" << m_Range << " Low=" << m_Low << " Bits left=" << m_BitsLeft << " bins=" << bins;
-    LOG_LINE(g_logger, ss.str());
+   // LOG_LINE(g_logger, ss.str());
 
     return 0;
 }
