@@ -251,11 +251,11 @@ public:
   void      iae_v                   (uint8_t v,int32_t value);
   void      uae_v                   (uint8_t v,uint32_t value);
 
-  uint64_t     encodeTensorHeader       ( const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name = "", const uint16_t tensorId = 0);
+  bool     encodeTensorHeader       ( const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name, const uint16_t tensorId, uint64_t& binsUsed);
 
   void      encodeWeightDirect(int32_t weight, uint16_t k = 2) { return encodeWeightVal(weight, k); }
 
-  uint64_t   encodeWeights(const int32_t* pWeights, uint32_t numWeights);
+  uint64_t   encodeWeights(const int32_t* pWeights, uint32_t numWeights, bool skipFlag);
 
   void      setBitwidthAndType(TensorBitwidth bitwidth, TensorType type) {
       m_tensorBitwidth = bitwidth;
@@ -272,18 +272,27 @@ private:
   }
 
 template <class trellisDef >
-uint64_t EncodeWeightsBase( const int32_t* pWeights, uint32_t numWeights)
+uint64_t EncodeWeightsBase( const int32_t* pWeights, uint32_t numWeights, bool skipFlag)
   {
     { //printf("==> encodeTensorbase: numWeights=%d\n", numWeights);
 
     uint64_t scaledBits = 0;
     int32_t localMean = 0;
     int shift = 0;
+    int width = getBitwidthFromEnum(m_tensorBitwidth);
 
-    bool useDelta = false;
+    if (skipFlag){
+      printf("Skipping BAC tensor encoding. Encoding as raw EP bins instead...\n");
+      for (uint32_t c = 0; c < numWeights; c++){
+        iae_v(width, pWeights[c]);
+        //m_BinEncoder.encodeBinsEP(pWeights[c], width);
+        scaledBits += width;
+      }
+      return scaledBits;
+    }
 
-    const uint32_t chunkSize = 1024 ; // small chunk for low RAM = for 32bits = 8KB 
-    uint32_t numChunks = (numWeights + chunkSize - 1) >> 10;
+    const uint32_t chunkSize = 2048 ; // small chunk for low RAM = for 32bits = 8KB 
+    uint32_t numChunks = (numWeights + chunkSize - 1) >> 11;
 
     for (uint32_t c = 0; c < numChunks; c++)
     {
@@ -365,13 +374,13 @@ uint64_t EncodeWeightsBase( const int32_t* pWeights, uint32_t numWeights)
 }
 
   template <class trellisDef >
-  uint64_t xEncodeWeights(const int32_t* pWeights, uint32_t numWeights)
+  uint64_t xEncodeWeights(const int32_t* pWeights, uint32_t numWeights, bool skipFlag)
   {
     uint64_t bits;
 
     m_CtxModeler.resetNeighborCtx();
 
-    bits = EncodeWeightsBase<trellisDef>(pWeights, numWeights);
+    bits = EncodeWeightsBase<trellisDef>(pWeights, numWeights, skipFlag);
     return bits;
   }
 

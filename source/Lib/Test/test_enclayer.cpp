@@ -15,7 +15,7 @@
 
 #define TENSOR_BIN_DIR "models/bert_tensors_binaries/"
 #define META_FILE "models/bert_tensors.meta"
-#define CSV_FILE "compression_results.csv"
+#define CSV_FILE "compression_results2.csv"
 namespace fs = std::filesystem;
 
 std::vector<int32_t> read_tensor_bin(const std::string &path)
@@ -130,7 +130,7 @@ int main()
     uint32_t numGtxFlags = 4;
 
     std::ofstream csv(CSV_FILE);
-    csv << "param_name,layer_type,shape,numel,bits_quant,raw_bytes,mse_post,nmse_post,"
+    csv << "param_name,layer_type,shape,numel,bits_quant,raw_bytes,mse_post,nmse_post,header_bits,"
         << "compressed_bytes,compression_ratio,compression_gain_pct,bits_per_element,"
         << "encode_time,decode_time\n";
 
@@ -150,11 +150,13 @@ int main()
 
         uint64_t raw_bytes = t.data.size() * getBitwidthFromEnum(t.tensorBitwidth) / 8; // exact bits already in tensorMeta if needed
 
+        uint32_t headerBits;
+
         totalRawBytes += t.data.size() * getBitwidthFromEnum(t.tensorBitwidth) / 8; // rough estimate
         // encoding
         encoder.initCtxModels(numGtxFlags);
         auto t_enc_start = std::chrono::high_resolution_clock::now();
-        uint64_t bitsUsed = encoder.encodeLayer(t, static_cast<uint16_t>(t.tensorId));
+        uint64_t bitsUsed = encoder.encodeLayer(t, static_cast<uint16_t>(t.tensorId), headerBits);
         encodedStreams[i] = encoder.finishEncoding();
         auto t_enc_end = std::chrono::high_resolution_clock::now();
         double enc_ms = std::chrono::duration<double, std::milli>(t_enc_end - t_enc_start).count();
@@ -218,6 +220,7 @@ int main()
             << raw_bytes << ","
             << mse << ","
             << nmse << ","
+            << headerBits << ","
             << compressed_bytes << ","
             << ratio << ","
             << gain_pct << ","

@@ -61,10 +61,9 @@ void CABACEncoder::initCtxMdls(uint32_t numGtxFlags)
 }
 
 
-uint64_t CABACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name, const uint16_t tensorId)
+bool CABACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name, const uint16_t tensorId, uint64_t& binsUsed)
 {
-
-    uint64_t binsUsed = 0;
+    binsUsed = 0;
     // encode tensor id
     m_BinEncoder.encodeBinsEP(tensorId, 10); // 10 bits = 1024 tensors
     binsUsed +=10;
@@ -98,8 +97,8 @@ uint64_t CABACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numW
     int32_t max_abs = 0;
     uint32_t count = 0;
 
-    const uint32_t chunkSize = 1024 ; // small chunk for low RAM = for 32bits = 8KB
-    uint32_t numChunks = (numWeights + chunkSize - 1) >> 10;
+    const uint32_t chunkSize = 2048 ; // small chunk for low RAM ?
+    uint32_t numChunks = (numWeights + chunkSize - 1) >> 11;
     for (uint32_t chunk = 0; chunk < numChunks; chunk++)
     {
         for (uint32_t i = 0; i < chunkSize && (chunk * chunkSize + i) < numWeights; i++)
@@ -131,7 +130,47 @@ uint64_t CABACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numW
     //    printf("Mean not used, mean value: %d\n", mean);
     }
 
+     /// entropy calculation to check whether encoding is worth for the tensor
+    const uint32_t histSize = 1u << bitwidth;
+    std::vector<uint32_t> hist(histSize, 0);
 
+    for(uint32_t i = 0; i < numWeights; i++)
+    {
+        int32_t residual = pWeights[i] - m_TensorMean;
+
+        int32_t symbol = residual + (histSize >> 1);
+
+        if(symbol >= 0 && symbol < histSize)
+            hist[symbol]++;
+    }
+
+    // ---------- ENTROPY COMPUTATION ----------
+
+    double entropy = 0.0;
+    double N = (double)count;
+
+    for(uint32_t c : hist)
+    {
+        if(c == 0) continue;
+
+        double p = c / N;
+        entropy -= p * std::log2(p);
+    }
+
+    // fixed point entropy (entropy * 16)
+    uint32_t entropy_fixed = (uint32_t)std::round(entropy * 16.0);
+
+    bool skip;// flag to indicate SKIP tensor
+    skip = (entropy > (bitwidth * 0.75)) ? 1 : 0;
+    if (skip){
+      m_BinEncoder.encodeBinEP(1); // skip tensor
+      binsUsed += 1;
+    }else {
+      m_BinEncoder.encodeBinEP(0); // do not SKIP tensor
+      binsUsed += 1;
+    }
+
+    std::cout << "Entropy=" << entropy << "| bitwidth*75=" <<  (bitwidth * 0.95) << "| SKip?" << skip << "\n";
     //g_logger->setTensorName(tensor_name);
     std::ostringstream ss;
     ss << "==> encodeTensorHeader: "
@@ -141,10 +180,13 @@ uint64_t CABACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numW
        << ", numDims=" << numDims
        << "use mean=" << use_mean
        << ", mean=" << mean
+       << ", entropy=" << entropy
+       << ", skip=" << skip
+       << ", entropy_fixed=" << entropy_fixed
        << " overhead in bits=" << binsUsed; // rough estimate of header bits
     //LOG_LINE(g_logger, ss.str());
    // printf("==> encodeTensorHeader returning with binsUsed=%llu\n", binsUsed);
-    return binsUsed;
+    return skip;
 }
 
 
@@ -192,13 +234,13 @@ void CABACEncoder::xEncRowSkip(uint8_t general_profile_idc, uint8_t rowSkipFlag,
 }
 
 
-uint64_t CABACEncoder::encodeWeights(const int32_t *pWeights, uint32_t numWeights)
+uint64_t CABACEncoder::encodeWeights(const int32_t *pWeights, uint32_t numWeights, bool skipFlag)
 {
   std::ostringstream ss;
   ss << "==> encodeWeights called with" 
      << "numWeights=" << numWeights;
   //LOG_LINE(g_logger, ss.str());
-  return xEncodeWeights<Trellis8States>( pWeights, numWeights);
+  return xEncodeWeights<Trellis8States>( pWeights, numWeights, skipFlag);
 
 }
 

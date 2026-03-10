@@ -102,13 +102,25 @@ template <class trellisDef >
 uint64_t CABACDecoder::decodeWeightsBase(int32_t* pWeights , uint32_t numWeights)
 {
 
-
+  int width = getBitwidthFromEnum(m_tensorBitwidth);
   uint64_t scaledBits = 0;
  // //printf("==> decodeWeightsBase called with numWeights=%d\n", numWeights);
   m_CtxModeler.resetNeighborCtx();
+
+  bool skipFlag = m_BinDecoder.decodeBinEP();
+
+  if (skipFlag){
+    for (uint32_t c = 0; c < numWeights; c++){
+      pWeights[c] = iae_v(width);
+      //pWeights[c] = m_BinDecoder.decodeBinsEP(width);
+      scaledBits += width;
+    }
+    printf ("Tensor decoded as raw EP bins.\n");
+    return scaledBits;
+  }
  
-  const uint32_t chunkSize = 1024 ; // small chunk for low RAM = for 32bits = 8KB
-  uint32_t numChunks = (numWeights + chunkSize - 1) >> 10;
+  const uint32_t chunkSize = 2048 ; // small chunk for low RAM = for 32bits = 8KB
+  uint32_t numChunks = (numWeights + chunkSize - 1) >> 11;
 
   for (uint32_t c = 0; c < numChunks; c++)
   {

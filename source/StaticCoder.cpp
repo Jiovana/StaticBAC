@@ -5,7 +5,7 @@
 #include "StaticCoder.h"
 
 
-uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId)
+uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint32_t& headerBits)
 {
     const std::vector<int32_t>& qindex = tensor.data;
     const uint32_t* shape = tensor.shape.data();
@@ -13,13 +13,16 @@ uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId)
     const std::string& tensor_name = tensor.name;
     uint32_t numWeights = qindex.size();
     uint64_t bitsUsed = 0;
+    bool skipFlag; 
 
     //printf("==> encodeLayer called with numWeights=%zu, tensor_name=%s\n", qindex.size(), tensor_name.c_str());
     m_CABACEncoder.setBitwidthAndType(tensor.tensorBitwidth, tensor.tensorType);
     // encode tensor header
-    bitsUsed += m_CABACEncoder.encodeTensorHeader(qindex.data(), numWeights, shape, numDims, tensor_name, tensorId);
+    skipFlag = m_CABACEncoder.encodeTensorHeader(qindex.data(), numWeights, shape, numDims, tensor_name, tensorId, bitsUsed);
+    headerBits = bitsUsed;
+
     // encode weights
-    bitsUsed += m_CABACEncoder.encodeWeights(qindex.data(), numWeights);
+    bitsUsed += m_CABACEncoder.encodeWeights(qindex.data(), numWeights, skipFlag);
     return bitsUsed;
 }
 
@@ -37,6 +40,7 @@ const std::vector<uint8_t>& Encoder::encodeModel(const std::vector<TensorMeta>& 
 {
     uint64_t totalBits = 0;
     uint16_t tensorId = 0;
+    uint32_t headerBits = 0;
 
     //encode number of tensors
     uint32_t numTensors = modelTensors.size();
@@ -45,7 +49,7 @@ const std::vector<uint8_t>& Encoder::encodeModel(const std::vector<TensorMeta>& 
 
     for (const auto& tensor : modelTensors)
     {
-      totalBits += this->encodeLayer(tensor, tensorId);
+      totalBits += this->encodeLayer(tensor, tensorId, headerBits);
       tensorId++;
     }
 
