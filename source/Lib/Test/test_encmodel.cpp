@@ -345,7 +345,7 @@ int main()
     auto decStart = std::chrono::high_resolution_clock::now();
 
     decoder.decodeModel(decodedModel);
-    decoder.finishDecoding();
+   // decoder.finishDecoding();
 
     auto decEnd = std::chrono::high_resolution_clock::now();
 

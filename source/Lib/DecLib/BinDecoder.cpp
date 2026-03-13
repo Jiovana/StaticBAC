@@ -74,14 +74,6 @@ uint32_t BinDec::decodeBinold( StaticCtx &ctxMdl, uint8_t ctxId, TensorType para
         m_BytesRead++;
     }
 
-    std::ostringstream ss;
-    ss << "decodeBin: ctxId=" << (int)ctxId << " paramType=" << (int)paramType << " rlps=" << rlps << " mps=" << mps << " bin=" << bin;
-    //LOG_LINE(g_logger, ss.str());
-    ss .str("");
-    ss << "m_Range: " << m_Range << " m_Value: " << m_Value << " m_BitsNeeded: " << m_BitsNeeded;
-    //LOG_LINE(g_logger, ss.str());
-
-
     return bin;
 }
 
@@ -89,10 +81,6 @@ uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramTyp
 {
     uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType);
     uint32_t mps  = ctxMdl.getMPS(ctxId, paramType);
-
-    std::ostringstream ss;
-    ss << "===> Inside decodeBin: start with Range=" << m_Range << " Value=" << m_Value << " Bits needed=" << m_BitsNeeded;
-    //LOG_LINE(g_logger, ss.str());
 
     uint32_t rmps = m_Range - rlps;
 
@@ -110,25 +98,32 @@ uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramTyp
         m_Value -= (rmps << 7);
 
     // renormalize
-    while (m_Range < 256)
-    {
-        m_Range <<= 1;
-        m_Value <<= 1;
-        m_BitsNeeded++;
+    // while (m_Range < 256)
+    // {
+    //     m_Range <<= 1;
+    //     m_Value <<= 1;
+    //     m_BitsNeeded++;
 
-        if (m_BitsNeeded >= 0)
-        {
-            m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
-            m_BitsNeeded -= 8;
-            m_BytesRead++;
-        }
+    //     if (m_BitsNeeded >= 0)
+    //     {
+    //         m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
+    //         m_BitsNeeded -= 8;
+    //         m_BytesRead++;
+    //     }
+    // }
+    uint32_t n = clz32(m_Range) - 23;
+
+    m_Range <<= n;
+    m_Value <<= n;
+    m_BitsNeeded += n;
+
+    if (m_BitsNeeded >= 0)
+    {
+        m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
+        m_BitsNeeded -= 8;
+        m_BytesRead++;
     }
 
-     ss .str("");
-    ss << "decodeBin: ctxId=" << (int)ctxId << " rlps=" << rlps << " mps=" << mps
-       << " bin=" << bin << " m_Range=" << m_Range << " m_Value=" << m_Value
-       << " m_BitsNeeded=" << m_BitsNeeded;
-    //LOG_LINE(g_logger, ss.str());
 
     return bin;
 }
@@ -174,9 +169,6 @@ uint32_t BinDec::decodeBinsEP( uint32_t numBins )
                 m_BytesRead++;
             }
         }
-            std::ostringstream ss;
-    ss << "===> Inside decodeBinsEP  Range=" << m_Range << " Value=" << m_Value << " Bits needed=" << m_BitsNeeded << " bins=" << bins;
-    //LOG_LINE(g_logger, ss.str());
 
         return bins;
     }
@@ -219,10 +211,6 @@ uint32_t BinDec::decodeBinsEP( uint32_t numBins )
             m_Value -= SR;
         }
     }
-
-    std::ostringstream ss;
-    ss << "===> Inside decodeBinsEP  Range=" << m_Range << " Value=" << m_Value << " Bits needed=" << m_BitsNeeded << " bins=" << bins;
-    //LOG_LINE(g_logger, ss.str());
 
     return bins;
 }

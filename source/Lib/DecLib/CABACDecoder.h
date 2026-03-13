@@ -1,46 +1,5 @@
-/* -----------------------------------------------------------------------------
-The copyright in this software is being made available under the Clear BSD
-License, included below. No patent rights, trademark rights and/or
-other Intellectual Property Rights other than the copyrights concerning
-the Software are granted under this license.
-
-The Clear BSD License
-
-Copyright (c) 2019-2025, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V. & The NNCodec Authors.
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-
-     * Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-
-     * Redistributions in binary form must reproduce the above copyright
-     notice, this list of conditions and the following disclaimer in the
-     documentation and/or other materials provided with the distribution.
-
-     * Neither the name of the copyright holder nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY
-THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
-CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
-IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE.
-
-
-------------------------------------------------------------------------------------------- */
-#ifndef __CABACDEC__
-#define __CABACDEC__
+#ifndef __BACDEC__
+#define __BACDEC__
 
 #include <vector>
 #include <algorithm>
@@ -51,31 +10,35 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "CommonLib/Scan.h"
 #include "BinDecoder.h"
 
-class CABACDecoder
+class BACDecoder
 {
 public:
-    CABACDecoder() {}
-    ~CABACDecoder() {}
+    BACDecoder() = default;
+    ~BACDecoder() = default;
 
-    void     startCabacDecoding    ( uint8_t* pBytestream );
+    /* Initializes CABAC decoder with input bytestream */
+    void     startBacDecoding    ( uint8_t* pBytestream );
+    /* Initializes context models */
     void     initCtxModels           ( uint32_t cabac_unary_length );
-
-    uint32_t terminateCabacDecoding();
+    /* Finalizes decoding */
+    uint32_t terminateBacDecoding();
+    /* Signed EP bin decoding */
     int32_t  iae_v                 ( uint8_t v );
+    /* Unsigned EP bin decoding */
     uint32_t uae_v                 ( uint8_t v );
-
+    /* Decodes tensor header and metadata */
     uint64_t    decodeTensorHeader     ( uint32_t* shape, uint32_t& numDims, TensorMeta &tensor );
+    /* Decodes tensor weights */
     uint64_t    decodeWeights          ( int32_t* pWeights, uint32_t numWeights );
-    
+    /* Bytes consumed from bitstream */
     uint32_t  getBytesRead();
 
 protected:
 
-  template <class trellisDef>
-  uint64_t decodeWeightsBase(int32_t* pWeights, uint32_t numWeights);
-
-    uint64_t decodeWeightVal           ( int32_t &decodedIntVal, uint8_t k );
-    int32_t decodeRemAbsLevel      ( uint32_t& remainder, uint32_t k );
+  
+  uint64_t decodeWeightsChunks(int32_t* pWeights, uint32_t numWeights);
+  uint64_t decodeWeightVal    ( int32_t &decodedIntVal, uint8_t k );
+  int32_t  decodeAbsRem       ( uint32_t& remainder, uint32_t k );
    
 private:
     StaticCtx             m_CtxStore;
@@ -87,4 +50,4 @@ private:
     int32_t               m_TensorMean;
     bool                  m_useMean;
 };
-#endif // __CABACDEC__
+#endif // __BACDEC__
