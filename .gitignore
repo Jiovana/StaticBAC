@@ -45,3 +45,6 @@
 
 #txt files
 *.txt
+
+#numpy files
+*.npz
