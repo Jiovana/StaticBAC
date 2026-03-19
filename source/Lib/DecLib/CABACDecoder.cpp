@@ -34,8 +34,13 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
 {
   uint64_t binsRead = 0;
  // //printf("==> decodeTensorHeader called\n");
+
+  // decode scaling flag
+  m_useScaling = m_BinDecoder.decodeBinEP();
+  binsRead += 1; 
   // decode tensor id
   tensor.tensorId = m_BinDecoder.decodeBinsEP(10);
+  binsRead += 10; 
   // decode tensor type
   m_tensorType = static_cast<TensorType>(m_BinDecoder.decodeBinEP());
   tensor.tensorType = m_tensorType;

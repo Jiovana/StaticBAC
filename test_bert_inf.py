@@ -15,6 +15,32 @@ BITWIDTH_MAP = {
 # Path to your CSV file
 qstep_file = r"C:\Users\gomes\OneDrive\Documentos\GitHub\nncodec2_work\example\compression scripts\bert_quant_eval_mixed_run5\compression_results.csv"
 
+def build_id_to_name_map(model, decoded_meta):
+    sd = model.state_dict()
+    keys = list(sd.keys())
+
+    if len(keys) != len(decoded_meta):
+        raise RuntimeError(
+            f"Mismatch: model has {len(keys)} tensors but decoded_meta has {len(decoded_meta)}"
+        )
+
+    id_to_name = {}
+
+    for i, t in enumerate(decoded_meta):
+        tensor_id = t["idx"]
+        name = keys[i]
+
+        # 🔒 Strong safety check
+        if list(sd[name].shape) != list(t["shape"]):
+            raise RuntimeError(
+                f"Shape mismatch at ID {tensor_id}: "
+                f"{name} {list(sd[name].shape)} vs decoded {list(t['shape'])}"
+            )
+
+        id_to_name[tensor_id] = name
+
+    print("ID → name mapping built and verified.")
+    return id_to_name
 
 # ------------------------------------------------------------
 # read decoded meta
@@ -84,7 +110,7 @@ def load_tensor(path, bitwidth, shape):
 # ------------------------------------------------------------
 # inject tensors by order
 # ------------------------------------------------------------
-def load_by_order(model, decoded_meta, folder, qstep_file):
+def load_by_id(model, decoded_meta, folder, qstep_file):
     """
     Load decoded tensors into a model by order, reconstructing them using qstep.
     
@@ -104,12 +130,13 @@ def load_by_order(model, decoded_meta, folder, qstep_file):
             tensor_qsteps[name] = qstep
 
     sd = model.state_dict()
-    keys = list(sd.keys())
-    assert len(keys) == len(decoded_meta), f"State dict has {len(keys)} keys, but decoded_meta has {len(decoded_meta)}"
+
+    id_to_name = build_id_to_name_map(model, decoded_meta)
 
     with torch.no_grad():
-        for i, t in enumerate(decoded_meta):
-            param_name = keys[i]
+        for t in decoded_meta:
+            tensor_id = t["idx"]
+            param_name = id_to_name[tensor_id]
             bin_path = os.path.join(folder, t["filename"])
 
             # Load integer tensor
@@ -127,10 +154,13 @@ def load_by_order(model, decoded_meta, folder, qstep_file):
 
             if sd[param_name].shape != tensor_torch.shape:
                 print("Shape mismatch:", param_name, sd[param_name].shape, tensor_torch.shape)
-                continue
+                raise RuntimeError(f"Shape mismatch for {param_name}")
 
             # Copy reconstructed tensor to model
             sd[param_name].copy_(tensor_torch)
+
+            if not torch.allclose(sd[param_name], tensor_torch):
+                raise RuntimeError(f"Copy failed for {param_name}")
 
     print("All tensors loaded and reconstructed successfully.")
 
@@ -205,8 +235,24 @@ if __name__ == "__main__":
     decoded_meta = read_decoded_meta(META_PATH)
     print("Decoded tensors:", len(decoded_meta))
 
+    for name, param in model.named_parameters():
+        print(name, torch.mean(param).item())
+        break
+
     print("Reconstructing weights...")
-    load_by_order(model, decoded_meta, DECODED_FOLDER, qstep_file)
+    load_by_id(model, decoded_meta, DECODED_FOLDER, qstep_file)
+
+    for name, param in model.named_parameters():
+        print(name, torch.mean(param).item())
+        break
+
+
+    model_orig = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+
+    for (n1, p1), (n2, p2) in zip(model_orig.named_parameters(), model.named_parameters()):
+        diff = torch.max(torch.abs(p1 - p2)).item()
+        print(n1, diff)
+        break
 
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)

@@ -22,12 +22,14 @@ static constexpr uint32_t MAX_TENSOR_DIMS  = 8;    // max tensor rank supported
 /// @return total number of bits used for this tensor
 ///
 ///////////////////////////////////////////////////////////////
-uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint32_t& headerBits)
+uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint32_t& headerBits, const bool useScaling)
 {
     const uint32_t numWeights = tensor.data.size();
     uint64_t bitsUsed = 0;
 
     m_BACEncoder.setBitwidthAndType(tensor.tensorBitwidth, tensor.tensorType);
+
+    //std::cout << "Encoding tensor: " << tensor.name << "\n";
 
     // Encode tensor header
     uint64_t headerBitsLocal =
@@ -37,7 +39,8 @@ uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint3
             tensor.shape.data(),
             tensor.numDims,
             tensor.name,
-            tensorId);
+            tensorId,
+            useScaling);
 
     headerBits = headerBitsLocal;
     bitsUsed += headerBitsLocal;
@@ -77,7 +80,7 @@ const std::vector<uint8_t>&  Encoder::finishEncoding()
 /// @return reference to compressed model bytestream
 ///
 ///////////////////////////////////////////////////////////////
-const std::vector<uint8_t>& Encoder::encodeModel(const std::vector<TensorMeta>& modelTensors)
+const std::vector<uint8_t>& Encoder::encodeModel(const std::vector<TensorMeta>& modelTensors, const bool useScaling)
 {
     //encode number of tensors
     const uint32_t numTensors = modelTensors.size();
@@ -86,7 +89,7 @@ const std::vector<uint8_t>& Encoder::encodeModel(const std::vector<TensorMeta>& 
     uint32_t headerBits = 0;
     for (uint16_t tensorId = 0; tensorId < numTensors; tensorId++)
     {
-      encodeLayer(modelTensors[tensorId], tensorId, headerBits);
+      encodeLayer(modelTensors[tensorId], tensorId, headerBits, useScaling);
     }
 
   return this->finishEncoding();

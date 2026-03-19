@@ -49,5 +49,6 @@ private:
     TensorType            m_tensorType;
     int32_t               m_TensorMean;
     bool                  m_useMean;
+    bool                  m_useScaling;
 };
 #endif // __BACDEC__

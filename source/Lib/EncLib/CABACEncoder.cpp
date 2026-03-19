@@ -99,9 +99,14 @@ void BACEncoder::initCtxMdls(uint32_t numGtxFlags)
 //   division and transmitted only if its magnitude exceeds a
 //   small threshold.
 //--------------------------------------------------------------
-uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name, const uint16_t tensorId)
+uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name, const uint16_t tensorId, const bool useScaling)
 {
     uint64_t binsUsed = 0;
+
+    // encode useScaling flag
+    m_BinEncoder.encodeBinEP(useScaling); 
+    binsUsed += 1; // 1 bit for flag
+    m_useScaling = useScaling;
     // encode tensor id
     m_BinEncoder.encodeBinsEP(tensorId, 10); // 10 bits = 1024 tensors
     binsUsed +=10;
@@ -501,6 +506,9 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       else                        k = 3;
 
       uint8_t shift = getShiftFromMeanAndK(m_tensorBitwidth, m_TensorMean, k);
+      // if scaling flag is false, then do not scale residual
+      if (m_useScaling == false)
+        shift = 0;
 
       // ------------ pass 2 - histogram on scaled residuals 
       uint64_t estBits = 0;
@@ -510,7 +518,7 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
           int32_t residual = pWeights[i] - localMean;
 
           int32_t scaled;
-          if (shift > 0)
+          if (shift > 0 )
               scaled = (residual + (residual >= 0 ? (1 << (shift-1)) : (1 << (shift-1)))) >> shift;
           else
               scaled = residual;

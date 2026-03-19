@@ -15,8 +15,15 @@
 #include <map>
 
 
-#define TENSOR_BIN_DIR "models/bert_tensors_binaries/"
-#define META_FILE "models/bert_tensors.meta"
+//#define TENSOR_BIN_DIR "models/bert_tensors_binaries/"
+//#define META_FILE "models/bert_tensors.meta"
+//#define TENSOR_BIN_DIR "models/gpt_tensors_binaries/"
+//#define META_FILE "models/gpt_tensors.meta"
+#define TENSOR_BIN_DIR "models/vit_tensors_binaries/"
+#define META_FILE "models/vit_tensors.meta"
+
+#define MODEL_NAME "vit"
+
 
 
 
@@ -69,6 +76,7 @@ bool loadModelTensors(std::vector<TensorMeta>& tensors)
 
     std::string tag;
     uint32_t numTensors;
+    float qstep;
 
     meta >> tag >> numTensors;
 
@@ -82,6 +90,7 @@ bool loadModelTensors(std::vector<TensorMeta>& tensors)
 
         meta >> t.tensorId;
         meta >> t.name;
+        t.name.erase(std::remove(t.name.begin(), t.name.end(), '\r'), t.name.end());
 
         std::string typeStr;
         meta >> typeStr;
@@ -102,8 +111,16 @@ bool loadModelTensors(std::vector<TensorMeta>& tensors)
         for(uint32_t d = 0; d < t.numDims; d++)
             meta >> t.shape[d];
 
+        meta >> qstep;
+
         // load bin tensor
         std::string binPath = std::string(TENSOR_BIN_DIR) + t.name + ".bin";
+
+        //std::cout << "Trying to open: " << binPath << std::endl;
+        if(!std::filesystem::exists(binPath))
+        {
+            std::cout << "File does not exist!\n";
+        }
 
         t.data = read_tensor_bin(binPath);
 
@@ -219,11 +236,11 @@ void validateModel(
         totalMismatch += mism;
         totalWeights  += A.data.size();
 
-        if(mism > 0)
-        {
-            std::cout << "Tensor mismatch: " << A.name
-                      << " mismatches=" << mism << "\n";
-        }
+       // if(mism > 0)
+      //  {
+      //      std::cout << "Tensor mismatch: " << A.name
+      //                << " mismatches=" << mism << "\n";
+      //  }
     }
 
     std::cout << "\n===== Validation =====\n";
@@ -282,7 +299,7 @@ int main()
     auto encStart = std::chrono::high_resolution_clock::now();
 
     const std::vector<uint8_t>& bytestream =
-        encoder.encodeModel(modelTensors);
+        encoder.encodeModel(modelTensors, true);
 
     auto encEnd = std::chrono::high_resolution_clock::now();
 
@@ -300,7 +317,7 @@ int main()
 
     uint64_t compressedBits = bytestream.size() * 8;
 
-    std::ofstream f("bert_model_bitstream.bin", std::ios::binary);
+    std::ofstream f("vit_model_bitstream.bin", std::ios::binary);
     f.write(reinterpret_cast<const char*>(bytestream.data()),
         bytestream.size());
 
@@ -384,7 +401,7 @@ int main()
 
 
     /// save decoded tensormeta
-    saveDecodedModel(decodedModel, "bert_decoded");
+    saveDecodedModel(decodedModel, ("vit_tensors_decoded"));
 
     std::cout << "\n========== MODEL CODING SUMMARY ==========\n";
 
@@ -419,7 +436,3 @@ int main()
 
     return 0;
 }
-
-// BERT RESULTS
-//Finished encodig model. Total encoded bits: 1 392 359 557
-//Compressed size: 139 067 863 bytes

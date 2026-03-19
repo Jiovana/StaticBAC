@@ -1,0 +1,215 @@
+numTensors 213
+
+0 features_0_0_weight Weight 12 4 32 3 3 3 0.001244290881492341
+1 features_0_1_weight Weight 12 1 32 0.005704813715092088
+2 features_0_1_bias Bias 12 1 32 0.007292290064946489
+3 features_1_0_block_0_0_weight Weight 12 4 32 1 3 3 0.001810638133622769
+4 features_1_0_block_0_1_weight Weight 12 1 32 0.0031979767212657042
+5 features_1_0_block_0_1_bias Bias 12 1 32 0.004873170674036882
+6 features_1_0_block_1_fc1_weight Weight 12 4 8 32 1 1 0.0005623672841997334
+7 features_1_0_block_1_fc1_bias Bias 12 1 8 0.000886497464942049
+8 features_1_0_block_1_fc2_weight Weight 12 4 32 8 1 1 0.0005619376585624857
+9 features_1_0_block_1_fc2_bias Bias 12 1 32 0.00404185166183554
+10 features_1_0_block_2_0_weight Weight 12 4 16 32 1 1 0.000934983052034999
+11 features_1_0_block_2_1_weight Weight 12 1 16 0.003571448118772889
+12 features_1_0_block_2_1_bias Bias 12 1 16 4.369256864169048e-06
+13 features_2_0_block_0_0_weight Weight 12 4 96 16 1 1 0.0009580917699587965
+14 features_2_0_block_0_1_weight Weight 12 1 96 0.005055803392657479
+15 features_2_0_block_0_1_bias Bias 12 1 96 0.0026625752024417347
+16 features_2_0_block_1_0_weight Weight 12 4 96 1 3 3 0.00042396599197126164
+17 features_2_0_block_1_1_weight Weight 12 1 96 0.006285059864633119
+18 features_2_0_block_1_1_bias Bias 12 1 96 0.007933954174134417
+19 features_2_0_block_2_fc1_weight Weight 12 4 4 96 1 1 0.000214677669505426
+20 features_2_0_block_2_fc1_bias Bias 12 1 4 0.0009197591279343183
+21 features_2_0_block_2_fc2_weight Weight 12 4 96 4 1 1 0.0005773947073386843
+22 features_2_0_block_2_fc2_bias Bias 12 1 96 0.0015261952407777703
+23 features_2_0_block_3_0_weight Weight 12 4 24 96 1 1 0.0008752355598513287
+24 features_2_0_block_3_1_weight Weight 12 1 24 0.004371640271052262
+25 features_2_0_block_3_1_bias Bias 12 1 24 2.1657226293168726e-06
+26 features_2_1_block_0_0_weight Weight 12 4 144 24 1 1 0.0006206723301586143
+27 features_2_1_block_0_1_weight Weight 12 1 144 0.003754975636926173
+28 features_2_1_block_0_1_bias Bias 12 1 144 0.004087858550324088
+29 features_2_1_block_1_0_weight Weight 12 4 144 1 3 3 0.0007033383683192201
+30 features_2_1_block_1_1_weight Weight 12 1 144 0.0021220467440712177
+31 features_2_1_block_1_1_bias Bias 12 1 144 0.0019413662134703262
+32 features_2_1_block_2_fc1_weight Weight 12 4 6 144 1 1 0.00048105448972993333
+33 features_2_1_block_2_fc1_bias Bias 12 1 6 0.0012769946017666496
+34 features_2_1_block_2_fc2_weight Weight 12 4 144 6 1 1 0.00035316387232429156
+35 features_2_1_block_2_fc2_bias Bias 12 1 144 0.0019356724857708344
+36 features_2_1_block_3_0_weight Weight 12 4 24 144 1 1 0.000471159858094772
+37 features_2_1_block_3_1_weight Weight 12 1 24 0.004027072662348751
+38 features_2_1_block_3_1_bias Bias 12 1 24 0.0025391406295346705
+39 features_3_0_block_0_0_weight Weight 12 4 144 24 1 1 0.0007830086569160388
+40 features_3_0_block_0_1_weight Weight 12 1 144 0.0031589877996627373
+41 features_3_0_block_0_1_bias Bias 12 1 144 0.003381927289867675
+42 features_3_0_block_1_0_weight Weight 12 4 144 1 5 5 0.00039015970234021133
+43 features_3_0_block_1_1_weight Weight 12 1 144 0.005540378599603478
+44 features_3_0_block_1_1_bias Bias 12 1 144 0.002293623646699747
+45 features_3_0_block_2_fc1_weight Weight 12 4 6 144 1 1 0.0009101997316054188
+46 features_3_0_block_2_fc1_bias Bias 12 1 6 0.0007671333256112375
+47 features_3_0_block_2_fc2_weight Weight 12 4 144 6 1 1 0.0006558111307237788
+48 features_3_0_block_2_fc2_bias Bias 12 1 144 0.0018085913199448137
+49 features_3_0_block_3_0_weight Weight 12 4 40 144 1 1 0.0006863826039167733
+50 features_3_0_block_3_1_weight Weight 12 1 40 0.004907774917846614
+51 features_3_0_block_3_1_bias Bias 12 1 40 1.4672796395922173e-06
+52 features_3_1_block_0_0_weight Weight 12 4 240 40 1 1 0.0003583102145037389
+53 features_3_1_block_0_1_weight Weight 12 1 240 0.0017966469307638968
+54 features_3_1_block_0_1_bias Bias 12 1 240 0.0025874067264231295
+55 features_3_1_block_1_0_weight Weight 12 4 240 1 5 5 0.0005773257256083469
+56 features_3_1_block_1_1_weight Weight 12 1 240 0.0022939283956214364
+57 features_3_1_block_1_1_bias Bias 12 1 240 0.0022170861191272862
+58 features_3_1_block_2_fc1_weight Weight 12 4 10 240 1 1 0.0005096624587942554
+59 features_3_1_block_2_fc1_bias Bias 12 1 10 0.0012151857207387533
+60 features_3_1_block_2_fc2_weight Weight 12 4 240 10 1 1 0.0005187984984799669
+61 features_3_1_block_2_fc2_bias Bias 12 1 240 0.001554098145996817
+62 features_3_1_block_3_0_weight Weight 12 4 40 240 1 1 0.0003322084759577834
+63 features_3_1_block_3_1_weight Weight 12 1 40 0.0035911738269372795
+64 features_3_1_block_3_1_bias Bias 12 1 40 0.0018932192108216458
+65 features_4_0_block_0_0_weight Weight 12 4 240 40 1 1 0.0005420805853054712
+66 features_4_0_block_0_1_weight Weight 12 1 240 0.0014905146333223168
+67 features_4_0_block_0_1_bias Bias 12 1 240 0.002158781362963096
+68 features_4_0_block_1_0_weight Weight 12 4 240 1 3 3 0.00027228296948005683
+69 features_4_0_block_1_1_weight Weight 12 1 240 0.0017048617985790278
+70 features_4_0_block_1_1_bias Bias 12 1 240 0.0027842445513880753
+71 features_4_0_block_2_fc1_weight Weight 12 4 10 240 1 1 0.00022162028943221708
+72 features_4_0_block_2_fc1_bias Bias 12 1 10 0.0001970893095097234
+73 features_4_0_block_2_fc2_weight Weight 12 4 240 10 1 1 0.00039098773996861826
+74 features_4_0_block_2_fc2_bias Bias 12 1 240 0.0017320790269695662
+75 features_4_0_block_3_0_weight Weight 8 4 80 240 1 1 0.00390625
+76 features_4_0_block_3_1_weight Weight 12 1 80 0.004927477545703436
+77 features_4_0_block_3_1_bias Bias 12 1 80 1.9968955039646335e-06
+78 features_4_1_block_0_0_weight Weight 8 4 480 80 1 1 0.00390625
+79 features_4_1_block_0_1_weight Weight 12 1 480 0.0015211968636434474
+80 features_4_1_block_0_1_bias Bias 12 1 480 0.003779609318847678
+81 features_4_1_block_1_0_weight Weight 12 4 480 1 3 3 0.00033533163482412905
+82 features_4_1_block_1_1_weight Weight 12 1 480 0.0025098807070161834
+83 features_4_1_block_1_1_bias Bias 12 1 480 0.002078763750466372
+84 features_4_1_block_2_fc1_weight Weight 12 4 20 480 1 1 0.0006943874448143543
+85 features_4_1_block_2_fc1_bias Bias 12 1 20 0.0009684964512124058
+86 features_4_1_block_2_fc2_weight Weight 12 4 480 20 1 1 0.0005859962814175175
+87 features_4_1_block_2_fc2_bias Bias 12 1 480 0.0017191289362266716
+88 features_4_1_block_3_0_weight Weight 8 4 80 480 1 1 0.00390625
+89 features_4_1_block_3_1_weight Weight 12 1 80 0.002465390201177038
+90 features_4_1_block_3_1_bias Bias 12 1 80 0.0015637558367701584
+91 features_4_2_block_0_0_weight Weight 8 4 480 80 1 1 0.00390625
+92 features_4_2_block_0_1_weight Weight 12 1 480 0.001357725844843357
+93 features_4_2_block_0_1_bias Bias 12 1 480 0.0030709704101405584
+94 features_4_2_block_1_0_weight Weight 12 4 480 1 3 3 0.00030363861427575386
+95 features_4_2_block_1_1_weight Weight 12 1 480 0.0027297328443961957
+96 features_4_2_block_1_1_bias Bias 12 1 480 0.0018461730850401386
+97 features_4_2_block_2_fc1_weight Weight 12 4 20 480 1 1 0.0006577211548457098
+98 features_4_2_block_2_fc1_bias Bias 12 1 20 0.0009979592571573187
+99 features_4_2_block_2_fc2_weight Weight 12 4 480 20 1 1 0.0005633312025670326
+100 features_4_2_block_2_fc2_bias Bias 12 1 480 0.0019821749020042774
+101 features_4_2_block_3_0_weight Weight 8 4 80 480 1 1 0.00390625
+102 features_4_2_block_3_1_weight Weight 12 1 80 0.0022065221615865938
+103 features_4_2_block_3_1_bias Bias 12 1 80 0.001131076498594984
+104 features_5_0_block_0_0_weight Weight 8 4 480 80 1 1 0.00390625
+105 features_5_0_block_0_1_weight Weight 12 1 480 0.002420861851015803
+106 features_5_0_block_0_1_bias Bias 12 1 480 0.0031527379708350327
+107 features_5_0_block_1_0_weight Weight 8 4 480 1 5 5 0.00390625
+108 features_5_0_block_1_1_weight Weight 12 1 480 0.0024366808260422174
+109 features_5_0_block_1_1_bias Bias 12 1 480 0.002218718508097464
+110 features_5_0_block_2_fc1_weight Weight 12 4 20 480 1 1 0.0006520127308064759
+111 features_5_0_block_2_fc1_bias Bias 12 1 20 0.0009904348040720118
+112 features_5_0_block_2_fc2_weight Weight 12 4 480 20 1 1 0.0005868446600895401
+113 features_5_0_block_2_fc2_bias Bias 12 1 480 0.0018063550616621302
+114 features_5_0_block_3_0_weight Weight 8 4 112 480 1 1 0.00390625
+115 features_5_0_block_3_1_weight Weight 12 1 112 0.0035476832009143397
+116 features_5_0_block_3_1_bias Bias 12 1 112 9.883449730665187e-07
+117 features_5_1_block_0_0_weight Weight 8 4 672 112 1 1 0.00390625
+118 features_5_1_block_0_1_weight Weight 12 1 672 0.0013010747729892962
+119 features_5_1_block_0_1_bias Bias 12 1 672 0.0014456665517323382
+120 features_5_1_block_1_0_weight Weight 8 4 672 1 5 5 0.00390625
+121 features_5_1_block_1_1_weight Weight 12 1 672 0.0017557830365204077
+122 features_5_1_block_1_1_bias Bias 12 1 672 0.0020585233195093205
+123 features_5_1_block_2_fc1_weight Weight 8 4 28 672 1 1 0.00390625
+124 features_5_1_block_2_fc1_bias Bias 12 1 28 0.0007787895715076323
+125 features_5_1_block_2_fc2_weight Weight 8 4 672 28 1 1 0.00390625
+126 features_5_1_block_2_fc2_bias Bias 12 1 672 0.0012770947213406503
+127 features_5_1_block_3_0_weight Weight 8 4 112 672 1 1 0.00390625
+128 features_5_1_block_3_1_weight Weight 12 1 112 0.0025569136237679983
+129 features_5_1_block_3_1_bias Bias 12 1 112 0.0008423545112221688
+130 features_5_2_block_0_0_weight Weight 8 4 672 112 1 1 0.00390625
+131 features_5_2_block_0_1_weight Weight 12 1 672 0.001354165555475588
+132 features_5_2_block_0_1_bias Bias 12 1 672 0.0017740839815401413
+133 features_5_2_block_1_0_weight Weight 8 4 672 1 5 5 0.00390625
+134 features_5_2_block_1_1_weight Weight 12 1 672 0.00201875330255682
+135 features_5_2_block_1_1_bias Bias 12 1 672 0.0028616770733015055
+136 features_5_2_block_2_fc1_weight Weight 8 4 28 672 1 1 0.00390625
+137 features_5_2_block_2_fc1_bias Bias 12 1 28 0.000788677070680911
+138 features_5_2_block_2_fc2_weight Weight 8 4 672 28 1 1 0.00390625
+139 features_5_2_block_2_fc2_bias Bias 12 1 672 0.0015672532032473254
+140 features_5_2_block_3_0_weight Weight 8 4 112 672 1 1 0.00390625
+141 features_5_2_block_3_1_weight Weight 12 1 112 0.002029576697239535
+142 features_5_2_block_3_1_bias Bias 12 1 112 0.0006819442713691434
+143 features_6_0_block_0_0_weight Weight 8 4 672 112 1 1 0.00390625
+144 features_6_0_block_0_1_weight Weight 12 1 672 0.0023686733377755132
+145 features_6_0_block_0_1_bias Bias 12 1 672 0.0022050404261408935
+146 features_6_0_block_1_0_weight Weight 8 4 672 1 5 5 0.00390625
+147 features_6_0_block_1_1_weight Weight 12 1 672 0.0031425090114760527
+148 features_6_0_block_1_1_bias Bias 12 1 672 0.0021522437453007077
+149 features_6_0_block_2_fc1_weight Weight 8 4 28 672 1 1 0.00390625
+150 features_6_0_block_2_fc1_bias Bias 12 1 28 0.001108049006938879
+151 features_6_0_block_2_fc2_weight Weight 8 4 672 28 1 1 0.00390625
+152 features_6_0_block_2_fc2_bias Bias 12 1 672 0.0015756442691721231
+153 features_6_0_block_3_0_weight Weight 8 4 192 672 1 1 0.00390625
+154 features_6_0_block_3_1_weight Weight 12 1 192 0.00346123459043075
+155 features_6_0_block_3_1_bias Bias 12 1 192 1.1987737371045016e-06
+156 features_6_1_block_0_0_weight Weight 8 4 1152 192 1 1 0.00390625
+157 features_6_1_block_0_1_weight Weight 12 1 1152 0.001289750273566719
+158 features_6_1_block_0_1_bias Bias 12 1 1152 0.001629134006882426
+159 features_6_1_block_1_0_weight Weight 8 4 1152 1 5 5 0.00390625
+160 features_6_1_block_1_1_weight Weight 12 1 1152 0.001751100208664156
+161 features_6_1_block_1_1_bias Bias 12 1 1152 0.002234887887426238
+162 features_6_1_block_2_fc1_weight Weight 8 4 48 1152 1 1 0.00390625
+163 features_6_1_block_2_fc1_bias Bias 12 1 48 0.0006295309985545392
+164 features_6_1_block_2_fc2_weight Weight 8 4 1152 48 1 1 0.00390625
+165 features_6_1_block_2_fc2_bias Bias 12 1 1152 0.0015737894461601881
+166 features_6_1_block_3_0_weight Weight 8 4 192 1152 1 1 0.00390625
+167 features_6_1_block_3_1_weight Weight 12 1 192 0.0024487654203496096
+168 features_6_1_block_3_1_bias Bias 12 1 192 0.00129400526029103
+169 features_6_2_block_0_0_weight Weight 8 4 1152 192 1 1 0.00390625
+170 features_6_2_block_0_1_weight Weight 12 1 1152 0.0015128166759454547
+171 features_6_2_block_0_1_bias Bias 12 1 1152 0.0015880193254483505
+172 features_6_2_block_1_0_weight Weight 8 4 1152 1 5 5 0.00390625
+173 features_6_2_block_1_1_weight Weight 12 1 1152 0.0015637436046658517
+174 features_6_2_block_1_1_bias Bias 12 1 1152 0.0017704078003452357
+175 features_6_2_block_2_fc1_weight Weight 8 4 48 1152 1 1 0.00390625
+176 features_6_2_block_2_fc1_bias Bias 12 1 48 0.0010209134153368572
+177 features_6_2_block_2_fc2_weight Weight 8 4 1152 48 1 1 0.00390625
+178 features_6_2_block_2_fc2_bias Bias 12 1 1152 0.0010877049575420592
+179 features_6_2_block_3_0_weight Weight 8 4 192 1152 1 1 0.00390625
+180 features_6_2_block_3_1_weight Weight 12 1 192 0.002096382073889871
+181 features_6_2_block_3_1_bias Bias 12 1 192 0.001201080201003595
+182 features_6_3_block_0_0_weight Weight 8 4 1152 192 1 1 0.00390625
+183 features_6_3_block_0_1_weight Weight 12 1 1152 0.0014986859645836621
+184 features_6_3_block_0_1_bias Bias 12 1 1152 0.0018220296532429508
+185 features_6_3_block_1_0_weight Weight 8 4 1152 1 5 5 0.00390625
+186 features_6_3_block_1_1_weight Weight 12 1 1152 0.001608252908193749
+187 features_6_3_block_1_1_bias Bias 12 1 1152 0.0018407213626663835
+188 features_6_3_block_2_fc1_weight Weight 8 4 48 1152 1 1 0.00390625
+189 features_6_3_block_2_fc1_bias Bias 12 1 48 0.0011974437184137175
+190 features_6_3_block_2_fc2_weight Weight 8 4 1152 48 1 1 0.00390625
+191 features_6_3_block_2_fc2_bias Bias 12 1 1152 0.0010617853186079664
+192 features_6_3_block_3_0_weight Weight 8 4 192 1152 1 1 0.00390625
+193 features_6_3_block_3_1_weight Weight 12 1 192 0.0017401256381452727
+194 features_6_3_block_3_1_bias Bias 12 1 192 0.0010585736528795206
+195 features_7_0_block_0_0_weight Weight 8 4 1152 192 1 1 0.00390625
+196 features_7_0_block_0_1_weight Weight 12 1 1152 0.001453144520063606
+197 features_7_0_block_0_1_bias Bias 12 1 1152 0.002501228647846472
+198 features_7_0_block_1_0_weight Weight 8 4 1152 1 3 3 0.00390625
+199 features_7_0_block_1_1_weight Weight 12 1 1152 0.002078466452444882
+200 features_7_0_block_1_1_bias Bias 12 1 1152 0.0038637007115982307
+201 features_7_0_block_2_fc1_weight Weight 8 4 48 1152 1 1 0.00390625
+202 features_7_0_block_2_fc1_bias Bias 12 1 48 0.0013746328533135413
+203 features_7_0_block_2_fc2_weight Weight 8 4 1152 48 1 1 0.00390625
+204 features_7_0_block_2_fc2_bias Bias 12 1 1152 0.0032306156307458107
+205 features_7_0_block_3_0_weight Weight 8 4 320 1152 1 1 0.00390625
+206 features_7_0_block_3_1_weight Weight 12 1 320 0.0016367709610235139
+207 features_7_0_block_3_1_bias Bias 12 1 320 5.302834119470324e-06
+208 features_8_0_weight Weight 8 4 1280 320 1 1 0.00390625
+209 features_8_1_weight Weight 12 1 1280 0.0016549764395824519
+210 features_8_1_bias Bias 12 1 1280 0.0020714121602491186
+211 classifier_1_weight Weight 8 2 1000 1280 0.00390625
+212 classifier_1_bias Bias 12 1 1000 0.0001530749805303518
