@@ -507,8 +507,10 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
 
       uint8_t shift = getShiftFromMeanAndK(m_tensorBitwidth, m_TensorMean, k);
       // if scaling flag is false, then do not scale residual
-      if (m_useScaling == false)
+      if (m_useScaling == false){
         shift = 0;
+        //printf("Use scaling disabled:%d \n", m_useScaling);
+      }
 
       // ------------ pass 2 - histogram on scaled residuals 
       uint64_t estBits = 0;

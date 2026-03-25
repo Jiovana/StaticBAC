@@ -127,7 +127,7 @@ def main():
     
     
    # === Select model ===
-    model_name = "vit_b_16"  # or efficientnet_b0, vit_b_16
+    model_name = "efficientnet_b0"  # or efficientnet_b0, vit_b_16
 
     if model_name == "resnet50":
         weights = models.ResNet50_Weights.IMAGENET1K_V1
@@ -160,7 +160,7 @@ def main():
     # load reconstructed tensors
     #torch.serialization.add_safe_globals([np.core.multiarray._reconstruct])
     #
-    npz = np.load("vit_reconstructed.npz")
+    npz = np.load("efficientnet_reconstructed.npz")
     #npz_path = r"C:\Users\gomes\OneDrive\Documentos\GitHub\nncodec2_work\example\compression scripts\multi_model_quant_eval_run5/efficientnet_b0_reconstructed_tensors.npz"
     #npz = np.load(npz_path)
     # choose precision: 8 or 16
@@ -173,7 +173,7 @@ def main():
     for k in npz.files:
         # remove "param_000_" or "buffer_000_"
         raw_name = k.split("_", 2)[-1]
-        name = meta_to_torch_name_vit(raw_name)
+        name = meta_to_torch_name_efficient(raw_name)
 
         arr = npz[k].astype(np.float32)
         loaded[name] = arr

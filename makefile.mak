@@ -1,5 +1,5 @@
 CXX      = g++
-CXXFLAGS = -std=c++17 -O2 -Wall -Wextra
+CXXFLAGS = -std=c++17 -O2 -Wall -Wextra -static -static-libgcc -static-libstdc++
 INCLUDES = -Isource/Lib
 SRC      = \
 	source/StaticCoder.cpp \
@@ -10,9 +10,9 @@ SRC      = \
 	source/Lib/DecLib/BinDecoder.cpp \
 	source/Lib/CommonLib/ContextModel.cpp \
 	source/Lib/CommonLib/ContextModeler.cpp \
-    source/Lib/Test/test_encmodel.cpp
+    source/Lib/Test/test_model_args.cpp
 
-TARGET = test_encmodel
+TARGET = staticBac
 
 all: $(TARGET)
 

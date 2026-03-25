@@ -24,17 +24,13 @@
 #include <atomic>
 #include <fstream>
 #include <sstream>
+#include <unordered_map>
 
 
-
-//#define TENSOR_BIN_DIR "models/bert_tensors_binaries/"
-//#define META_FILE "models/bert_tensors.meta"
-//#define TENSOR_BIN_DIR "models/gpt_tensors_binaries/"
-//#define META_FILE "models/gpt_tensors.meta"
-#define TENSOR_BIN_DIR "models/vit_tensors_binaries/"
-#define META_FILE "models/vit_tensors.meta"
-
-#define MODEL_NAME "vit"
+std::string g_tensorBinDir;
+std::string g_metaFile;
+std::string g_modelName;
+bool g_useScaling  = false;
 
 // ============================================================
 // Peak Memory Sampler — mirrors Python psutil RSS sampling
@@ -190,7 +186,7 @@ std::vector<int32_t> read_tensor_bin(const std::string &path)
 // ------------------------------------------------------------
 bool loadModelTensors(std::vector<TensorMeta>& tensors)
 {
-    std::ifstream meta(META_FILE);
+    std::ifstream meta(g_metaFile);
 
     if(!meta)
     {
@@ -238,7 +234,7 @@ bool loadModelTensors(std::vector<TensorMeta>& tensors)
         meta >> qstep;
 
         // load bin tensor
-        std::string binPath = std::string(TENSOR_BIN_DIR) + t.name + ".bin";
+        std::string binPath = g_tensorBinDir + t.name + ".bin";
 
         //std::cout << "Trying to open: " << binPath << std::endl;
         if(!std::filesystem::exists(binPath))
@@ -379,14 +375,79 @@ void validateModel(
 }
 
 
+bool parseArgs(int argc, char* argv[])
+{
+    std::unordered_map<std::string, std::string> args;
 
+    for(int i = 1; i < argc; i++)
+    {
+        std::string key = argv[i];
+
+        if(key == "--scaling")
+        {
+            g_useScaling = true;  // flag detected
+        }
+        else if(key.rfind("--", 0) == 0) // starts with --
+        {
+            if(i + 1 >= argc)
+            {
+                std::cerr << "Missing value for " << key << "\n";
+                return false;
+            }
+
+            args[key] = argv[i + 1];
+            i++;
+        }
+        else
+        {
+            std::cerr << "Unknown argument: " << key << "\n";
+            return false;
+        }
+    }
+
+    // Required arguments
+    if(args.count("--binaries")) g_tensorBinDir = args["--binaries"];
+    else { std::cerr << "--binaries location required\n"; return false; }
+
+    if(args.count("--meta")) g_metaFile = args["--meta"];
+    else { std::cerr << "--meta file required\n"; return false; }
+
+    if(args.count("--name")) g_modelName = args["--name"];
+    else { std::cerr << "--model name required\n"; return false; }
+
+    // normalize path
+    if(!g_tensorBinDir.empty())
+    {
+        char last = g_tensorBinDir.back();
+        if(last != '/' && last != '\\')
+            g_tensorBinDir += "/";
+    }
+
+    return true;
+}
 
 
 // ------------------------------------------------------------
 // MAIN
 // ------------------------------------------------------------
-int main()
+int main(int argc, char* argv[])
 {
+    if(!parseArgs(argc, argv))
+    {
+        std::cout << "\nUsage:\n"
+                  << argv[0]
+                  << " --binaries <tensor_bin_dir>"
+                  << " --meta <meta_file>"
+                  << " --name <model_name>\n\n";
+
+        return -1;
+    }
+
+    std::cout << "=== Configuration ===\n";
+    std::cout << "Tensor bin dir : " << g_tensorBinDir << "\n";
+    std::cout << "Meta file      : " << g_metaFile << "\n";
+    std::cout << "Model name     : " << g_modelName << "\n";
+    std::cout << "Use scaling    : " << (g_useScaling ? "true" : "false") << "\n";
 
     std::map<TensorBitwidth, CodingStats> stats;
 
@@ -427,7 +488,7 @@ int main()
 
     encoder.initCtxModels(numGtxFlags);
     const std::vector<uint8_t>& bytestream =
-        encoder.encodeModel(modelTensors, false);
+        encoder.encodeModel(modelTensors, g_useScaling);
 
     auto encEnd = std::chrono::high_resolution_clock::now();
 
@@ -447,7 +508,12 @@ int main()
 
     uint64_t compressedBits = bytestream.size() * 8;
 
-    std::ofstream f("vit_model_bitstream.bin", std::ios::binary);
+    std::string suffix = g_useScaling ? "_scaled" : "_noscale";
+
+    std::string bitstreamFile = g_modelName + suffix + ".bin";
+    std::string decodedDir    = g_modelName + suffix + "_decoded";
+
+    std::ofstream f(bitstreamFile, std::ios::binary);
     f.write(reinterpret_cast<const char*>(bytestream.data()),
         bytestream.size());
 
@@ -538,17 +604,10 @@ int main()
               << decodedModel.size()
               << "\n";
 
-   
-
-    // --------------------------------------------------
-    // VALIDATION
-    // --------------------------------------------------
-
-    validateModel(modelTensors, decodedModel);
-
 
     /// save decoded tensormeta
-    saveDecodedModel(decodedModel, ("vit_tensors_decoded"));
+
+    saveDecodedModel(decodedModel, decodedDir);
 
 
     // --------------------------------------------------
@@ -579,14 +638,6 @@ int main()
     std::cout << "\n========== MEMORY USAGE ==========\n";
     printMemStats("Encode memory:", encMemStats);
     printMemStats("Decode memory:", decMemStats);
-
-    // Structured summary matching the Python dict fields
-    //auto toMB = [](size_t b){ return b / (1024.0 * 1024.0); };
-    std::cout << "\n  peak_enc_mem   : " << toMB(encMemStats.peakBytes)     << " MB\n"
-              << "  peak_dec_mem   : " << toMB(decMemStats.peakBytes)     << " MB\n"
-              << "  peak_delta_enc : " << toMB(encMemStats.deltaBytes)    << " MB\n"
-              << "  peak_delta_dec : " << toMB(decMemStats.deltaBytes)    << " MB\n"
-              << "==========================================\n";
 
     return 0;
 }

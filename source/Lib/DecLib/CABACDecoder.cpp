@@ -33,31 +33,31 @@ uint32_t BACDecoder::uae_v(uint8_t v)
 uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, TensorMeta &tensor)
 {
   uint64_t binsRead = 0;
- // //printf("==> decodeTensorHeader called\n");
 
   // decode scaling flag
   m_useScaling = m_BinDecoder.decodeBinEP();
   binsRead += 1; 
+ // printf("SCALING FLAG: %d \n", m_useScaling);
   // decode tensor id
   tensor.tensorId = m_BinDecoder.decodeBinsEP(10);
   binsRead += 10; 
   // decode tensor type
   m_tensorType = static_cast<TensorType>(m_BinDecoder.decodeBinEP());
   tensor.tensorType = m_tensorType;
-//  //printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
+ // printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
   binsRead += 1; // 1 bit for tensor type
 
   // decode bitwidth
   m_tensorBitwidth = static_cast<TensorBitwidth>(m_BinDecoder.decodeBinsEP(3));
   tensor.tensorBitwidth = m_tensorBitwidth;
   int bitwidth = getBitwidthFromEnum(m_tensorBitwidth);
- // //printf("Decoded tensor bitwidth: %d\n", static_cast<uint32_t>(m_tensorBitwidth));
+ // printf("Decoded tensor bitwidth: %d\n", static_cast<uint32_t>(m_tensorBitwidth));
   binsRead += 3; // 3 bits for bitwidth
 
   // decode number of dimensions
   numDims = m_BinDecoder.decodeBinsEP(3);
   tensor.numDims = numDims;
- // //printf("Decoded number of dimensions: %d\n", numDims);
+  //printf("Decoded number of dimensions: %d\n", numDims);
   binsRead += 3; // 3 bits for numDims
 
   // decode shape of each dimension
@@ -71,7 +71,7 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
    // //printf("Decoded bitlen for dimension %d: %d, -1:%d\n", i, bitlen, bitlenMinus1);
     //shape[i] = uae_v(bitlen);
     shape[i] = m_BinDecoder.decodeBinsEP(bitlen);
-  //  //printf("Decoded dimension %d size: %d\n", i, shape[i]);
+    //printf("Decoded dimension %d size: %d\n", i, shape[i]);
     binsRead += 5 + bitlen; // bits used to decode this dimension
   }
 
@@ -94,7 +94,6 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
 
 uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights)
 {
-
   int width = getBitwidthFromEnum(m_tensorBitwidth);
   uint64_t scaledBits = 0;
 
@@ -156,6 +155,7 @@ uint64_t BACDecoder::decodeWeights(int32_t *pWeights, uint32_t numWeights)
 
 uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
 { 
+  
   uint64_t bitsUsed = 0;
 
   const int32_t sigctx = m_CtxModeler.getSigCtxId();

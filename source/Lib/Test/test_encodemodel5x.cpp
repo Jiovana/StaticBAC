@@ -9,7 +9,7 @@
 #include <fstream>
 #include <vector>
 #include "../EncLib/CABACEncoder.h"  // your header
-#include "../EncLib/BinEncoder_simple.h"
+#include "../EncLib/BinEncoderOB.h"
 #include "../CommonLib/ContextModel.h"
 #include "../../StaticCoder.h" 
 #include "../CommonLib/TypeDef.h"
@@ -27,14 +27,14 @@
 
 
 
-//#define TENSOR_BIN_DIR "models/bert_tensors_binaries/"
-//#define META_FILE "models/bert_tensors.meta"
+#define TENSOR_BIN_DIR "models/bert_tensors_binaries/"
+#define META_FILE "models/bert_tensors.meta"
 //#define TENSOR_BIN_DIR "models/gpt_tensors_binaries/"
 //#define META_FILE "models/gpt_tensors.meta"
-#define TENSOR_BIN_DIR "models/vit_tensors_binaries/"
-#define META_FILE "models/vit_tensors.meta"
+//#define TENSOR_BIN_DIR "models/resnet_tensors_binaries/"
+//#define META_FILE "models/resnet_tensors.meta"
 
-#define MODEL_NAME "vit"
+#define MODEL_NAME "bert"
 
 // ============================================================
 // Peak Memory Sampler — mirrors Python psutil RSS sampling
@@ -78,6 +78,31 @@ static size_t getCurrentRSS()
     return 0;
 #endif
 }
+
+struct RunStats
+{
+    double encTime = 0.0;
+    double decTime = 0.0;
+
+    size_t encBaseline = 0;
+    size_t decBaseline = 0;
+
+    size_t encPeak = 0;
+    size_t decPeak = 0;
+
+    size_t encDelta = 0;
+    size_t decDelta = 0;
+
+    uint64_t compressedBytes = 0;
+    double ratio = 0.0;
+};
+
+struct CodingStats
+{
+    uint64_t weights = 0;
+    uint64_t rawBits = 0;
+};
+
 
 struct MemoryStats
 {
@@ -151,11 +176,6 @@ static void printMemStats(const std::string& label, const MemoryStats& ms)
 
 
 
-struct CodingStats
-{
-    uint64_t weights = 0;
-    uint64_t rawBits = 0;
-};
 
 std::vector<int32_t> read_tensor_bin(const std::string &path)
 {
@@ -407,186 +427,185 @@ int main()
         s.rawBits += (uint64_t)t.data.size() * bw;
     }
 
-
-    // --------------------------------------------------
-    // ENCODING
-    // --------------------------------------------------
-
-    Encoder encoder;
-
-    uint32_t numGtxFlags = 4;
-
-    std::cout << "\n=== Encoding Model ===\n";
-
-    PeakMemorySampler encSampler;
-    size_t baselineEncMem = getCurrentRSS();          // baseline before encode
-
-    encSampler.start();
-
-    auto encStart = std::chrono::high_resolution_clock::now();
-
-    encoder.initCtxModels(numGtxFlags);
-    const std::vector<uint8_t>& bytestream =
-        encoder.encodeModel(modelTensors, false);
-
-    auto encEnd = std::chrono::high_resolution_clock::now();
-
-    MemoryStats encMemStats = encSampler.stop(baselineEncMem);
-
-    double encTime = std::chrono::duration<double>(encEnd - encStart).count();
-
-    std::cout << "Compressed size: "
-              << bytestream.size()
-              << " bytes\n";
-
-
-    uint64_t totalRawBits = 0;
-
-    for(auto& [bw, s] : stats)
-        totalRawBits += s.rawBits;
-
-    uint64_t compressedBits = bytestream.size() * 8;
-
-    std::ofstream f("vit_model_bitstream.bin", std::ios::binary);
-    f.write(reinterpret_cast<const char*>(bytestream.data()),
-        bytestream.size());
-
-    std::cout << "\n===== Bitwidth Statistics =====\n";
-
-    for(auto& [bw, s] : stats)
-    {
-        uint64_t compBits =
-            (double)s.rawBits / totalRawBits * compressedBits;
-
-        double bitsPerWeight =
-            (double)compBits / s.weights;
-
-        std::cout
-            << "Bitwidth "
-            << getBitwidthFromEnum(bw)
-            << "-bit\n";
-
-        std::cout
-            << "  weights: "
-            << s.weights << "\n";
-
-        std::cout
-            << "  bits/weight: "
-            << bitsPerWeight << "\n";
-    }
-
-    int num_tensors = modelTensors.size();
+    // Compute original size once (same across runs)
     uint64_t originalBytes = 0;
 
     for(const auto& t : modelTensors)
     {
         uint32_t bw = getBitwidthFromEnum(t.tensorBitwidth);
-
-        originalBytes +=
-            (uint64_t)t.data.size() * bw / 8;
+        originalBytes += (uint64_t)t.data.size() * bw / 8;
     }
 
+    double encodeMB = (double)originalBytes / (1024.0 * 1024.0);
+    int num_tensors = modelTensors.size();
 
-        // --------------------------------------------------
-    // Free model tensors before decoding — decoder only needs the bytestream
-    // --------------------------------------------------
-    std::cout << "\n=== Freeing model tensors before decode ===\n";
-    size_t beforeFree = getCurrentRSS();
 
-    for (auto& t : modelTensors)
+    const int NUM_RUNS = 5;
+    std::vector<RunStats> allRuns;
+
+    for(int run = 0; run < NUM_RUNS; run++)
     {
-        std::vector<int32_t>().swap(t.data);  // force-free each tensor's heap data
+        std::cout << "\n================ RUN " << run+1 << " =================\n";
+
+        // Reload tensors every run
+        std::vector<TensorMeta> modelTensors;
+        if(!loadModelTensors(modelTensors))
+            return -1;
+
+        Encoder encoder;
+        uint32_t numGtxFlags = 4;
+
+        // ---------------- ENCODING ----------------
+        PeakMemorySampler encSampler;
+        size_t baselineEncMem = getCurrentRSS();
+
+        encSampler.start();
+        auto encStart = std::chrono::high_resolution_clock::now();
+
+        encoder.initCtxModels(numGtxFlags);
+        const std::vector<uint8_t>& bytestream =
+            encoder.encodeModel(modelTensors, false);
+
+        auto encEnd = std::chrono::high_resolution_clock::now();
+        MemoryStats encMemStats = encSampler.stop(baselineEncMem);
+
+        double encTime = std::chrono::duration<double>(encEnd - encStart).count();
+
+        uint64_t compressedBytes = bytestream.size();
+
+        std::cout << "Compressed size: " << compressedBytes << " bytes\n";
+
+        uint64_t totalRawBits = 0;
+        for(auto& [bw, s] : stats)
+            totalRawBits += s.rawBits;
+
+        uint64_t compressedBits = compressedBytes * 8;
+
+        // (optional: only save bitstream on first run)
+        if(run == 0)
+        {
+            std::ofstream f("bert_model_bitstream.bin", std::ios::binary);
+            f.write(reinterpret_cast<const char*>(bytestream.data()),
+                    bytestream.size());
+        }
+
+        // ---------------- FREE ORIGINAL ----------------
+        for (auto& t : modelTensors)
+            std::vector<int32_t>().swap(t.data);
+
+        modelTensors.clear();
+        modelTensors.shrink_to_fit();
+
+        // ---------------- DECODING ----------------
+        Decoder decoder;
+        std::vector<TensorMeta> decodedModel;
+
+        PeakMemorySampler decSampler;
+        size_t baselineDecMem = getCurrentRSS();
+
+        decSampler.start();
+        auto decStart = std::chrono::high_resolution_clock::now();
+
+        decoder.setStream(const_cast<std::vector<uint8_t>&>(bytestream));
+        decoder.initCtxModels(numGtxFlags);
+        decoder.decodeModel(decodedModel);
+
+        auto decEnd = std::chrono::high_resolution_clock::now();
+        MemoryStats decMemStats = decSampler.stop(baselineDecMem);
+
+        double decTime = std::chrono::duration<double>(decEnd - decStart).count();
+
+        std::cout << "Decoded tensors: " << decodedModel.size() << "\n";
+
+        // ---------------- COMPUTE RATIO ----------------
+        double ratio = (double)originalBytes / compressedBytes;
+
+        // ---------------- STORE RUN ----------------
+        RunStats r;
+        r.encTime = encTime;
+        r.decTime = decTime;
+
+        r.encBaseline = baselineEncMem;
+        r.decBaseline = baselineDecMem;
+
+        r.encPeak = encMemStats.peakBytes;
+        r.decPeak = decMemStats.peakBytes;
+
+        r.encDelta = encMemStats.deltaBytes;
+        r.decDelta = decMemStats.deltaBytes;
+
+        r.compressedBytes = compressedBytes;
+        r.ratio = ratio;
+
+        allRuns.push_back(r);
+
+        // FORCE CLEANUP AFTER EACH RUN
+        {
+            std::vector<uint8_t>().swap(const_cast<std::vector<uint8_t>&>(bytestream));
+        }
+
+        // also ensure decoder output is freed
+        {
+            std::vector<TensorMeta>().swap(decodedModel);
+        }
+
+        // give OS a chance (important on Linux)
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
-    modelTensors.clear();
-    modelTensors.shrink_to_fit();
 
-    size_t afterFree = getCurrentRSS();
-    auto toMB = [](size_t b){ return b / (1024.0 * 1024.0); };
-    std::cout << "Memory before free : " << toMB(beforeFree) << " MB\n";
-    std::cout << "Memory after free  : " << toMB(afterFree)  << " MB\n";
-    std::cout << "Freed              : " << toMB(beforeFree - afterFree) << " MB\n";
+    double avgEncTime = 0, avgDecTime = 0;
+    double avgEncPeak = 0, avgDecPeak = 0;
+    double avgEncDelta = 0, avgDecDelta = 0;
+    double avgCompSize = 0, avgRatio = 0;
 
+    double avgEncBaseline = 0, avgDecBaseline = 0;
+    double avgEncDelta = 0, avgDecDelta = 0;
 
-    // --------------------------------------------------
-    // DECODING
-    // --------------------------------------------------
+    for(const auto& r : allRuns)
+    {
+        avgEncTime += r.encTime;
+        avgDecTime += r.decTime;
 
-    std::cout << "\n=== Decoding Model ===\n";
+        avgEncBaseline += r.encBaseline;
+        avgDecBaseline += r.decBaseline;
 
-    Decoder decoder;
-    std::vector<TensorMeta> decodedModel;
+        avgEncDelta += r.encDelta;
+        avgDecDelta += r.decDelta;
+        avgCompSize += r.compressedBytes;
+        avgRatio += r.ratio;
+    }
 
-    PeakMemorySampler decSampler;
-    size_t baselineDecMem = getCurrentRSS();          // baseline before decode
+    avgEncTime /= NUM_RUNS;
+    avgDecTime /= NUM_RUNS;
+    avgEncPeak /= NUM_RUNS;
+    avgDecPeak /= NUM_RUNS;
+    avgEncDelta /= NUM_RUNS;
+    avgDecDelta /= NUM_RUNS;
+    avgCompSize /= NUM_RUNS;
+    avgRatio /= NUM_RUNS;
 
-    decSampler.start();
-    auto decStart = std::chrono::high_resolution_clock::now();
-    
-    decoder.setStream(const_cast<std::vector<uint8_t>&>(bytestream));
+    auto toMB = [](double b){ return b / (1024.0 * 1024.0); };
 
-    decoder.initCtxModels(numGtxFlags);
-    printf("start decoding...\n");
-    decoder.decodeModel(decodedModel);
-   // decoder.finishDecoding();
+    std::cout << "\n========== AVERAGED MODEL CODING SUMMARY ==========\n";
 
-    auto decEnd = std::chrono::high_resolution_clock::now();
-    MemoryStats decMemStats = decSampler.stop(baselineDecMem);
+    std::cout << "Tensors processed  : " << num_tensors << "\n";
+    std::cout << "Original size      : " << encodeMB << " MB\n";
+    std::cout << "Compressed size    : " << toMB(avgCompSize) << " MB\n";
+    std::cout << "Compression ratio  : " << avgRatio << "\n";
 
-    double decTime = std::chrono::duration<double>(decEnd-decStart).count();
+    std::cout << "\nEncoding time      : " << avgEncTime << " sec\n";
+    std::cout << "Decoding time      : " << avgDecTime << " sec\n";
+    std::cout << "Encode speed       : " << encodeMB / avgEncTime << " MB/s\n";
+    std::cout << "Decode speed       : " << encodeMB / avgDecTime << " MB/s\n";
 
-    std::cout << "Decoded tensors: "
-              << decodedModel.size()
-              << "\n";
+    std::cout << "\n========== AVERAGE MEMORY USAGE ==========\n";
+    std::cout << "Peak enc mem   : " << toMB(avgEncPeak) << " MB\n";
+    std::cout << "Peak dec mem   : " << toMB(avgDecPeak) << " MB\n";
+    std::cout << "Delta enc mem  : " << toMB(avgEncDelta) << " MB\n";
+    std::cout << "Delta dec mem  : " << toMB(avgDecDelta) << " MB\n";
 
-   
+    std::cout << "==========================================\n";
 
-    // --------------------------------------------------
-    // VALIDATION
-    // --------------------------------------------------
-
-    validateModel(modelTensors, decodedModel);
-
-
-    /// save decoded tensormeta
-    saveDecodedModel(decodedModel, ("vit_tensors_decoded"));
-
-
-    // --------------------------------------------------
-    // SUMMARY
-    // --------------------------------------------------
-
-    
-
-    uint64_t compressedBytes = bytestream.size();
-
-    double ratio =
-        (double)originalBytes / compressedBytes;
-
-    double encodeMB =
-    (double)originalBytes / (1024.0*1024.0);
-
-
-    std::cout << "\n========== MODEL CODING SUMMARY ==========\n"
-              << "Tensors processed  : " << num_tensors        << "\n"
-              << "Original size      : " << encodeMB                    << " MB\n"
-              << "Compressed size    : " << compressedBytes/(1024.0*1024.0) << " MB\n"
-              << "Compression ratio  : " << ratio                       << "\n"
-              << "\nEncoding time      : " << encTime                   << " sec\n"
-              << "Decoding time      : " << decTime                     << " sec\n"
-              << "Encode speed       : " << encodeMB / encTime          << " MB/s\n"
-              << "Decode speed       : " << encodeMB / decTime          << " MB/s\n";
-
-    std::cout << "\n========== MEMORY USAGE ==========\n";
-    printMemStats("Encode memory:", encMemStats);
-    printMemStats("Decode memory:", decMemStats);
-
-    // Structured summary matching the Python dict fields
-    //auto toMB = [](size_t b){ return b / (1024.0 * 1024.0); };
-    std::cout << "\n  peak_enc_mem   : " << toMB(encMemStats.peakBytes)     << " MB\n"
-              << "  peak_dec_mem   : " << toMB(decMemStats.peakBytes)     << " MB\n"
-              << "  peak_delta_enc : " << toMB(encMemStats.deltaBytes)    << " MB\n"
-              << "  peak_delta_dec : " << toMB(decMemStats.deltaBytes)    << " MB\n"
-              << "==========================================\n";
 
     return 0;
 }

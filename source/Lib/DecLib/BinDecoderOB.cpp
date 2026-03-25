@@ -2,7 +2,7 @@
 #include <random>
 #include <algorithm>
 #include <iostream>
-#include "BinDecoder.h"
+#include "BinDecoderOB.h"
 //#include "Utils/global_logger.h"
 
 
@@ -16,12 +16,6 @@ inline uint32_t clz32(uint32_t x)
     return __builtin_clz(x);
 #endif
 }
-
-const uint32_t BinDec::m_auiGoRiceRange[ 10 ] =
-{
-    6, 5, 6, 3, 3, 3, 3, 3, 3, 3
-};
-
 
 void BinDec::setByteStreamBuf( uint8_t* byteStreamBuf )
 {
@@ -45,42 +39,10 @@ void BinDec::startBinDecoder()
 }
 
 
-uint32_t BinDec::decodeBinold( StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType )
-{
-    uint32_t rlps    = ctxMdl.getRLPS( ctxId, paramType );
-    uint32_t mps     = ctxMdl.getMPS( ctxId, paramType );
-
-    uint32_t rmps    = m_Range - rlps;
-
-     // Determine if LPS
-    int32_t is_lps = ((int32_t)(rmps + ~(m_Value >> 7))) >> 31;
-    // Update range 
-    m_Range          = rmps ^ ((rmps ^ rlps) & is_lps);
-    // if LPS, update value
-    m_Value         -= (rmps << 7) & is_lps;
-
-    // reconstruct bin
-    uint32_t bin     = mps ^ (is_lps & 1);
-
-    // renormalize
-    uint32_t n = clz32(m_Range) - 23;
-
-    m_Range <<= n;
-    m_Value <<= n;
-    m_BitsNeeded += n;
-    if (m_BitsNeeded >= 0)
-    {
-        m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
-        m_BitsNeeded -= 8;
-        m_BytesRead++;
-    }
-
-    return bin;
-}
 
 uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType)
 {
-    //printf("DecodeBin called: range %d value %d \n", m_Range, m_Value );
+    printf("DecodeBin called: range %d value %d \n", m_Range, m_Value );
     uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType);
     uint32_t mps  = ctxMdl.getMPS(ctxId, paramType);
 
@@ -99,32 +61,28 @@ uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramTyp
     if (isLPS)
         m_Value -= (rmps << 7);
 
-    // renormalize
-    // while (m_Range < 256)
-    // {
-    //     m_Range <<= 1;
-    //     m_Value <<= 1;
-    //     m_BitsNeeded++;
+    // renormalization with OB tracking
+    while (m_Range < 256) {
+        m_Range <<= 1;
 
-    //     if (m_BitsNeeded >= 0)
-    //     {
-    //         m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
-    //         m_BitsNeeded -= 8;
-    //         m_BytesRead++;
-    //     }
-    // }
-    uint32_t n = clz32(m_Range) - 23;
+        // shift in pending bit first
+        m_Value <<= 1;
+        if (m_PendingBit >= 0) {
+            m_Value |= m_PendingBit;
+            for (int i = 0; i < m_OB; i++)
+                m_Value |= (m_PendingBit ^ 1) << i;
+            m_OB = 0;
+            m_PendingBit = -1;
+        }
 
-    m_Range <<= n;
-    m_Value <<= n;
-    m_BitsNeeded += n;
-
-    if (m_BitsNeeded >= 0)
-    {
-        m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
-        m_BitsNeeded -= 8;
-        m_BytesRead++;
+        m_BitsNeeded++;
+        if (m_BitsNeeded >= 0) {
+            m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
+            m_BitsNeeded -= 8;
+            m_BytesRead++;
+        }
     }
+
 
 
     return bin;
@@ -215,6 +173,28 @@ uint32_t BinDec::decodeBinsEP( uint32_t numBins )
     }
 
     return bins;
+}
+
+void BinDec::resolvePending(uint32_t bit)
+{
+    if (m_PendingBit == -1)
+    {
+        // first pending bit
+        m_PendingBit = bit;
+        return;
+    }
+
+    // consume the previous pending bit
+    m_Value = (m_Value << 1) | m_PendingBit;
+
+    // consume outstanding bits (mirror OB)
+    for (uint32_t i = 0; i < m_OB; i++)
+        m_Value = (m_Value << 1) | (m_PendingBit ^ 1u);
+
+    m_OB = 0;
+
+    // update pending bit
+    m_PendingBit = bit;
 }
 
 

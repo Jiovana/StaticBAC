@@ -153,16 +153,16 @@ def normalize_b_key(k):
 def main():
 
     #model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
-    #model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
-    model = models.vit_b_16(weights= models.ViT_B_16_Weights.IMAGENET1K_V1)
+    model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
+    #model = models.vit_b_16(weights= models.ViT_B_16_Weights.IMAGENET1K_V1)
 
 
     # paths
-    folder_param = "vit_tensors_decoded"
+    folder_param = "efficientnet_tensors_decoded"
     #folder_param = "efficientnet_tensors_decoded"
     #folder_buffer = "resnet_buffers_decoded"
 
-    encoder_meta_param = "models/vit_tensors.meta"
+    encoder_meta_param = "models/efficientnet_tensors.meta"
     #encoder_meta_buffer = "models/resnet_buffers.meta"
 
     qstep_param, id_to_name = read_encoder_meta(encoder_meta_param)
@@ -201,7 +201,7 @@ def main():
     all_data.update(param_data)
     all_data.update(buffer_data)
 
-    out_path = "vit_reconstructed.npz"
+    out_path = "efficientnet_reconstructed.npz"
     np.savez(out_path, **all_data)
 
     print(f"\nSaved NPZ → {out_path}")

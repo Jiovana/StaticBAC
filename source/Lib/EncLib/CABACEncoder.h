@@ -3,7 +3,7 @@
 
 #include "../CommonLib/ContextModel.h"
 #include "../CommonLib/ContextModeler.h"
-#include "BinEncoder_simple.h"
+#include "BinEncoderOB.h"
 #include <bitset>
 #include <limits>
 #include <iostream>
