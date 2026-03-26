@@ -38,7 +38,6 @@ uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint3
             numWeights,
             tensor.shape.data(),
             tensor.numDims,
-            tensor.name,
             tensorId,
             useScaling);
 

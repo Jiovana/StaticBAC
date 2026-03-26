@@ -9,14 +9,14 @@ void BACDecoder::startBacDecoding(uint8_t* pBytestream)
   //g_logger->setTensorName("CABACDecoder_log");
   m_BinDecoder.setByteStreamBuf(pBytestream);
   m_BinDecoder.startBinDecoder();
-  //printf("CABACDecoder: Started decoding\n");
+  ////printf("CABACDecoder: Started decoding\n");
 }
 
 void BACDecoder::initCtxModels(uint32_t cabac_unary_length)
 {
   m_NumGtxFlags = cabac_unary_length;
   m_CtxModeler.init(cabac_unary_length);
-  //printf("CABACDecoder: Context models initialized with cabac_unary_length=%d\n", cabac_unary_length);
+  ////printf("CABACDecoder: Context models initialized with cabac_unary_length=%d\n", cabac_unary_length);
 }
 
 
@@ -39,27 +39,27 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
   // decode scaling flag
   m_useScaling = m_BinDecoder.decodeBinEP();
   binsRead += 1; 
- // printf("SCALING FLAG: %d \n", m_useScaling);
+ // //printf("SCALING FLAG: %d \n", m_useScaling);
   // decode tensor id
   tensor.tensorId = m_BinDecoder.decodeBinsEP(MAX_TENSORS_BITS);
   binsRead += 12; 
   // decode tensor type
   m_tensorType = static_cast<TensorType>(m_BinDecoder.decodeBinEP());
   tensor.tensorType = m_tensorType;
- // printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
+ // //printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
   binsRead += 1; // 1 bit for tensor type
 
   // decode bitwidth
   m_tensorBitwidth = static_cast<TensorBitwidth>(m_BinDecoder.decodeBinsEP(3));
   tensor.tensorBitwidth = m_tensorBitwidth;
   int bitwidth = getBitwidthFromEnum(m_tensorBitwidth);
- // printf("Decoded tensor bitwidth: %d\n", static_cast<uint32_t>(m_tensorBitwidth));
+ // //printf("Decoded tensor bitwidth: %d\n", static_cast<uint32_t>(m_tensorBitwidth));
   binsRead += 3; // 3 bits for bitwidth
 
   // decode number of dimensions
   numDims = m_BinDecoder.decodeBinsEP(3);
   tensor.numDims = numDims;
-  //printf("Decoded number of dimensions: %d\n", numDims);
+  ////printf("Decoded number of dimensions: %d\n", numDims);
   binsRead += 3; // 3 bits for numDims
 
   // decode shape of each dimension
@@ -70,10 +70,10 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
     //bitlenMinus1 = uae_v(5);
     bitlenMinus1 = m_BinDecoder.decodeBinsEP(5);
     bitlen = bitlenMinus1 + 1;
-   // //printf("Decoded bitlen for dimension %d: %d, -1:%d\n", i, bitlen, bitlenMinus1);
+   // ////printf("Decoded bitlen for dimension %d: %d, -1:%d\n", i, bitlen, bitlenMinus1);
     //shape[i] = uae_v(bitlen);
     shape[i] = m_BinDecoder.decodeBinsEP(bitlen);
-    //printf("Decoded dimension %d size: %d\n", i, shape[i]);
+    ////printf("Decoded dimension %d size: %d\n", i, shape[i]);
     binsRead += 5 + bitlen; // bits used to decode this dimension
   }
 
@@ -84,10 +84,10 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
     {
       m_TensorMean = iae_v(bitwidth); // read mean value
       binsRead += bitwidth; // account for bits used to decode mean
-   //   //printf("Decoded mean: %d\n", m_TensorMean);
+   //   ////printf("Decoded mean: %d\n", m_TensorMean);
     } else {
       m_TensorMean = 0; // if mean not used, set it to zero for decoding residuals
-    //  //printf("Mean not used, mean value set to: %d\n", m_TensorMean);
+    //  ////printf("Mean not used, mean value set to: %d\n", m_TensorMean);
     }
 
   return binsRead;
@@ -118,7 +118,7 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
         pWeights[i] = iae_v(width);
         scaledBits += width;
       }
-      //printf ("Tensor decoded as raw EP bins.\n");
+      ////printf ("Tensor decoded as raw EP bins.\n");
       continue;
     }
 
@@ -127,8 +127,9 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
     scaledBits += 2;
 
     // read shift for scaling
-    uint8_t shift = getShiftFromMeanAndK(m_tensorBitwidth, m_TensorMean, k);
-   // //printf("Calculated shift for chunk %d: %d\n", c, shift);
+     uint8_t shift = uae_v(4);
+     scaledBits += 4;
+    // ////printf("Calculated shift for chunk %d: %d\n", c, shift);
 
     // --------------- BAC decode weights
     for (uint32_t i = start; i < end; i++)
@@ -136,10 +137,12 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
       int32_t decodedVal = 0;
       scaledBits += decodeWeightVal(decodedVal, k); 
       int32_t residual = shift > 0 ? (decodedVal << shift) : decodedVal;
+      //int32_t residual = decodedVal;
 
       pWeights[i] =  residual + m_TensorMean;
-     // //printf("Decoded weight %d: value=%d\n", i,  pWeights[i]);
+     // ////printf("Decoded weight %d: value=%d\n", i,  pWeights[i]);
       m_CtxModeler.updateNeighborCtx(decodedVal);
+      //printf("CHUNK[%d] - Decoded value %d\n", c, pWeights[i]);
 
     }
   }
@@ -162,8 +165,9 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
 
   const int32_t sigctx = m_CtxModeler.getSigCtxId();
   uint32_t sigFlag = m_BinDecoder.decodeBin(m_CtxStore, sigctx, m_tensorType);
- // //printf("Decoded sigFlag: %d\n", sigFlag);
+  //printf("Decoded sigFlag: %d\n", sigFlag);
   bitsUsed += 1; // 1 bit for sigFlag
+
 
   decodedIntVal = 0;
 
@@ -174,7 +178,7 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
   // sign 
   int32_t signCtx = m_CtxModeler.getSignFlagCtxId();
   uint32_t signFlag = m_BinDecoder.decodeBin(m_CtxStore, signCtx, m_tensorType);
-//  //printf("Decoded signFlag: %d\n", signFlag);
+  //printf("Decoded signFlag: %d\n", signFlag);
   bitsUsed += 1; // 1 bit for signFlag
 
   // branch flag
@@ -183,11 +187,12 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
 
   if (branchFlag)
   {
+     //printf("big value went to rem.. \n");
     // large residual case, directly decode remAbsLevel without gtx flags
     uint32_t remAbsLevel = 0;
     bitsUsed += decodeAbsRem(remAbsLevel, k);
     decodedIntVal = signFlag ? -int32_t(remAbsLevel + 6) : int32_t(remAbsLevel + 6);
-    
+   
     return bitsUsed;
   } else {
     // small residual case, decode gtx flags first
@@ -203,17 +208,17 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
         remAbsLevel++;
       numGreaterFlagsDecoded++;
 
-      ////printf("Decoded grXFlag: %d (numGreaterFlagsDecoded=%d)\n", grXFlag, numGreaterFlagsDecoded);
+      //////printf("Decoded grXFlag: %d (numGreaterFlagsDecoded=%d)\n", grXFlag, numGreaterFlagsDecoded);
     } while (grXFlag && numGreaterFlagsDecoded < m_NumGtxFlags);
 
-    if (grXFlag) { // last grxFlag means decoded value greater than four
-      remAbsLevel ++;
-    }
+    //if (grXFlag) { // last grxFlag means decoded value greater than four
+     // remAbsLevel ++;
+    //}
 
     decodedIntVal = remAbsLevel + 1; // add 1 to get the original abs value
     decodedIntVal = signFlag ? -decodedIntVal : decodedIntVal;
 
-  // //printf("Decoded weight value: %d\n", decodedIntVal);
+    //printf("Decoded weight value: %d\n", decodedIntVal);
 
     return bitsUsed;
   }
@@ -221,9 +226,11 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
 
 int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
 {
+  //printf("==> decodeAbsRem , rem %d k %d \n", remainder, k);
   uint32_t binsUsed = 0;
   uint32_t bitwidth = getBitwidthFromEnum(m_tensorBitwidth);
   uint8_t plusBits = 0;
+   //printf(" width %d \n", bitwidth);
 
   if (bitwidth < 2)
   {
@@ -236,6 +243,7 @@ int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
   uint32_t msb2 = m_BinDecoder.decodeBin(m_CtxStore, 7, m_tensorType);
   binsUsed += 2; // 2 bits for MSBs
   plusBits += 2;
+   //printf ("msb1 %d msb2 %d plusb %d \n", msb1, msb2, plusBits);
 
   uint32_t msb3 = 0, msb4 = 0, msb5 = 0, msb6 = 0;
   if (m_tensorBitwidth == TensorBitwidth::BW_12) {
@@ -243,6 +251,7 @@ int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
     msb4 = m_BinDecoder.decodeBin(m_CtxStore, 9, m_tensorType);
     binsUsed += 2; // 2 bits for MSBs
     plusBits += 2;
+    //printf ("msb3 %d msb4 %d plusb %d \n", msb3, msb4, plusBits);
   } else if (m_tensorBitwidth >= TensorBitwidth::BW_16) {
       msb3 = m_BinDecoder.decodeBin(m_CtxStore, 8, m_tensorType);
       msb4 = m_BinDecoder.decodeBin(m_CtxStore, 9, m_tensorType);
@@ -250,6 +259,7 @@ int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
       msb6 = m_BinDecoder.decodeBin(m_CtxStore, 11, m_tensorType);
       binsUsed += 4; // 4 bits for MSBs
       plusBits += 4;
+      //printf ("msb3 %d msb4 %d msb5 %d msb6 %d plusb %d \n", msb3, msb4, msb5, msb6, plusBits);
   }
 
   // uint32_t value = 0;
@@ -276,6 +286,7 @@ int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
   // ---- 3. Decode suffix ----
   uint32_t r = m_BinDecoder.decodeBinsEP(k_upd);
   binsUsed += k_upd; // k_upd bits for suffix
+  //printf(" q%d kupd%d r%d \n", q, k_upd, r);
 
 
   // ---- 4. Reconstruct value from MSBs, unary prefix, and suffix ----
@@ -293,7 +304,7 @@ int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
 
   remainder = value;
 
-
+  //printf("finish: remainder %d lowermsk %d lower %d \n", remainder, lowerMask, lower);
   return binsUsed;
 }
 

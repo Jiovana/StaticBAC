@@ -33,13 +33,13 @@ This framework is designed for:
 
 StaticBAC/
 │
-├── src/ # C++ source code (encoder/decoder)
+├── source/ # C++ source code (encoder/decoder)
 ├── python/ # Python preprocessing (model export & quantization)
 ├── build/ # Build directory
 ├── models/ # Input models
 └── README.md
 
-
+Main file is test_model_args.cpp
 ---
 
 ## Requirements

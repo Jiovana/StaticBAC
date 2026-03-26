@@ -31,10 +31,10 @@
 //#define META_FILE "models/bert_tensors.meta"
 //#define TENSOR_BIN_DIR "models/gpt_tensors_binaries/"
 //#define META_FILE "models/gpt_tensors.meta"
-#define TENSOR_BIN_DIR "models/vit_tensors_binaries/"
-#define META_FILE "models/vit_tensors.meta"
+#define TENSOR_BIN_DIR "models/efficientnet_b7/binaries/"
+#define META_FILE "models/efficientnet_b7/tensors.meta"
 
-#define MODEL_NAME "vit"
+#define MODEL_NAME "efficientnet_b7"
 
 // ============================================================
 // Peak Memory Sampler — mirrors Python psutil RSS sampling
@@ -353,18 +353,21 @@ void validateModel(
 
         for(size_t i = 0; i < A.data.size(); i++)
         {
-            if(A.data[i] != B.data[i])
+            if(A.data[i] != B.data[i]){
                 mism++;
+                printf("mismatch: original: %d | decoded: %d \n", A.data[i], B.data[i]);
+            }
+                
         }
 
         totalMismatch += mism;
         totalWeights  += A.data.size();
 
-       // if(mism > 0)
-      //  {
-      //      std::cout << "Tensor mismatch: " << A.name
-      //                << " mismatches=" << mism << "\n";
-      //  }
+       if(mism > 0)
+        {
+            std::cout << "Tensor mismatch: " << A.name
+                      << " mismatches=" << mism << "\n";
+        }
     }
 
     std::cout << "\n===== Validation =====\n";
@@ -447,7 +450,7 @@ int main()
 
     uint64_t compressedBits = bytestream.size() * 8;
 
-    std::ofstream f("vit_model_bitstream.bin", std::ios::binary);
+    std::ofstream f("efficientnet_b7_bitstream.bin", std::ios::binary);
     f.write(reinterpret_cast<const char*>(bytestream.data()),
         bytestream.size());
 
@@ -490,7 +493,7 @@ int main()
         // --------------------------------------------------
     // Free model tensors before decoding — decoder only needs the bytestream
     // --------------------------------------------------
-    std::cout << "\n=== Freeing model tensors before decode ===\n";
+/*     std::cout << "\n=== Freeing model tensors before decode ===\n";
     size_t beforeFree = getCurrentRSS();
 
     for (auto& t : modelTensors)
@@ -505,7 +508,7 @@ int main()
     std::cout << "Memory before free : " << toMB(beforeFree) << " MB\n";
     std::cout << "Memory after free  : " << toMB(afterFree)  << " MB\n";
     std::cout << "Freed              : " << toMB(beforeFree - afterFree) << " MB\n";
-
+ */
 
     // --------------------------------------------------
     // DECODING
@@ -548,7 +551,7 @@ int main()
 
 
     /// save decoded tensormeta
-    saveDecodedModel(decodedModel, ("vit_tensors_decoded"));
+    saveDecodedModel(decodedModel, ("efficientnet_b7_decoded"));
 
 
     // --------------------------------------------------
@@ -565,7 +568,7 @@ int main()
     double encodeMB =
     (double)originalBytes / (1024.0*1024.0);
 
-
+    auto toMB = [](size_t b){ return b / (1024.0 * 1024.0); };
     std::cout << "\n========== MODEL CODING SUMMARY ==========\n"
               << "Tensors processed  : " << num_tensors        << "\n"
               << "Original size      : " << encodeMB                    << " MB\n"

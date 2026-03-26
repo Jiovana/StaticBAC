@@ -67,7 +67,6 @@ class BACEncoder
         uint32_t numWeights,
         const uint32_t* shape,
         uint32_t numDims,
-        const std::string& tensor_name,
         uint16_t tensorId,
         const bool useScaling);
 

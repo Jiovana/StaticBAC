@@ -102,13 +102,13 @@ void BACEncoder::initCtxMdls(uint32_t numGtxFlags)
 //   division and transmitted only if its magnitude exceeds a
 //   small threshold.
 //--------------------------------------------------------------
-uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name, const uint16_t tensorId, const bool useScaling)
+uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const uint16_t tensorId, const bool useScaling)
 {
     uint64_t binsUsed = 0;
    // if (tensorId > 600){
-    //  printf("Encoding tensor header... Tensor id: %d \n", tensorId);
-    //  printf("Type: %d Width: %d \n", static_cast<uint16_t>(m_tensorType), static_cast<uint16_t>(m_tensorBitwidth));
-    //  printf("Converted width: %d\n", getBitwidthFromEnum(m_tensorBitwidth));
+    //  //printf("Encoding tensor header... Tensor id: %d \n", tensorId);
+    //  //printf("Type: %d Width: %d \n", static_cast<uint16_t>(m_tensorType), static_cast<uint16_t>(m_tensorBitwidth));
+    //  //printf("Converted width: %d\n", getBitwidthFromEnum(m_tensorBitwidth));
     //}
     
 
@@ -136,13 +136,13 @@ uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWei
     {
         uint32_t dimSize = shape[i];
         int bitlen = (dimSize == 0) ? 1 : 32 - __builtin_clz(dimSize);
-      //  printf("CLZ results: %d\n", __builtin_clz(dimSize));
+      //  //printf("CLZ results: %d\n", __builtin_clz(dimSize));
         m_BinEncoder.encodeBinsEP(bitlen-1, 5);
         //uae_v(5, bitlen - 1);
         m_BinEncoder.encodeBinsEP(dimSize, bitlen);
         //uae_v(bitlen, dimSize);
         shapeBits += 5 + bitlen; // bits used to encode this dimension
-      //  printf("Encoded dimension %d: size=%d, bitlen=%d\n", i, dimSize, bitlen);
+      //  //printf("Encoded dimension %d: size=%d, bitlen=%d\n", i, dimSize, bitlen);
         binsUsed += 5 + bitlen;
     }
 
@@ -171,20 +171,20 @@ uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWei
     m_BinEncoder.encodeBinEP(use_mean ? 1 : 0); // flag to indicate if mean is used
     binsUsed += 1;
     int bitwidth = getBitwidthFromEnum(m_tensorBitwidth);
-    //printf("Will try to encode mean.. use mean?%d mean:%d\n", use_mean, mean);
+    ////printf("Will try to encode mean.. use mean?%d mean:%d\n", use_mean, mean);
     if (use_mean)
     {
       // 2. send/store mean
-     // printf("Encoding mean: %d with bitwidth: %d\n", mean, bitwidth);
+     // //printf("Encoding mean: %d with bitwidth: %d\n", mean, bitwidth);
       iae_v(bitwidth, mean); 
       binsUsed += bitwidth; // account for bits used to encode mean
-     // printf("Encoded mean: %d\n", mean);
+     // //printf("Encoded mean: %d\n", mean);
     } else {
       m_TensorMean = 0; // if not using mean, set it to zero for encoding residuals
-    //    printf("Mean not used, mean value: %d\n", mean);
+    //    //printf("Mean not used, mean value: %d\n", mean);
     }
 
-   // printf("==> encodeTensorHeader returning with binsUsed=%llu\n", binsUsed);
+   // //printf("==> encodeTensorHeader returning with binsUsed=%llu\n", binsUsed);
     return binsUsed;
 }
 
@@ -206,9 +206,9 @@ uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWei
 void BACEncoder::iae_v( uint8_t v, int32_t value )
 {
   //PROFILE_SCOPE("iae_v", 0);
- // printf("==> iae_v called with v=%d, value=%d\n", v, value);
+ // //printf("==> iae_v called with v=%d, value=%d\n", v, value);
     uint32_t pattern = uint32_t(value) & (uint32_t(0xFFFFFFFF) >> (32-v));
-    //printf("==> iae_v: pattern=0x%X\n", pattern);
+    ////printf("==> iae_v: pattern=0x%X\n", pattern);
     m_BinEncoder.encodeBinsEP( pattern, v );
 }
 
@@ -299,6 +299,7 @@ uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
     uint8_t minusBits = 0;
 
     uint32_t bitwidth = getBitwidthFromEnum(m_tensorBitwidth);
+    //printf(" width %d \n", bitwidth);
 
     if (bitwidth < 2){
       return m_BinEncoder.encodeBinsEP( value, bitwidth );
@@ -312,6 +313,7 @@ uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
     scaledBits += m_BinEncoder.encodeBin( msb1, m_CtxStore, 6, m_tensorType );
     scaledBits += m_BinEncoder.encodeBin( msb2, m_CtxStore, 7, m_tensorType );
     minusBits += 2;
+    //printf ("msb1 %d msb2 %d minusb %d \n", msb1, msb2, minusBits);
 
     uint32_t msb3 = 0, msb4 = 0, msb5 =0, msb6 =0;
 
@@ -321,6 +323,7 @@ uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
       msb4 = (value >> (bitwidth - 4)) & 0x1;
       scaledBits += m_BinEncoder.encodeBin( msb4, m_CtxStore, 9, m_tensorType );
       minusBits += 2;
+      //printf ("msb3 %d msb4 %d minusb %d \n", msb3, msb4, minusBits);
     } else if (m_tensorBitwidth >= TensorBitwidth::BW_16) {
       msb3 = (value >> (bitwidth - 3)) & 0x1;
       scaledBits += m_BinEncoder.encodeBin( msb3, m_CtxStore, 8, m_tensorType );
@@ -331,6 +334,7 @@ uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
       msb6 = (value >> (bitwidth - 6)) & 0x1;
       scaledBits += m_BinEncoder.encodeBin( msb6, m_CtxStore, 11, m_tensorType );
       minusBits += 4;
+      //printf ("msb3 %d msb4 %d msb5 %d msb6 %d minusb %d \n", msb3, msb4, msb5, msb6, minusBits);
     }
 
     uint32_t baseMask = (1 << (bitwidth - minusBits)) - 1;
@@ -339,6 +343,8 @@ uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
     uint8_t k_upd = k+1;
     uint32_t q = value_no_msb >> k_upd;
     uint32_t r = value_no_msb & ((1 << k_upd) - 1);
+
+    //printf(" basemsk %d valnomsb %d kup %d q %d r %d\n", baseMask, value_no_msb, k_upd, q, r);
 
    // if (q > maxUnary)
    // {
@@ -360,7 +366,7 @@ uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
         m_BinEncoder.encodeBinsEP(r, k_upd);
         scaledBits += k_upd;
   //  }
- 
+    //printf("scaled bits %d\n", scaledBits);
     return scaledBits;
   }
 
@@ -400,6 +406,7 @@ uint32_t BACEncoder::encodeWeightBAC( int32_t value, uint8_t k)
     uint32_t sigFlag        = value != 0 ? 1 : 0;
     int32_t  sigctx         = m_CtxModeler.getSigCtxId( );
     uint32_t scaledBits     = m_BinEncoder.encodeBin(sigFlag, m_CtxStore, sigctx, m_tensorType);
+    //printf("sigflag %d \n", sigFlag);
     
     if (sigFlag)
     {
@@ -407,15 +414,18 @@ uint32_t BACEncoder::encodeWeightBAC( int32_t value, uint8_t k)
       int32_t signCtx;
 
       signCtx = m_CtxModeler.getSignFlagCtxId();
-      scaledBits += m_BinEncoder.encodeBin(signFlag, m_CtxStore, signCtx, m_tensorType);     
+      scaledBits += m_BinEncoder.encodeBin(signFlag, m_CtxStore, signCtx, m_tensorType); 
+      //printf("signflag %d \n", sigFlag);    
 
       uint32_t remAbsLevel = abs(value) - 1;
+      //printf("remabs %d \n", remAbsLevel);
 
       if (abs(value) > 5){
         // bypass gtx flags and directly encode remAbsLevel using xEncRemAbs
         scaledBits += m_BinEncoder.encodeBin(1, m_CtxStore, 12, m_tensorType); // set branch flag to 1 to indicate large residual
         remAbsLevel -= 5; // we can subtract 5 here because values <=5 are handled in the small branch, this way we encode a smaller number in xEncRemAbs which is more efficient
         scaledBits += encodeAbsRem( remAbsLevel, k); 
+        //printf("big value went to rem.. \n");
       } else {
         scaledBits += m_BinEncoder.encodeBin(0, m_CtxStore, 12, m_tensorType); // set branch flag to 0 to indicate small residual
 
@@ -426,7 +436,7 @@ uint32_t BACEncoder::encodeWeightBAC( int32_t value, uint8_t k)
         scaledBits += m_BinEncoder.encodeBin(grXFlag, m_CtxStore, ctxIdx, m_tensorType);
 
         uint32_t numGreaterFlagsCoded = 1;
-        //printf("==> EncWeight: signctx=%d, ctxidx=%d, signFlag=%d, grXFlag=%d, scaledBits=%d\n", signCtx, ctxIdx, signFlag, grXFlag, scaledBits);
+        ////printf("==> EncWeight: signctx=%d, ctxidx=%d, signFlag=%d, grXFlag=%d, scaledBits=%d\n", signCtx, ctxIdx, signFlag, grXFlag, scaledBits);
         while (grXFlag && (numGreaterFlagsCoded < m_NumGtxFlags) )
         {
           remAbsLevel--;
@@ -434,7 +444,7 @@ uint32_t BACEncoder::encodeWeightBAC( int32_t value, uint8_t k)
           ctxIdx =  m_CtxModeler.getGtxCtxId(signFlag);         
           scaledBits += m_BinEncoder.encodeBin(grXFlag, m_CtxStore, ctxIdx, m_tensorType);        
           numGreaterFlagsCoded++;
-          //printf("==> EncWeight: numGreaterFlagsCoded=%d, ctxidx=%d, remAbsLevel=%d, grXFlag=%d, scaledBits=%d\n", numGreaterFlagsCoded, ctxIdx, remAbsLevel, grXFlag, scaledBits);
+          ////printf("==> EncWeight: numGreaterFlagsCoded=%d, ctxidx=%d, remAbsLevel=%d, grXFlag=%d, scaledBits=%d\n", numGreaterFlagsCoded, ctxIdx, remAbsLevel, grXFlag, scaledBits);
         }
 
       }
@@ -516,12 +526,13 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       else if (meanRes < 1024)    k = 3;
       else                        k = 3;
 
-      uint8_t shift = getShiftFromMeanAndK(m_tensorBitwidth, m_TensorMean, k);
+       uint8_t shift = getShiftFromMeanAndK(m_tensorBitwidth, m_TensorMean, k);
       // if scaling flag is false, then do not scale residual
-      if (m_useScaling == false){
-        shift = 0;
-        //printf("Use scaling disabled:%d \n", m_useScaling);
-      }
+       if (m_useScaling == false){
+         shift = 0;
+        ////printf("Use scaling disabled:%d \n", m_useScaling);
+       }
+     
 
       // ------------ pass 2 - histogram on scaled residuals 
       uint64_t estBits = 0;
@@ -532,7 +543,7 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
 
           int32_t scaled;
           if (shift > 0 )
-              scaled = (residual + (residual >= 0 ? (1 << (shift-1)) : (1 << (shift-1)))) >> shift;
+              scaled = (residual + (residual >= 0 ? (1 << (shift-1)) : -(1 << (shift-1)))) >> shift;
           else
               scaled = residual;
 
@@ -571,7 +582,7 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       scaledBits += 1;
 
       if (skipChunk){
-        //printf("Skipping BAC chunk encoding. Encoding as raw EP bins instead...\n");
+        ////printf("Skipping BAC chunk encoding. Encoding as raw EP bins instead...\n");
         for (uint32_t c = start; c < end; c++){
           iae_v(width, pWeights[c]);
           //m_BinEncoder.encodeBinsEP(pWeights[c], width);
@@ -584,22 +595,24 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       uae_v(2, k); // send k as 2-bit 
       scaledBits += 2; // account for bits used to encode k 
 
+       // send shift too...
+       uae_v(4, shift);
+       scaledBits += 4;
+
       // ------------ pass 3: bac encoding ----------------
       for (uint32_t i = start; i < end; i++)
       {
+        
         int32_t scaled = scaledBuf[i-start];
 
         scaledBits += encodeWeightBAC(scaled, k);
         m_CtxModeler.updateNeighborCtx(scaled);  
+        //printf("CHUNK[%d] - Encoding value %d\n" , c, scaled);
 
         }
 
     }
-    // ---------- print tensor-level averages ----------
-    avgBPE     /= numWeights;
-   // std::cout << "Tensor-level avgEntropy=" << avgEntropy
-   //           << ", avgBPE=" << avgBPE << ", Skip? " << skipChunk << "\n";
-
+  
     return scaledBits;
 }
 
