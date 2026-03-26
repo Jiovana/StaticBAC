@@ -51,33 +51,6 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <cassert>
 //#include <pybind11/pybind11.h>
 
-#define CFG_FIX_TC    1
-
-enum class ctxIds
-{
-  // TBD: Use also other indices
-  sigfBaEquZroNbEquZro = 0,
-  sigfBaEquZroNbGrtZro = 1,
-  sigfBaEquZroNbLesZro = 2,
-  sigfHdsp             = 3,
-  sigfBaEquOne         = 4,
-  sigfBaGrtOne         = 5,
-  signBaEquZroNbEquZro = 0 + 8 * 6,
-  signBaEquZroNbGrtZro = 1 + 8 * 6,
-  signBaEquZroNbLesZro = 2 + 8 * 6,
-  signBaEquOne         = 3 + 8 * 6,
-  signBaGrtOne         = 4 + 8 * 6,
-  gtx0BaEquZroCvGrt0   = 0 + 8 * 6 + 6,
-  gtx0BaEquZroCvLeq0   = 1 + 8 * 6 + 6,
-  gtx1BaEquZroCvGrt0   = 2 + 8 * 6 + 6,
-  gtx1BaEquZroCvLeq0   = 3 + 8 * 6 + 6,
-  gtx2BaEquZroCvGrt0   = 4 + 8 * 6 + 6,
-  gtx2BaEquZroCvLeq0   = 5 + 8 * 6 + 6,
-  gtx3BaEquZroCvGrt0   = 6 + 8 * 6 + 6,
-  gtx3BaEquZroCvLeq0   = 7 + 8 * 6 + 6,
-  gtx4BaEquZroCvGrt0   = 8 + 8 * 6 + 6,
-  gtx4BaEquZroCvLeq0   = 9 + 8 * 6 + 6,
-};
 
 
 enum class TensorType : uint8_t

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sstream>
 
+static constexpr uint32_t MAX_TENSORS_BITS = 12;   // allows up to 4096 tensors
+
 void BACDecoder::startBacDecoding(uint8_t* pBytestream)
 {
   //g_logger->setTensorName("CABACDecoder_log");
@@ -39,8 +41,8 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
   binsRead += 1; 
  // printf("SCALING FLAG: %d \n", m_useScaling);
   // decode tensor id
-  tensor.tensorId = m_BinDecoder.decodeBinsEP(10);
-  binsRead += 10; 
+  tensor.tensorId = m_BinDecoder.decodeBinsEP(MAX_TENSORS_BITS);
+  binsRead += 12; 
   // decode tensor type
   m_tensorType = static_cast<TensorType>(m_BinDecoder.decodeBinEP());
   tensor.tensorType = m_tensorType;

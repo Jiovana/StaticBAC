@@ -4,7 +4,7 @@
 #include <math.h>
 #include "StaticCoder.h"
 
-static constexpr uint32_t MAX_TENSORS_BITS = 10;   // allows up to 1024 tensors
+static constexpr uint32_t MAX_TENSORS_BITS = 12;   // allows up to 4096 tensors
 static constexpr uint32_t MAX_TENSOR_DIMS  = 8;    // max tensor rank supported
 
 ///////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ const std::vector<uint8_t>& Encoder::encodeModel(const std::vector<TensorMeta>& 
 {
     //encode number of tensors
     const uint32_t numTensors = modelTensors.size();
-    m_BACEncoder.uae_v(MAX_TENSORS_BITS, numTensors); // 10 bits = 1024 tensors limit. 
+    m_BACEncoder.uae_v(MAX_TENSORS_BITS, numTensors); // 12 bits = 4096 tensors limit. 
 
     uint32_t headerBits = 0;
     for (uint16_t tensorId = 0; tensorId < numTensors; tensorId++)
@@ -173,7 +173,7 @@ uint32_t Decoder::finishDecoding()
 void Decoder::decodeModel(std::vector<TensorMeta>& modelTensors)
 {
     // Decode number of tensors 
-    uint32_t numTensors = m_BACDecoder.uae_v(MAX_TENSORS_BITS); // up to 1024 tensors
+    uint32_t numTensors = m_BACDecoder.uae_v(MAX_TENSORS_BITS); // up to 4096 tensors
 
     modelTensors.resize(numTensors);
 

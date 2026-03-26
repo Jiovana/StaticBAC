@@ -143,7 +143,8 @@ uint32_t BinEnc::encodeBinEP( uint32_t bin )
 
 uint32_t BinEnc::encodeBinsEP( uint32_t bins, uint32_t numBins )
 {
-    CHECK( bins >= ( 1u << numBins ), printf( "%i can not be coded with %i EP-Bins", bins, numBins ) )
+    if (numBins < 32)
+      CHECK( bins >= ( 1u << numBins ), printf( "%i can not be coded with %i EP-Bins\n", bins, numBins ) )
 
     if (m_Range == 256)
     {

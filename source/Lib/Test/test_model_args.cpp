@@ -1,3 +1,134 @@
+/*
+===============================================================================
+StaticBAC Model Encoder / Decoder
+===============================================================================
+
+Description:
+------------
+This executable encodes and decodes neural network tensors using the
+StaticBAC entropy coding framework. It reads pre-quantized tensor data
+(.bin files) along with metadata, compresses them into a single bitstream,
+and optionally reconstructs (decodes) them back for validation.
+
+The tool also reports:
+- Compression ratio
+- Bit-per-weight statistics
+- Encoding / decoding speed
+- Peak memory usage during encoding and decoding
+
+-------------------------------------------------------------------------------
+Input Requirements for encoding:
+-------------------------------------------------------------------------------
+1. Tensor binaries directory (--binaries)
+   - Contains one .bin file per tensor
+   - Each file must store int32_t values
+   - Filename must match tensor name from metadata:
+        <tensor_name>.bin
+
+2. Metadata file (--meta)
+   - Text file describing all tensors
+   - Format:
+
+        numTensors <N>
+
+        <tensorId> <name> <type> <bitwidth> <numDims> <shape...> <qstep>
+
+   - Example:
+        0 conv1.weight Weight 8 4 64 3 7 7 0.02
+
+3. Model name (--name)
+   - Used to generate output filenames
+
+-------------------------------------------------------------------------------
+Usage:
+-------------------------------------------------------------------------------
+
+    ./staticBac
+        --binaries <tensor_bin_dir>
+        --meta <meta_file>
+        --name <model_name>
+        [--scaling]
+
+-------------------------------------------------------------------------------
+Arguments:
+-------------------------------------------------------------------------------
+
+--binaries <path>
+    Path to directory containing tensor .bin files
+
+--meta <file>
+    Path to metadata file describing tensors
+
+--name <string>
+    Model name used for output files
+
+--scaling (optional flag)
+    Enables scaling-aware encoding
+    Default: disabled (false)
+
+--encode (optional flag)
+    Enables encoding-only run
+    Default: false
+
+--decode (optional flag)
+    Enables decoding-only run
+    Default: false
+    
+If no explicity --encode and/or --decode, performs full encoding + decoding
+
+--bitstream <file> (for decoder only run)
+    Path to compressed bitstream file
+
+
+-------------------------------------------------------------------------------
+Outputs:
+-------------------------------------------------------------------------------
+
+1. Compressed bitstream:
+        <model_name>[_scaled|_noscale].bin
+
+2. Decoded tensors:
+        <model_name>[_scaled|_noscale]_decoded/
+            ├── tensor_0.bin
+            ├── tensor_1.bin
+            └── decoded_tensors.meta
+
+3. Console statistics:
+    - Compression ratio
+    - Bits per weight per bitwidth group
+    - Encoding / decoding time
+    - Throughput (MB/s)
+    - Peak memory usage
+
+-------------------------------------------------------------------------------
+Notes:
+-------------------------------------------------------------------------------
+- All tensors are expected to be already quantized and stored as int32.
+- Bitwidth information is used only for entropy coding efficiency.
+- Scaling mode (--scaling) changes encoder behavior (e.g., normalization).
+- Buffers (if included in metadata) should NOT be quantized and must already
+  be stored as int32.
+
+-------------------------------------------------------------------------------
+Example:
+-------------------------------------------------------------------------------
+
+    ./staticBac \
+        --binaries ./tensors/ \
+        --meta model.meta \
+        --name resnet50 \
+        --scaling
+
+-------------------------------------------------------------------------------
+Author:
+-------------------------------------------------------------------------------
+Jiovana Sousa Gomes <gomesjiovana@gmail.com> 
+Based on DeepCABAC and NNCodec https://github.com/d-becking/nncodec2
+===============================================================================
+*/
+
+
+
 #if defined(_WIN32)
   #include <windows.h>
   #include <psapi.h>
@@ -31,6 +162,9 @@ std::string g_tensorBinDir;
 std::string g_metaFile;
 std::string g_modelName;
 bool g_useScaling  = false;
+bool g_doEncode = false;
+bool g_doDecode = false;
+std::string g_bitstreamFile;
 
 // ============================================================
 // Peak Memory Sampler — mirrors Python psutil RSS sampling
@@ -330,50 +464,6 @@ void saveDecodedModel(const std::vector<TensorMeta>& model,
     std::cout << "Decoded tensors saved to: " << dir << "\n";
 }
 
-// ------------------------------------------------------------
-// Validation
-// ------------------------------------------------------------
-void validateModel(
-    const std::vector<TensorMeta>& original,
-    const std::vector<TensorMeta>& decoded)
-{
-    uint64_t totalMismatch = 0;
-    uint64_t totalWeights  = 0;
-
-    for(size_t t = 0; t < original.size(); t++)
-    {
-        const auto& A = original[t];
-        const auto& B = decoded[t];
-
-        uint64_t mism = 0;
-
-        for(size_t i = 0; i < A.data.size(); i++)
-        {
-            if(A.data[i] != B.data[i])
-                mism++;
-        }
-
-        totalMismatch += mism;
-        totalWeights  += A.data.size();
-
-       // if(mism > 0)
-      //  {
-      //      std::cout << "Tensor mismatch: " << A.name
-      //                << " mismatches=" << mism << "\n";
-      //  }
-    }
-
-    std::cout << "\n===== Validation =====\n";
-
-    std::cout << "Total weights: " << totalWeights << "\n";
-    std::cout << "Total mismatches: " << totalMismatch << "\n";
-
-    if(totalMismatch == 0)
-        std::cout << "Perfect reconstruction\n";
-    else
-        std::cout << "Reconstruction errors detected\n";
-}
-
 
 bool parseArgs(int argc, char* argv[])
 {
@@ -387,6 +477,15 @@ bool parseArgs(int argc, char* argv[])
         {
             g_useScaling = true;  // flag detected
         }
+        else if(key == "--encode")
+        {
+            g_doEncode = true;
+        }
+        else if(key == "--decode")
+        {
+            g_doDecode = true;
+        }
+        
         else if(key.rfind("--", 0) == 0) // starts with --
         {
             if(i + 1 >= argc)
@@ -405,15 +504,36 @@ bool parseArgs(int argc, char* argv[])
         }
     }
 
-    // Required arguments
-    if(args.count("--binaries")) g_tensorBinDir = args["--binaries"];
-    else { std::cerr << "--binaries location required\n"; return false; }
+    // Default: if neither specified → do both
+    if(!g_doEncode && !g_doDecode)
+    {
+        g_doEncode = true;
+        g_doDecode = true;
+    }
 
-    if(args.count("--meta")) g_metaFile = args["--meta"];
-    else { std::cerr << "--meta file required\n"; return false; }
+    // Required arguments
+    if(g_doEncode)
+    {
+         if(args.count("--binaries")) g_tensorBinDir = args["--binaries"];
+        else { std::cerr << "--binaries location required\n"; return false; }
+
+        if(args.count("--meta")) g_metaFile = args["--meta"];
+        else { std::cerr << "--meta file required\n"; return false; }
+    }
+
+    if(g_doDecode)
+    {
+        if(!g_doEncode && !args.count("--bitstream"))
+        {
+            std::cerr << "Decode-only mode requires --bitstream\n";
+            return false;
+        }else { g_bitstreamFile = args["--bitstream"]; }
+    }
+   
 
     if(args.count("--name")) g_modelName = args["--name"];
     else { std::cerr << "--model name required\n"; return false; }
+
 
     // normalize path
     if(!g_tensorBinDir.empty())
@@ -436,208 +556,247 @@ int main(int argc, char* argv[])
     {
         std::cout << "\nUsage:\n"
                   << argv[0]
-                  << " --binaries <tensor_bin_dir>"
-                  << " --meta <meta_file>"
-                  << " --name <model_name>\n\n";
+                  << " --binaries <tensor_bin_dir> (for enc)"
+                  << " --meta <meta_file> (for enc)"
+                  << " --name <model_name>"
+                  << " --scaling (optional)"
+                  << " --encode --decode --bitstream (for dec) \n\n";
 
         return -1;
     }
 
     std::cout << "=== Configuration ===\n";
-    std::cout << "Tensor bin dir : " << g_tensorBinDir << "\n";
-    std::cout << "Meta file      : " << g_metaFile << "\n";
-    std::cout << "Model name     : " << g_modelName << "\n";
-    std::cout << "Use scaling    : " << (g_useScaling ? "true" : "false") << "\n";
+    if (g_doEncode){
+        std::cout << "Tensor bin dir : " << g_tensorBinDir << "\n";
+        std::cout << "Meta file      : " << g_metaFile << "\n";
+        std::cout << "Model name     : " << g_modelName << "\n";
+        std::cout << "Use scaling    : " << (g_useScaling ? "true" : "false") << "\n";
+    }
+    if (g_doDecode){
+        std::cout << "Bitstream file : " << g_bitstreamFile << "\n";
+        std::cout << "Model name     : " << g_modelName << "\n";
+    }
+    
 
     std::map<TensorBitwidth, CodingStats> stats;
 
     std::vector<TensorMeta> modelTensors;
 
-    if(!loadModelTensors(modelTensors))
-        return -1;
-
-    std::cout << "Loaded tensors successfully\n";
-
-    for(const auto& t : modelTensors)
+    if(g_doEncode)
     {
-        uint32_t bw = getBitwidthFromEnum(t.tensorBitwidth);
+        if(!loadModelTensors(modelTensors))
+            return -1;
 
-        CodingStats& s = stats[t.tensorBitwidth];
+        std::cout << "Loaded tensors successfully\n";
 
-        s.weights += t.data.size();
-        s.rawBits += (uint64_t)t.data.size() * bw;
+        for(const auto& t : modelTensors)
+        {
+            uint32_t bw = getBitwidthFromEnum(t.tensorBitwidth);
+
+            CodingStats& s = stats[t.tensorBitwidth];
+
+            s.weights += t.data.size();
+            s.rawBits += (uint64_t)t.data.size() * bw;
+        }
     }
 
+    
 
+    std::vector<uint8_t> bytestream;
+    uint32_t numGtxFlags = 4;
     // --------------------------------------------------
     // ENCODING
     // --------------------------------------------------
+    if (g_doEncode){
+        Encoder encoder;
 
-    Encoder encoder;
+        std::cout << "\n=== Encoding Model ===\n";
 
-    uint32_t numGtxFlags = 4;
+        PeakMemorySampler encSampler;
+        size_t baselineEncMem = getCurrentRSS();          // baseline before encode
 
-    std::cout << "\n=== Encoding Model ===\n";
+        encSampler.start();
 
-    PeakMemorySampler encSampler;
-    size_t baselineEncMem = getCurrentRSS();          // baseline before encode
+        auto encStart = std::chrono::high_resolution_clock::now();
 
-    encSampler.start();
+        encoder.initCtxModels(numGtxFlags);
+        bytestream = encoder.encodeModel(modelTensors, g_useScaling);
 
-    auto encStart = std::chrono::high_resolution_clock::now();
+        auto encEnd = std::chrono::high_resolution_clock::now();
 
-    encoder.initCtxModels(numGtxFlags);
-    const std::vector<uint8_t>& bytestream =
-        encoder.encodeModel(modelTensors, g_useScaling);
+        MemoryStats encMemStats = encSampler.stop(baselineEncMem);
 
-    auto encEnd = std::chrono::high_resolution_clock::now();
+        double encTime = std::chrono::duration<double>(encEnd - encStart).count();
 
-    MemoryStats encMemStats = encSampler.stop(baselineEncMem);
-
-    double encTime = std::chrono::duration<double>(encEnd - encStart).count();
-
-    std::cout << "Compressed size: "
-              << bytestream.size()
-              << " bytes\n";
+        std::cout << "Compressed size: "
+                << bytestream.size()
+                << " bytes\n";
 
 
-    uint64_t totalRawBits = 0;
+        uint64_t totalRawBits = 0;
 
-    for(auto& [bw, s] : stats)
-        totalRawBits += s.rawBits;
+        for(auto& [bw, s] : stats)
+            totalRawBits += s.rawBits;
 
-    uint64_t compressedBits = bytestream.size() * 8;
+        uint64_t compressedBits = bytestream.size() * 8;
 
-    std::string suffix = g_useScaling ? "_scaled" : "_noscale";
+        std::string suffix = g_useScaling ? "_scaled" : "_noscale";
 
-    std::string bitstreamFile = g_modelName + suffix + ".bin";
-    std::string decodedDir    = g_modelName + suffix + "_decoded";
+        std::string bitstreamFile = g_modelName + suffix + ".bin";
+        std::string decodedDir    = g_modelName + suffix + "_decoded";
 
-    std::ofstream f(bitstreamFile, std::ios::binary);
-    f.write(reinterpret_cast<const char*>(bytestream.data()),
-        bytestream.size());
+        std::ofstream f(bitstreamFile, std::ios::binary);
+        f.write(reinterpret_cast<const char*>(bytestream.data()),
+            bytestream.size());
 
-    std::cout << "\n===== Bitwidth Statistics =====\n";
+        std::cout << "Bitstream saved to: " << bitstreamFile << "\n";
 
-    for(auto& [bw, s] : stats)
-    {
-        uint64_t compBits =
-            (double)s.rawBits / totalRawBits * compressedBits;
+        
 
-        double bitsPerWeight =
-            (double)compBits / s.weights;
+        int num_tensors = modelTensors.size();
+        uint64_t originalBytes = 0;
 
-        std::cout
-            << "Bitwidth "
-            << getBitwidthFromEnum(bw)
-            << "-bit\n";
+        for(const auto& t : modelTensors)
+        {
+            uint32_t bw = getBitwidthFromEnum(t.tensorBitwidth);
 
-        std::cout
-            << "  weights: "
-            << s.weights << "\n";
+            originalBytes +=
+                (uint64_t)t.data.size() * bw / 8;
+        }
 
-        std::cout
-            << "  bits/weight: "
-            << bitsPerWeight << "\n";
-    }
+         uint64_t compressedBytes = bytestream.size();
 
-    int num_tensors = modelTensors.size();
-    uint64_t originalBytes = 0;
+        double ratio =
+            (double)originalBytes / compressedBytes;
 
-    for(const auto& t : modelTensors)
-    {
-        uint32_t bw = getBitwidthFromEnum(t.tensorBitwidth);
-
-        originalBytes +=
-            (uint64_t)t.data.size() * bw / 8;
-    }
+        double encodeMB =
+        (double)originalBytes / (1024.0*1024.0);
 
 
-        // --------------------------------------------------
-    // Free model tensors before decoding — decoder only needs the bytestream
-    // --------------------------------------------------
-    std::cout << "\n=== Freeing model tensors before decode ===\n";
-    size_t beforeFree = getCurrentRSS();
-
-    for (auto& t : modelTensors)
-    {
-        std::vector<int32_t>().swap(t.data);  // force-free each tensor's heap data
-    }
-    modelTensors.clear();
-    modelTensors.shrink_to_fit();
-
-    size_t afterFree = getCurrentRSS();
-    auto toMB = [](size_t b){ return b / (1024.0 * 1024.0); };
-    std::cout << "Memory before free : " << toMB(beforeFree) << " MB\n";
-    std::cout << "Memory after free  : " << toMB(afterFree)  << " MB\n";
-    std::cout << "Freed              : " << toMB(beforeFree - afterFree) << " MB\n";
-
-
-    // --------------------------------------------------
-    // DECODING
-    // --------------------------------------------------
-
-    std::cout << "\n=== Decoding Model ===\n";
-
-    Decoder decoder;
-    std::vector<TensorMeta> decodedModel;
-
-    PeakMemorySampler decSampler;
-    size_t baselineDecMem = getCurrentRSS();          // baseline before decode
-
-    decSampler.start();
-    auto decStart = std::chrono::high_resolution_clock::now();
-    
-    decoder.setStream(const_cast<std::vector<uint8_t>&>(bytestream));
-
-    decoder.initCtxModels(numGtxFlags);
-    printf("start decoding...\n");
-    decoder.decodeModel(decodedModel);
-   // decoder.finishDecoding();
-
-    auto decEnd = std::chrono::high_resolution_clock::now();
-    MemoryStats decMemStats = decSampler.stop(baselineDecMem);
-
-    double decTime = std::chrono::duration<double>(decEnd-decStart).count();
-
-    std::cout << "Decoded tensors: "
-              << decodedModel.size()
-              << "\n";
-
-
-    /// save decoded tensormeta
-
-    saveDecodedModel(decodedModel, decodedDir);
-
-
-    // --------------------------------------------------
-    // SUMMARY
-    // --------------------------------------------------
-
-    
-
-    uint64_t compressedBytes = bytestream.size();
-
-    double ratio =
-        (double)originalBytes / compressedBytes;
-
-    double encodeMB =
-    (double)originalBytes / (1024.0*1024.0);
-
-
-    std::cout << "\n========== MODEL CODING SUMMARY ==========\n"
+    std::cout << "\n========== ENCODING SUMMARY ==========\n"
               << "Tensors processed  : " << num_tensors        << "\n"
               << "Original size      : " << encodeMB                    << " MB\n"
               << "Compressed size    : " << compressedBytes/(1024.0*1024.0) << " MB\n"
               << "Compression ratio  : " << ratio                       << "\n"
               << "\nEncoding time      : " << encTime                   << " sec\n"
-              << "Decoding time      : " << decTime                     << " sec\n"
-              << "Encode speed       : " << encodeMB / encTime          << " MB/s\n"
-              << "Decode speed       : " << encodeMB / decTime          << " MB/s\n";
+              << "Encode speed       : " << encodeMB / encTime          << " MB/s\n";
 
-    std::cout << "\n========== MEMORY USAGE ==========\n";
-    printMemStats("Encode memory:", encMemStats);
-    printMemStats("Decode memory:", decMemStats);
+         printMemStats("Encode memory:", encMemStats);
+
+         std::cout << "\n===== Bitwidth Statistics =====\n";
+
+        for(auto& [bw, s] : stats)
+        {
+            uint64_t compBits =
+                (double)s.rawBits / totalRawBits * compressedBits;
+
+            double bitsPerWeight =
+                (double)compBits / s.weights;
+
+            std::cout
+                << "Bitwidth "
+                << getBitwidthFromEnum(bw)
+                << "-bit\n";
+
+            std::cout
+                << "  weights: "
+                << s.weights << "\n";
+
+            std::cout
+                << "  bits/weight: "
+                << bitsPerWeight << "\n";
+        }
+    }
+
+    if (g_doEncode && g_doDecode){    
+        // --------------------------------------------------
+        // Free model tensors before decoding — decoder only needs the bytestream
+        // --------------------------------------------------
+        std::cout << "\n=== Freeing model tensors before decode ===\n";
+        size_t beforeFree = getCurrentRSS();
+
+        for (auto& t : modelTensors)
+        {
+            std::vector<int32_t>().swap(t.data);  // force-free each tensor's heap data
+        }
+        modelTensors.clear();
+        modelTensors.shrink_to_fit();
+
+        size_t afterFree = getCurrentRSS();
+        auto toMB = [](size_t b){ return b / (1024.0 * 1024.0); };
+        std::cout << "Memory before free : " << toMB(beforeFree) << " MB\n";
+        std::cout << "Memory after free  : " << toMB(afterFree)  << " MB\n";
+        std::cout << "Freed              : " << toMB(beforeFree - afterFree) << " MB\n";
+
+    }
+    // --------------------------------------------------
+    // DECODING
+    // --------------------------------------------------
+    // necessary to load bitstream from file if encoding not performed
+    if (g_doDecode && !g_doEncode){
+        std::ifstream f(g_bitstreamFile, std::ios::binary | std::ios::ate);
+        if(!f)
+        {
+            std::cerr << "Failed to open bitstream\n";
+            return -1;
+        }
+        std::streamsize size = f.tellg();
+        f.seekg(0, std::ios::beg);
+        bytestream.resize(size);
+        f.read(reinterpret_cast<char*>(bytestream.data()), size);
+        std::cout << "Loaded bitstream: " << size << " bytes\n";
+    }
+
+    if(g_doDecode){
+        std::cout << "\n=== Decoding Model ===\n";
+
+        Decoder decoder;
+        std::vector<TensorMeta> decodedModel;
+
+        PeakMemorySampler decSampler;
+        size_t baselineDecMem = getCurrentRSS();          // baseline before decode
+
+        decSampler.start();
+        auto decStart = std::chrono::high_resolution_clock::now();
+        
+        decoder.setStream(const_cast<std::vector<uint8_t>&>(bytestream));
+
+        decoder.initCtxModels(numGtxFlags);
+        printf("Start decoding...\n");
+        decoder.decodeModel(decodedModel);
+
+        auto decEnd = std::chrono::high_resolution_clock::now();
+        MemoryStats decMemStats = decSampler.stop(baselineDecMem);
+
+        double decTime = std::chrono::duration<double>(decEnd-decStart).count();
+
+        std::cout << "Decoded tensors: "
+                << decodedModel.size()
+                << "\n";
+
+
+        /// save decoded tensormeta
+        std::string suffix = g_useScaling ? "_scaled" : "_noscale";
+        std::string decodedDir = g_modelName + suffix + "_decoded";
+        saveDecodedModel(decodedModel, decodedDir);
+
+        uint64_t decodedBytes = 0;
+
+        for(const auto& t : decodedModel)
+        {
+            decodedBytes += t.data.size() * sizeof(int32_t);
+        }
+
+        double decodedMB = decodedBytes / (1024.0 * 1024.0);
+
+        std::cout << "\n========== DECODING SUMMARY ==========\n"
+            << "Decoded size       : " << decodedMB << " MB\n"
+            << "Decoding time      : " << decTime                     << " sec\n"
+            << "Decode speed       : " << decodedMB / decTime          << " MB/s\n";
+        printMemStats("Decode memory:", decMemStats);
+    }
+   
+    
 
     return 0;
 }

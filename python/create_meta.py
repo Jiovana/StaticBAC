@@ -1,3 +1,162 @@
+"""
+===============================================================================
+Neural Network Tensor Export & Quantization Tool
+===============================================================================
+
+Description:
+------------
+This script extracts tensors from deep learning models (PyTorch / Torchvision /
+HuggingFace), optionally quantizes them, and exports:
+
+1. Binary tensor files (.bin, int32)
+2. A metadata file describing all tensors
+
+The output is designed to be consumed by the StaticBAC encoder/decoder pipeline.
+
+-------------------------------------------------------------------------------
+Supported Model Sources:
+-------------------------------------------------------------------------------
+
+1. HuggingFace (default)
+   - NLP / transformer models
+   - Examples:
+        bert-base-uncased
+        gpt2
+        meta-llama/Llama-2-7b-hf
+
+2. Torchvision
+   - Image models
+   - Examples:
+        resnet50
+        mobilenet_v2
+        vgg19
+        efficientnet_b0
+
+-------------------------------------------------------------------------------
+Usage:
+-------------------------------------------------------------------------------
+
+    python export_model.py \
+        --model <model_name_or_path> \
+        --out_dir <output_directory> \
+        [--source hf|torchvision] \
+        [--weights <weights_enum>] \
+        [--quantized] \
+        [--no_quant]
+
+-------------------------------------------------------------------------------
+Arguments:
+-------------------------------------------------------------------------------
+
+--model <string>   (required)
+    Model name or path
+
+--out_dir <path>   (required)
+    Output directory where binaries and metadata will be stored
+
+--source <string>  (default: hf)
+    Model source:
+        hf           → HuggingFace models
+        torchvision  → Torchvision models
+
+--weights <string> (optional)
+    Torchvision weights enum
+    Example:
+        ResNet50_Weights.DEFAULT
+
+--quantized (flag)
+    Load a pre-quantized torchvision model
+    (uses int_repr() internally)
+
+--no_quant (flag)
+    Skip quantization (assumes tensors are already quantized)
+
+-------------------------------------------------------------------------------
+Outputs:
+-------------------------------------------------------------------------------
+
+<out_dir>/
+├── binaries/
+│   ├── layer1.weight.bin
+│   ├── layer1.bias.bin
+│   └── ...
+└── tensor.meta
+
+-------------------------------------------------------------------------------
+Metadata Format:
+-------------------------------------------------------------------------------
+
+    numTensors <N>
+
+    <id> <name> <type> <bitwidth> <numDims> <shape...> <qstep>
+
+Example:
+    0 conv1.weight weight 8 4 64 3 7 7 0.02
+
+-------------------------------------------------------------------------------
+Tensor Handling:
+-------------------------------------------------------------------------------
+
+1. Parameters (named_parameters):
+    - Weights → quantized to 8-bit
+    - Bias / norm → quantized to 12-bit
+    - Small tensors (<32 elements) → 12-bit
+
+2. Buffers (named_buffers):
+    - NEVER quantized
+    - Always stored as int32
+    - Bitwidth = 32
+
+3. Pre-quantized models:
+    - Uses int_repr()
+    - No additional quantization applied
+
+-------------------------------------------------------------------------------
+Quantization:
+-------------------------------------------------------------------------------
+
+- Uniform symmetric quantization
+- Step size (qstep) optimized via golden-section search (MSE minimization)
+- Output stored as int32 regardless of bitwidth
+- Bitwidth used later for entropy coding (StaticBAC)
+
+-------------------------------------------------------------------------------
+Notes:
+-------------------------------------------------------------------------------
+
+- All outputs are stored as int32 for compatibility with C++ pipeline
+- Bitwidth does NOT change storage format, only coding behavior
+- Tensor names are used as filenames
+- Buffers (e.g., BatchNorm stats) are preserved exactly
+
+-------------------------------------------------------------------------------
+Example:
+-------------------------------------------------------------------------------
+
+# HuggingFace model
+python create_meta.py \
+    --model bert-base-uncased \
+    --out_dir ./bert_export
+
+# Torchvision model with weights
+python create_meta.py \
+    --model resnet50 \
+    --source torchvision \
+    --weights ResNet50_Weights.DEFAULT \
+    --out_dir ./resnet_export
+
+# Quantized torchvision model
+python create_meta.py \
+    --model resnet50 \
+    --source torchvision \
+    --weights ResNet50_QuantizedWeights.DEFAULT \
+    --quantized \
+    --out_dir ./resnet_quant_export
+
+
+===============================================================================
+"""
+
 import os
 import argparse
 import numpy as np
@@ -6,7 +165,7 @@ from torchvision import models, transforms, datasets
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoModelForCausalLM, AutoModelForSequenceClassification
-
+# may need to add more libs here for other models!
 
 
 # ============================================================
@@ -79,7 +238,10 @@ def optimal_uniform_quant(x, bitwidth, search_steps=40):
     return q.astype(np.int32), float(qstep)
 
 
-
+# Core quantization entry point
+# - Handles weights, biases, and buffers differently
+# - Always outputs int32 (for C++ compatibility)
+# - Bitwidth is used later for entropy coding, not storage
 def quantize_tensor(arr, use_quant=True, tensor_kind ="weight"):
     numel = arr.size
 
@@ -129,6 +291,9 @@ def write_metadata(path, tensors):
 
 # ============================================================
 # Model loader
+# Flexible loader:
+# - Torchvision: supports weights + quantized models
+# - HuggingFace: tries causal LM → classifier → base model
 # ============================================================
 
 def load_model(name, source="hf", weights=None, quantized=False):
@@ -220,11 +385,13 @@ def main():
     for name, param in tqdm(model.named_parameters(), desc="parameters"):
         tensor_kind = "weight" if "weight" in name.lower() else "bias" if "bias" in name.lower() else "other"
 
+        # If model is already quantized (e.g., torchvision quantized models),
+        # use int_repr() to extract integer values directly
         if (args.quantized and hasattr(param, "int_repr")):
             arr = param.int_repr().cpu().numpy().astype(np.int32)
             q, qstep, bitwidth = quantize_tensor(
                 arr,
-                use_quant=False, # no quantization for already quantized models
+                use_quant=False, # no quantization 
                 tensor_kind=tensor_kind
             )
         else:
@@ -253,7 +420,11 @@ def main():
 
         tensor_id += 1
 
+
     # --- BUFFERS ---
+    # Buffers are NOT part of named_parameters (e.g., BatchNorm stats)
+    # They must NOT be quantized to preserve correctness
+    # We store them as raw int32 with bitwidth=32
     for name, buf in tqdm(model.named_buffers(), desc="buffers"):
         arr = buf.detach().cpu().numpy().astype(np.float32)
         tensor_kind = "buffer"

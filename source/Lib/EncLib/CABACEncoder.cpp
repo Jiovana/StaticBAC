@@ -23,6 +23,9 @@
 #include <sstream>
 //#include "Utils/global_logger.h"
 
+
+static constexpr uint32_t MAX_TENSORS_BITS = 12;   // allows up to 4096 tensors
+
 //--------------------------------------------------------------
 // startBacEncoding
 //
@@ -102,17 +105,24 @@ void BACEncoder::initCtxMdls(uint32_t numGtxFlags)
 uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const std::string& tensor_name, const uint16_t tensorId, const bool useScaling)
 {
     uint64_t binsUsed = 0;
+   // if (tensorId > 600){
+    //  printf("Encoding tensor header... Tensor id: %d \n", tensorId);
+    //  printf("Type: %d Width: %d \n", static_cast<uint16_t>(m_tensorType), static_cast<uint16_t>(m_tensorBitwidth));
+    //  printf("Converted width: %d\n", getBitwidthFromEnum(m_tensorBitwidth));
+    //}
+    
 
     // encode useScaling flag
     m_BinEncoder.encodeBinEP(useScaling); 
     binsUsed += 1; // 1 bit for flag
     m_useScaling = useScaling;
     // encode tensor id
-    m_BinEncoder.encodeBinsEP(tensorId, 10); // 10 bits = 1024 tensors
-    binsUsed +=10;
+    m_BinEncoder.encodeBinsEP(tensorId, MAX_TENSORS_BITS); // 
+    binsUsed +=12;
     // encode tensor type
     m_BinEncoder.encodeBinEP(static_cast<uint32_t>(m_tensorType)); // weight or bias
     binsUsed += 1; // 1 bit for tensor type
+    
     // encode bitwidth
     m_BinEncoder.encodeBinsEP(static_cast<uint32_t>(m_tensorBitwidth), 3); // using 3 bits for bitwidth (up to 8 different bitwidths)
     binsUsed += 3; // 3 bits for bitwidth
@@ -161,13 +171,14 @@ uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWei
     m_BinEncoder.encodeBinEP(use_mean ? 1 : 0); // flag to indicate if mean is used
     binsUsed += 1;
     int bitwidth = getBitwidthFromEnum(m_tensorBitwidth);
+    //printf("Will try to encode mean.. use mean?%d mean:%d\n", use_mean, mean);
     if (use_mean)
     {
       // 2. send/store mean
      // printf("Encoding mean: %d with bitwidth: %d\n", mean, bitwidth);
       iae_v(bitwidth, mean); 
       binsUsed += bitwidth; // account for bits used to encode mean
-    //  printf("Encoded mean: %d\n", mean);
+     // printf("Encoded mean: %d\n", mean);
     } else {
       m_TensorMean = 0; // if not using mean, set it to zero for encoding residuals
     //    printf("Mean not used, mean value: %d\n", mean);
@@ -197,7 +208,7 @@ void BACEncoder::iae_v( uint8_t v, int32_t value )
   //PROFILE_SCOPE("iae_v", 0);
  // printf("==> iae_v called with v=%d, value=%d\n", v, value);
     uint32_t pattern = uint32_t(value) & (uint32_t(0xFFFFFFFF) >> (32-v));
-  //  printf("==> iae_v: pattern=0x%X\n", pattern);
+    //printf("==> iae_v: pattern=0x%X\n", pattern);
     m_BinEncoder.encodeBinsEP( pattern, v );
 }
 
