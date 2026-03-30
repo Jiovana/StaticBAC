@@ -161,7 +161,6 @@ Based on DeepCABAC and NNCodec https://github.com/d-becking/nncodec2
 std::string g_tensorBinDir;
 std::string g_metaFile;
 std::string g_modelName;
-bool g_useScaling  = false;
 bool g_doEncode = false;
 bool g_doDecode = false;
 std::string g_bitstreamFile;
@@ -473,11 +472,8 @@ bool parseArgs(int argc, char* argv[])
     {
         std::string key = argv[i];
 
-        if(key == "--scaling")
-        {
-            g_useScaling = true;  // flag detected
-        }
-        else if(key == "--encode")
+       
+        if(key == "--encode")
         {
             g_doEncode = true;
         }
@@ -559,7 +555,6 @@ int main(int argc, char* argv[])
                   << " --binaries <tensor_bin_dir> (for enc)"
                   << " --meta <meta_file> (for enc)"
                   << " --name <model_name>"
-                  << " --scaling (optional)"
                   << " --encode --decode --bitstream (for dec) \n\n";
 
         return -1;
@@ -570,7 +565,6 @@ int main(int argc, char* argv[])
         std::cout << "Tensor bin dir : " << g_tensorBinDir << "\n";
         std::cout << "Meta file      : " << g_metaFile << "\n";
         std::cout << "Model name     : " << g_modelName << "\n";
-        std::cout << "Use scaling    : " << (g_useScaling ? "true" : "false") << "\n";
     }
     if (g_doDecode){
         std::cout << "Bitstream file : " << g_bitstreamFile << "\n";
@@ -620,7 +614,7 @@ int main(int argc, char* argv[])
         auto encStart = std::chrono::high_resolution_clock::now();
 
         encoder.initCtxModels(numGtxFlags);
-        bytestream = encoder.encodeModel(modelTensors, g_useScaling);
+        bytestream = encoder.encodeModel(modelTensors);
 
         auto encEnd = std::chrono::high_resolution_clock::now();
 
@@ -640,10 +634,9 @@ int main(int argc, char* argv[])
 
         uint64_t compressedBits = bytestream.size() * 8;
 
-        std::string suffix = g_useScaling ? "_scaled" : "_noscale";
 
-        std::string bitstreamFile = g_modelName + suffix + ".bin";
-        std::string decodedDir    = g_modelName + suffix + "_decoded";
+        std::string bitstreamFile = g_modelName + ".bin";
+        std::string decodedDir    = g_modelName + "_decoded";
 
         std::ofstream f(bitstreamFile, std::ios::binary);
         f.write(reinterpret_cast<const char*>(bytestream.data()),
@@ -776,8 +769,7 @@ int main(int argc, char* argv[])
 
 
         /// save decoded tensormeta
-        std::string suffix = g_useScaling ? "_scaled" : "_noscale";
-        std::string decodedDir = g_modelName + suffix + "_decoded";
+        std::string decodedDir = g_modelName + "_decoded";
         saveDecodedModel(decodedModel, decodedDir);
 
         uint64_t decodedBytes = 0;

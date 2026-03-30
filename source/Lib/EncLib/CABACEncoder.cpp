@@ -102,7 +102,7 @@ void BACEncoder::initCtxMdls(uint32_t numGtxFlags)
 //   division and transmitted only if its magnitude exceeds a
 //   small threshold.
 //--------------------------------------------------------------
-uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const uint16_t tensorId, const bool useScaling)
+uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const uint16_t tensorId)
 {
     uint64_t binsUsed = 0;
    // if (tensorId > 600){
@@ -111,14 +111,9 @@ uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWei
     //  //printf("Converted width: %d\n", getBitwidthFromEnum(m_tensorBitwidth));
     //}
     
-
-    // encode useScaling flag
-    m_BinEncoder.encodeBinEP(useScaling); 
-    binsUsed += 1; // 1 bit for flag
-    m_useScaling = useScaling;
     // encode tensor id
     m_BinEncoder.encodeBinsEP(tensorId, MAX_TENSORS_BITS); // 
-    binsUsed +=12;
+    binsUsed += MAX_TENSORS_BITS;
     // encode tensor type
     m_BinEncoder.encodeBinEP(static_cast<uint32_t>(m_tensorType)); // weight or bias
     binsUsed += 1; // 1 bit for tensor type
@@ -525,13 +520,6 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       else if (meanRes < 256)     k = 2;
       else if (meanRes < 1024)    k = 3;
       else                        k = 3;
-
-       uint8_t shift = getShiftFromMeanAndK(m_tensorBitwidth, m_TensorMean, k);
-      // if scaling flag is false, then do not scale residual
-       if (m_useScaling == false){
-         shift = 0;
-        ////printf("Use scaling disabled:%d \n", m_useScaling);
-       }
      
 
       // ------------ pass 2 - histogram on scaled residuals 
@@ -542,10 +530,8 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
           int32_t residual = pWeights[i] - localMean;
 
           int32_t scaled;
-          if (shift > 0 )
-              scaled = (residual + (residual >= 0 ? (1 << (shift-1)) : -(1 << (shift-1)))) >> shift;
-          else
-              scaled = residual;
+
+          scaled = residual;
 
           scaledBuf[i - start] = scaled;
 
@@ -595,9 +581,6 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       uae_v(2, k); // send k as 2-bit 
       scaledBits += 2; // account for bits used to encode k 
 
-       // send shift too...
-       uae_v(4, shift);
-       scaledBits += 4;
 
       // ------------ pass 3: bac encoding ----------------
       for (uint32_t i = start; i < end; i++)

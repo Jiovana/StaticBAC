@@ -36,10 +36,6 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
 {
   uint64_t binsRead = 0;
 
-  // decode scaling flag
-  m_useScaling = m_BinDecoder.decodeBinEP();
-  binsRead += 1; 
- // //printf("SCALING FLAG: %d \n", m_useScaling);
   // decode tensor id
   tensor.tensorId = m_BinDecoder.decodeBinsEP(MAX_TENSORS_BITS);
   binsRead += 12; 
@@ -126,18 +122,13 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
     uint8_t k = uae_v(2); // read k as 2-bit fixed length for simplicity
     scaledBits += 2;
 
-    // read shift for scaling
-     uint8_t shift = uae_v(4);
-     scaledBits += 4;
-    // ////printf("Calculated shift for chunk %d: %d\n", c, shift);
 
     // --------------- BAC decode weights
     for (uint32_t i = start; i < end; i++)
     {
       int32_t decodedVal = 0;
       scaledBits += decodeWeightVal(decodedVal, k); 
-      int32_t residual = shift > 0 ? (decodedVal << shift) : decodedVal;
-      //int32_t residual = decodedVal;
+      int32_t residual = decodedVal;
 
       pWeights[i] =  residual + m_TensorMean;
      // ////printf("Decoded weight %d: value=%d\n", i,  pWeights[i]);

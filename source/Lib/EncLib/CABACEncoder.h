@@ -67,8 +67,7 @@ class BACEncoder
         uint32_t numWeights,
         const uint32_t* shape,
         uint32_t numDims,
-        uint16_t tensorId,
-        const bool useScaling);
+        uint16_t tensorId);
 
     /// Encode tensor weights
     uint64_t encodeWeights(const int32_t* pWeights, uint32_t numWeights);
@@ -110,7 +109,6 @@ class BACEncoder
 
     int32_t        m_TensorMean;
     bool           m_useMean;
-    bool           m_useScaling;
 };
 
 #endif

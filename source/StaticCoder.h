@@ -13,9 +13,9 @@ public:
   void                  initCtxModels(uint32_t cabac_unary_length) { m_BACEncoder.initCtxMdls(cabac_unary_length); }
   void                  iae_v( uint8_t v, int32_t value )            { m_BACEncoder.iae_v( v, value ); }
   void                  uae_v( uint8_t v, uint32_t value )           { m_BACEncoder.uae_v( v, value ); }
-  uint64_t              encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint32_t& headerBits, const bool useScaling);
+  uint64_t              encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint32_t& headerBits);
   const std::vector<uint8_t>&  finishEncoding();
-  const std::vector<uint8_t>&  encodeModel(const std::vector<TensorMeta>& modelTensors, const bool useScaling);
+  const std::vector<uint8_t>&  encodeModel(const std::vector<TensorMeta>& modelTensors);
  private:
   std::vector<uint8_t>  m_Bytestream;
   BACEncoder          m_BACEncoder;
