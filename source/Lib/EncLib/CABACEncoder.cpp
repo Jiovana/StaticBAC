@@ -46,7 +46,6 @@ static constexpr uint32_t MAX_TENSORS_BITS = 12;   // allows up to 4096 tensors
 void BACEncoder::startBacEncoding( std::vector<uint8_t>* pBytestream)
 {
     m_BinEncoder.setByteStreamBuf(pBytestream);
-    m_TensorMean = 0;
     m_BinEncoder.startBinEncoder();
 }
 
@@ -102,7 +101,7 @@ void BACEncoder::initCtxMdls(uint32_t numGtxFlags)
 //   division and transmitted only if its magnitude exceeds a
 //   small threshold.
 //--------------------------------------------------------------
-uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWeights, const uint32_t* shape, uint32_t numDims, const uint16_t tensorId)
+uint64_t BACEncoder::encodeTensorHeader( const uint32_t* shape, uint32_t numDims, const uint16_t tensorId)
 {
     uint64_t binsUsed = 0;
    // if (tensorId > 600){
@@ -141,43 +140,6 @@ uint64_t BACEncoder::encodeTensorHeader(const int32_t* pWeights, uint32_t numWei
         binsUsed += 5 + bitlen;
     }
 
-    int64_t sum = 0;
-    int32_t max_abs = 0;
-    uint32_t count = 0;
-
-    const uint32_t chunkSize = 2048 ; // small chunk for low RAM ?
-    uint32_t numChunks = (numWeights + chunkSize - 1) >> 11;
-    for (uint32_t chunk = 0; chunk < numChunks; chunk++)
-    {
-        for (uint32_t i = 0; i < chunkSize && (chunk * chunkSize + i) < numWeights; i++)
-        {
-            int32_t value = pWeights[chunk * chunkSize + i];
-            sum += value;
-            max_abs = std::max(max_abs, std::abs(value));
-            count++;
-        }
-      }
-      // Approximate mean using nearest power-of-2 shift
-    uint32_t shift = std::ceil(std::log2(count));
-    int32_t mean = sum >> shift; // integer shift division
-    bool use_mean = (std::abs(mean) > 4); // threshold fixed at 4, can be tuned based on experiments
-    m_useMean = use_mean;
-    m_TensorMean = mean;
-    m_BinEncoder.encodeBinEP(use_mean ? 1 : 0); // flag to indicate if mean is used
-    binsUsed += 1;
-    int bitwidth = getBitwidthFromEnum(m_tensorBitwidth);
-    ////printf("Will try to encode mean.. use mean?%d mean:%d\n", use_mean, mean);
-    if (use_mean)
-    {
-      // 2. send/store mean
-     // //printf("Encoding mean: %d with bitwidth: %d\n", mean, bitwidth);
-      iae_v(bitwidth, mean); 
-      binsUsed += bitwidth; // account for bits used to encode mean
-     // //printf("Encoded mean: %d\n", mean);
-    } else {
-      m_TensorMean = 0; // if not using mean, set it to zero for encoding residuals
-    //    //printf("Mean not used, mean value: %d\n", mean);
-    }
 
    // //printf("==> encodeTensorHeader returning with binsUsed=%llu\n", binsUsed);
     return binsUsed;
@@ -480,7 +442,6 @@ uint32_t BACEncoder::encodeWeightBAC( int32_t value, uint8_t k)
 uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numWeights)
 {
     uint64_t scaledBits = 0;
-    int32_t localMean = m_TensorMean;
     int width = getBitwidthFromEnum(m_tensorBitwidth);
 
     const uint32_t chunkSize = 2048 ; // small chunk for low RAM = for 32bits =~ 65KB 
@@ -502,7 +463,19 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       int64_t sumRes = 0;
       int32_t residual = 0;
 
-      // ---------- pass 1: residual + meanResidual -------------
+      // ---- pass 1:compute local mean ----
+      int64_t sum = 0;
+      for (uint32_t i = start; i < end; i++)
+          sum += pWeights[i];
+
+      uint32_t shift = std::ceil(std::log2(len));
+      int32_t localMean = sum >> shift;
+
+      bool useMean = (std::abs(localMean) > 4);
+
+
+
+      // ---------- pass 2: residual + meanResidual -------------
       for (uint32_t i = start; i < end; i++)
       {
           residual = pWeights[i] - localMean;
@@ -522,7 +495,7 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       else                        k = 3;
      
 
-      // ------------ pass 2 - histogram on scaled residuals 
+      // ------------ pass 3 - histogram on scaled residuals 
       uint64_t estBits = 0;
       
       for (uint32_t i = start; i < end; i++)
@@ -576,6 +549,18 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
         }
         continue;
       }
+
+      // send mean flag and mean value
+      m_BinEncoder.encodeBinEP(useMean ? 1 : 0);
+      scaledBits += 1;
+
+      if (useMean) {
+          iae_v(width, localMean);
+          scaledBits += width;
+      } else {
+          localMean = 0;
+      }
+
     
       // send k  
       uae_v(2, k); // send k as 2-bit 

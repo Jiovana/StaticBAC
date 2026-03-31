@@ -63,8 +63,6 @@ class BACEncoder
 
     /// Encode tensor metadata header
     uint64_t encodeTensorHeader(
-        const int32_t* pWeights,
-        uint32_t numWeights,
         const uint32_t* shape,
         uint32_t numDims,
         uint16_t tensorId);
@@ -107,8 +105,6 @@ class BACEncoder
     TensorBitwidth m_tensorBitwidth;
     TensorType     m_tensorType;
 
-    int32_t        m_TensorMean;
-    bool           m_useMean;
 };
 
 #endif

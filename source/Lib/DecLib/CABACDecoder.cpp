@@ -48,7 +48,6 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
   // decode bitwidth
   m_tensorBitwidth = static_cast<TensorBitwidth>(m_BinDecoder.decodeBinsEP(3));
   tensor.tensorBitwidth = m_tensorBitwidth;
-  int bitwidth = getBitwidthFromEnum(m_tensorBitwidth);
  // //printf("Decoded tensor bitwidth: %d\n", static_cast<uint32_t>(m_tensorBitwidth));
   binsRead += 3; // 3 bits for bitwidth
 
@@ -72,19 +71,6 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
     ////printf("Decoded dimension %d size: %d\n", i, shape[i]);
     binsRead += 5 + bitlen; // bits used to decode this dimension
   }
-
-  m_useMean = m_BinDecoder.decodeBinEP(); // read flag for mean usage
-  binsRead += 1; // 1 bit for mean usage flag
-
-  if (m_useMean)
-    {
-      m_TensorMean = iae_v(bitwidth); // read mean value
-      binsRead += bitwidth; // account for bits used to decode mean
-   //   ////printf("Decoded mean: %d\n", m_TensorMean);
-    } else {
-      m_TensorMean = 0; // if mean not used, set it to zero for decoding residuals
-    //  ////printf("Mean not used, mean value set to: %d\n", m_TensorMean);
-    }
 
   return binsRead;
 }
@@ -117,6 +103,15 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
       ////printf ("Tensor decoded as raw EP bins.\n");
       continue;
     }
+    // read local mean flag and value
+    bool useMean = m_BinDecoder.decodeBinEP();
+    scaledBits += 1;
+
+    int32_t localMean = 0;
+    if (useMean) {
+        localMean = iae_v(width);
+        scaledBits += width;
+    }
 
     // ---------- read k parameter for Rice-Golomb coding
     uint8_t k = uae_v(2); // read k as 2-bit fixed length for simplicity
@@ -130,7 +125,7 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
       scaledBits += decodeWeightVal(decodedVal, k); 
       int32_t residual = decodedVal;
 
-      pWeights[i] =  residual + m_TensorMean;
+      pWeights[i] =  residual + localMean;
      // ////printf("Decoded weight %d: value=%d\n", i,  pWeights[i]);
       m_CtxModeler.updateNeighborCtx(decodedVal);
       //printf("CHUNK[%d] - Decoded value %d\n", c, pWeights[i]);

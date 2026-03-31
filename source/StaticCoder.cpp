@@ -34,8 +34,6 @@ uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint3
     // Encode tensor header
     uint64_t headerBitsLocal =
         m_BACEncoder.encodeTensorHeader(
-            tensor.data.data(),
-            numWeights,
             tensor.shape.data(),
             tensor.numDims,
             tensorId);

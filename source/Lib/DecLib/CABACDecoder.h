@@ -47,7 +47,5 @@ private:
     uint32_t              m_NumGtxFlags;
     TensorBitwidth        m_tensorBitwidth;
     TensorType            m_tensorType;
-    int32_t               m_TensorMean;
-    bool                  m_useMean;
 };
 #endif // __BACDEC__
