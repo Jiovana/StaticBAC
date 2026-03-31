@@ -40,6 +40,7 @@ void BinEnc::startBinEncoder()
     m_Range              = 510;
     m_BitsLeft           = 23;
     m_NumBufferedBytes   = 0;
+    m_BufferedByte       = 0;
 }
 
 

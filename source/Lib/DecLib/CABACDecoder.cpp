@@ -1,4 +1,5 @@
 #include "CABACDecoder.h"
+
 #include <iostream>
 #include <sstream>
 
@@ -19,6 +20,20 @@ void BACDecoder::initCtxModels(uint32_t cabac_unary_length)
   ////printf("CABACDecoder: Context models initialized with cabac_unary_length=%d\n", cabac_unary_length);
 }
 
+uint8_t* BACDecoder::getBytestreamPtr()
+{
+  return m_BinDecoder.getByteStreamPtr();
+}
+
+void BACDecoder::setByteStreamPtr(uint8_t* ptr)
+{
+  m_BinDecoder.setByteStreamPtr(ptr);
+}
+void BACDecoder::setBytesRead(uint32_t bytesRead)
+{
+  m_BinDecoder.setBytesRead(bytesRead);
+}
+
 
 int32_t BACDecoder::iae_v(uint8_t v)
 {
@@ -32,27 +47,31 @@ uint32_t BACDecoder::uae_v(uint8_t v)
 }
 
 
-uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, TensorMeta &tensor)
+uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, TensorMeta &tensor, BitstreamReader& reader)
 {
   uint64_t binsRead = 0;
 
   // decode tensor id
-  tensor.tensorId = m_BinDecoder.decodeBinsEP(MAX_TENSORS_BITS);
+  tensor.tensorId = reader.readBits(MAX_TENSORS_BITS); // read numTensors
+  //tensor.tensorId = m_BinDecoder.decodeBinsEP(MAX_TENSORS_BITS);
   binsRead += 12; 
   // decode tensor type
-  m_tensorType = static_cast<TensorType>(m_BinDecoder.decodeBinEP());
+  m_tensorType = static_cast<TensorType>(reader.readBits(1)); // weight or bias
+  // m_tensorType = static_cast<TensorType>(m_BinDecoder.decodeBinEP());
   tensor.tensorType = m_tensorType;
- // //printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
+   printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
   binsRead += 1; // 1 bit for tensor type
 
   // decode bitwidth
-  m_tensorBitwidth = static_cast<TensorBitwidth>(m_BinDecoder.decodeBinsEP(3));
+  m_tensorBitwidth = static_cast<TensorBitwidth>(reader.readBits(3)); // using 3 bits for bitwidth (up to 8 different bitwidths)
+  // m_tensorBitwidth = static_cast<TensorBitwidth>(m_BinDecoder.decodeBinsEP(3));
   tensor.tensorBitwidth = m_tensorBitwidth;
  // //printf("Decoded tensor bitwidth: %d\n", static_cast<uint32_t>(m_tensorBitwidth));
   binsRead += 3; // 3 bits for bitwidth
 
   // decode number of dimensions
-  numDims = m_BinDecoder.decodeBinsEP(3);
+  numDims = reader.readBits(3); // using 3 bits for numDims (up to 8 dimensions)
+  // numDims = m_BinDecoder.decodeBinsEP(3);
   tensor.numDims = numDims;
   ////printf("Decoded number of dimensions: %d\n", numDims);
   binsRead += 3; // 3 bits for numDims
@@ -63,14 +82,21 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
   for (uint32_t i = 0; i < numDims; i++)
   {
     //bitlenMinus1 = uae_v(5);
-    bitlenMinus1 = m_BinDecoder.decodeBinsEP(5);
+    bitlenMinus1 = reader.readBits(5);
+    // bitlenMinus1 = m_BinDecoder.decodeBinsEP(5);
     bitlen = bitlenMinus1 + 1;
    // ////printf("Decoded bitlen for dimension %d: %d, -1:%d\n", i, bitlen, bitlenMinus1);
     //shape[i] = uae_v(bitlen);
-    shape[i] = m_BinDecoder.decodeBinsEP(bitlen);
+    shape[i] = reader.readBits(bitlen);
+    // shape[i] = m_BinDecoder.decodeBinsEP(bitlen);
     ////printf("Decoded dimension %d size: %d\n", i, shape[i]);
     binsRead += 5 + bitlen; // bits used to decode this dimension
   }
+
+  reader.alignToByte(); // align to byte after reading header
+
+  printf("Decoded tensor header: id=%d type=%d bitwidth=%d numDims=%d totalHeaderBits=%llu\n",
+      tensor.tensorId, static_cast<uint32_t>(tensor.tensorType), static_cast<uint32_t>(tensor.tensorBitwidth), numDims, binsRead);
 
   return binsRead;
 }
@@ -86,8 +112,10 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
 
   for (uint32_t c = 0; c < numChunks; c++)
   {
+    m_BinDecoder.startBinDecoder();
     m_CtxModeler.resetNeighborCtx();
-
+    //printf("Chunk %d decoding start ptr: %p\n", c, m_BinDecoder.getByteStreamPtr());
+    printf("Chunk %d decoding start\n", c);
     uint32_t start = c * chunkSize;
     uint32_t end   = std::min(start + chunkSize, numWeights);
 
@@ -101,6 +129,8 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
         scaledBits += width;
       }
       ////printf ("Tensor decoded as raw EP bins.\n");
+      m_BinDecoder.decodeBinTrm(); // read termination bit for the chunk
+      m_BinDecoder.finish();
       continue;
     }
     // read local mean flag and value
@@ -131,6 +161,8 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
       //printf("CHUNK[%d] - Decoded value %d\n", c, pWeights[i]);
 
     }
+    m_BinDecoder.decodeBinTrm(); // read termination bit for the chunk
+    m_BinDecoder.finish();
   }
   return scaledBits;
 }
@@ -138,8 +170,13 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
 
 uint64_t BACDecoder::decodeWeights(int32_t *pWeights, uint32_t numWeights)
 {
+  uint32_t startBytes = m_BinDecoder.getBytesRead();
 
-  return decodeWeightsChunks(pWeights, numWeights); 
+  decodeWeightsChunks(pWeights, numWeights); 
+
+  uint32_t endBytes = m_BinDecoder.getBytesRead();
+
+  return endBytes - startBytes; 
 
 }
 
@@ -307,4 +344,10 @@ uint32_t BACDecoder::terminateBacDecoding()
     return m_BinDecoder.getBytesRead();
   }
   CHECK(1, "Terminating Bin not received!");
+}
+
+void BACDecoder::finishBac()
+{
+    m_BinDecoder.finish();
+;
 }

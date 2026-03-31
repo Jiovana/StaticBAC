@@ -15,6 +15,8 @@ public:
     void      startBinEncoder      ();
     void      setByteStreamBuf     ( std::vector<uint8_t> *byteStreamBuf );
 
+    std::vector<uint8_t>*getByteStreamBuf() { return m_ByteBuf; }
+
     uint32_t  encodeBinold            ( uint32_t bin,  const StaticCtx &ctxMdl, uint8_t ctxId,  TensorType paramType   );
     uint32_t  encodeBin            ( uint32_t bin,  const StaticCtx &ctxMdl, uint8_t ctxId,  TensorType paramType   );
 

@@ -49,6 +49,11 @@ void BACEncoder::startBacEncoding( std::vector<uint8_t>* pBytestream)
     m_BinEncoder.startBinEncoder();
 }
 
+void BACEncoder::startBinEncoder()
+{
+    m_BinEncoder.startBinEncoder();
+}
+
 //--------------------------------------------------------------
 // initCtxMdls
 //
@@ -101,27 +106,28 @@ void BACEncoder::initCtxMdls(uint32_t numGtxFlags)
 //   division and transmitted only if its magnitude exceeds a
 //   small threshold.
 //--------------------------------------------------------------
-uint64_t BACEncoder::encodeTensorHeader( const uint32_t* shape, uint32_t numDims, const uint16_t tensorId)
+uint64_t BACEncoder::encodeTensorHeader( const uint32_t* shape, uint32_t numDims, const uint16_t tensorId, std::vector<uint8_t>& m_Bytestream )
 {
     uint64_t binsUsed = 0;
-   // if (tensorId > 600){
-    //  //printf("Encoding tensor header... Tensor id: %d \n", tensorId);
-    //  //printf("Type: %d Width: %d \n", static_cast<uint16_t>(m_tensorType), static_cast<uint16_t>(m_tensorBitwidth));
-    //  //printf("Converted width: %d\n", getBitwidthFromEnum(m_tensorBitwidth));
-    //}
-    
+
+    BitstreamWriter writer(&m_Bytestream); 
+
     // encode tensor id
-    m_BinEncoder.encodeBinsEP(tensorId, MAX_TENSORS_BITS); // 
+    writer.writeBits(tensorId, MAX_TENSORS_BITS); // 12 bits = 4096 tensors limit
+    // m_BinEncoder.encodeBinsEP(tensorId, MAX_TENSORS_BITS); // 
     binsUsed += MAX_TENSORS_BITS;
     // encode tensor type
-    m_BinEncoder.encodeBinEP(static_cast<uint32_t>(m_tensorType)); // weight or bias
+    writer.writeBits(static_cast<uint32_t>(m_tensorType), 1); // weight or bias
+    // m_BinEncoder.encodeBinEP(static_cast<uint32_t>(m_tensorType)); // weight or bias
     binsUsed += 1; // 1 bit for tensor type
     
     // encode bitwidth
-    m_BinEncoder.encodeBinsEP(static_cast<uint32_t>(m_tensorBitwidth), 3); // using 3 bits for bitwidth (up to 8 different bitwidths)
+    writer.writeBits(static_cast<uint32_t>(m_tensorBitwidth), 3); // using 3 bits for bitwidth (up to 8 different bitwidths)
+    // m_BinEncoder.encodeBinsEP(static_cast<uint32_t>(m_tensorBitwidth), 3); // using 3 bits for bitwidth (up to 8 different bitwidths)
     binsUsed += 3; // 3 bits for bitwidth
     // encode number of dimensions
-    m_BinEncoder.encodeBinsEP(numDims, 3); // using 4 bits for numDims (up to 8 dimensions)
+    writer.writeBits(numDims, 3); // using 3 bits for numDims (up to 8 dimensions)
+    //m_BinEncoder.encodeBinsEP(numDims, 3); // using 4 bits for numDims (up to 8 dimensions)
     binsUsed += 3; // 3 bits for numDims
     uint16_t shapeBits = 0;
 
@@ -131,17 +137,20 @@ uint64_t BACEncoder::encodeTensorHeader( const uint32_t* shape, uint32_t numDims
         uint32_t dimSize = shape[i];
         int bitlen = (dimSize == 0) ? 1 : 32 - __builtin_clz(dimSize);
       //  //printf("CLZ results: %d\n", __builtin_clz(dimSize));
-        m_BinEncoder.encodeBinsEP(bitlen-1, 5);
+        writer.writeBits(bitlen - 1, 5); // encode bitlen-1 using 5 bits (supports up to 32-bit dimensions)
+       //  m_BinEncoder.encodeBinsEP(bitlen-1, 5);
         //uae_v(5, bitlen - 1);
-        m_BinEncoder.encodeBinsEP(dimSize, bitlen);
+        writer.writeBits(dimSize, bitlen); // encode dimension size using bitlen bits
+        // m_BinEncoder.encodeBinsEP(dimSize, bitlen);
         //uae_v(bitlen, dimSize);
         shapeBits += 5 + bitlen; // bits used to encode this dimension
       //  //printf("Encoded dimension %d: size=%d, bitlen=%d\n", i, dimSize, bitlen);
         binsUsed += 5 + bitlen;
     }
 
-
-   // //printf("==> encodeTensorHeader returning with binsUsed=%llu\n", binsUsed);
+    writer.flushToByte(); // flush after encoding header
+    printf("Encoded tensor header: id=%d type=%d bitwidth=%d numDims=%d shapeBits=%d totalHeaderBits=%d\n",
+        tensorId, static_cast<uint32_t>(m_tensorType), static_cast<uint32_t>(m_tensorBitwidth), numDims, shapeBits, binsUsed);
     return binsUsed;
 }
 
@@ -202,6 +211,12 @@ void BACEncoder::terminateBacEncoding()
 {
     //PROFILE_SCOPE("terminateCabacEncoding", 0);
     m_BinEncoder.encodeBinTrm(1);
+    m_BinEncoder.finish();
+}
+
+void BACEncoder::finishBac()
+{
+    //PROFILE_SCOPE("terminateCabacEncoding", 0);
     m_BinEncoder.finish();
 }
 
@@ -454,6 +469,7 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
     std::vector<int32_t> scaledBuf(chunkSize);
     for (uint32_t c = 0; c < numChunks; c++)
     {
+      m_BinEncoder.startBinEncoder();
       m_CtxModeler.resetNeighborCtx();
 
       uint32_t start = c * chunkSize;
@@ -547,6 +563,8 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
           //m_BinEncoder.encodeBinsEP(pWeights[c], width);
           scaledBits += width;
         }
+        m_BinEncoder.encodeBinTrm(1);
+        m_BinEncoder.finish();
         continue;
       }
 
@@ -577,7 +595,10 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
         m_CtxModeler.updateNeighborCtx(scaled);  
         //printf("CHUNK[%d] - Encoding value %d\n" , c, scaled);
 
-        }
+      }
+
+      m_BinEncoder.encodeBinTrm(1);
+      m_BinEncoder.finish();
 
     }
   

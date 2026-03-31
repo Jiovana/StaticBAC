@@ -32,7 +32,7 @@
 //#define TENSOR_BIN_DIR "models/gpt_tensors_binaries/"
 //#define META_FILE "models/gpt_tensors.meta"
 #define TENSOR_BIN_DIR "models/efficientnet_b7/binaries/"
-#define META_FILE "models/efficientnet_b7/tensors.meta"
+#define META_FILE "models/efficientnet_b7/tensor1.meta"
 
 #define MODEL_NAME "efficientnet_b7"
 
@@ -430,7 +430,9 @@ int main()
 
     encoder.initCtxModels(numGtxFlags);
     const std::vector<uint8_t>& bytestream =
-        encoder.encodeModel(modelTensors, false);
+        encoder.encodeModel(modelTensors);
+
+    printf("Bytestream pointer in script: %p\n", bytestream.data());
 
     auto encEnd = std::chrono::high_resolution_clock::now();
 
@@ -490,26 +492,6 @@ int main()
     }
 
 
-        // --------------------------------------------------
-    // Free model tensors before decoding — decoder only needs the bytestream
-    // --------------------------------------------------
-/*     std::cout << "\n=== Freeing model tensors before decode ===\n";
-    size_t beforeFree = getCurrentRSS();
-
-    for (auto& t : modelTensors)
-    {
-        std::vector<int32_t>().swap(t.data);  // force-free each tensor's heap data
-    }
-    modelTensors.clear();
-    modelTensors.shrink_to_fit();
-
-    size_t afterFree = getCurrentRSS();
-    auto toMB = [](size_t b){ return b / (1024.0 * 1024.0); };
-    std::cout << "Memory before free : " << toMB(beforeFree) << " MB\n";
-    std::cout << "Memory after free  : " << toMB(afterFree)  << " MB\n";
-    std::cout << "Freed              : " << toMB(beforeFree - afterFree) << " MB\n";
- */
-
     // --------------------------------------------------
     // DECODING
     // --------------------------------------------------
@@ -525,11 +507,10 @@ int main()
     decSampler.start();
     auto decStart = std::chrono::high_resolution_clock::now();
     
-    decoder.setStream(const_cast<std::vector<uint8_t>&>(bytestream));
 
     decoder.initCtxModels(numGtxFlags);
     printf("start decoding...\n");
-    decoder.decodeModel(decodedModel);
+    decoder.decodeModel(decodedModel, bytestream);
    // decoder.finishDecoding();
 
     auto decEnd = std::chrono::high_resolution_clock::now();

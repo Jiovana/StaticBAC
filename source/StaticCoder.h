@@ -33,9 +33,9 @@ public:
   int32_t  iae_v        (uint8_t v)                     { return m_BACDecoder.iae_v(v); }
   uint32_t uae_v        ( uint8_t v )                   { return m_BACDecoder.uae_v( v ); }
 
-  void     decodeLayer  ( TensorMeta& tensor);
+  uint8_t*     decodeLayer  ( TensorMeta& tensor,  uint8_t* ptr);
   uint32_t finishDecoding       ();
-  void     decodeModel(std::vector<TensorMeta>& modelTensors);
+  void     decodeModel(std::vector<TensorMeta>& modelTensors, const std::vector<uint8_t>& bytestream);
 
   
 

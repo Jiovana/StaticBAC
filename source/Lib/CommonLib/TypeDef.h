@@ -51,6 +51,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include <cassert>
 //#include <pybind11/pybind11.h>
 
+#include "BitReaderWriter.h"
 
 
 enum class TensorType : uint8_t

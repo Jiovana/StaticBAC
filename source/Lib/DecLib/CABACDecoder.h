@@ -9,6 +9,7 @@
 #include "CommonLib/Quant.h"
 #include "CommonLib/Scan.h"
 #include "BinDecoder.h"
+#include "../CommonLib/TypeDef.h"
 
 class BACDecoder
 {
@@ -22,12 +23,19 @@ public:
     void     initCtxModels           ( uint32_t cabac_unary_length );
     /* Finalizes decoding */
     uint32_t terminateBacDecoding();
+
+    void finishBac();
+
+    uint8_t* getBytestreamPtr();
+    void setByteStreamPtr(uint8_t* ptr);
+    void setBytesRead(uint32_t bytesRead);
+
     /* Signed EP bin decoding */
     int32_t  iae_v                 ( uint8_t v );
     /* Unsigned EP bin decoding */
     uint32_t uae_v                 ( uint8_t v );
     /* Decodes tensor header and metadata */
-    uint64_t    decodeTensorHeader     ( uint32_t* shape, uint32_t& numDims, TensorMeta &tensor );
+    uint64_t    decodeTensorHeader     ( uint32_t* shape, uint32_t& numDims, TensorMeta &tensor, BitstreamReader& reader );
     /* Decodes tensor weights */
     uint64_t    decodeWeights          ( int32_t* pWeights, uint32_t numWeights );
     /* Bytes consumed from bitstream */

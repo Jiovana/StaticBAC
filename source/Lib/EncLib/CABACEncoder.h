@@ -3,7 +3,8 @@
 
 #include "../CommonLib/ContextModel.h"
 #include "../CommonLib/ContextModeler.h"
-#include "BinEncoderOB.h"
+#include "../CommonLib/TypeDef.h"
+#include "BinEncoder_simple.h"
 #include <bitset>
 #include <limits>
 #include <iostream>
@@ -41,8 +42,12 @@ class BACEncoder
     /// Initialize BAC encoder and attach output bytestream
     void startBacEncoding(std::vector<uint8_t>* pBytestream);
 
+    void startBinEncoder();
+
     /// Finish encoding and flush remaining bits
     void terminateBacEncoding();
+
+    void finishBac();
 
     /// Initialize context models
     void initCtxMdls(uint32_t numGtxFlags);
@@ -65,7 +70,8 @@ class BACEncoder
     uint64_t encodeTensorHeader(
         const uint32_t* shape,
         uint32_t numDims,
-        uint16_t tensorId);
+        uint16_t tensorId,
+        std::vector<uint8_t>& m_Bytestream);
 
     /// Encode tensor weights
     uint64_t encodeWeights(const int32_t* pWeights, uint32_t numWeights);
