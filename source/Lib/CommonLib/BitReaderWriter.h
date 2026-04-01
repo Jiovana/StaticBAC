@@ -44,6 +44,16 @@ public:
             m_bitsFilled = 0;
         }
     }
+
+    void writeIAE(uint8_t v, int32_t value)
+    {
+        if (v == 0) return;
+
+        uint32_t mask = (v == 32) ? 0xFFFFFFFFu : ((1u << v) - 1);
+        uint32_t pattern = uint32_t(value) & mask;
+
+        writeBits(pattern, v);
+    }
 };
 
 
@@ -96,10 +106,20 @@ public:
     }
 
     size_t getBytesRead() const {
-    if (m_usePtr) {
-        return m_ptr - m_initialPtr; // you need to store initial pointer
-    } else {
-        return m_pos;
+        if (m_usePtr) {
+            return m_ptr - m_initialPtr; // you need to store initial pointer
+        } else {
+            return m_pos;
+        }
     }
-}
+    
+    int32_t readIAE(uint8_t v)
+    {
+        if (v == 0) return 0;
+
+        uint32_t pattern = readBits(v);
+
+        // sign extension
+        return int32_t(pattern << (32 - v)) >> (32 - v);
+    }
 };

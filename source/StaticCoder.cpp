@@ -84,9 +84,9 @@ const std::vector<uint8_t>& Encoder::encodeModel(const std::vector<TensorMeta>& 
     BitstreamWriter writer(&m_Bytestream);
     writer.writeBits(numTensors, MAX_TENSORS_BITS); // 12 bits = 4096 tensors limit
     writer.flushToByte(); // flush after writing numTensors
-    printf("Raw bytes after writing numTensors: ");
-    for (int i = 0; i < 2; i++) printf("%02X ", m_Bytestream[i]);
-    printf("\n");
+   // printf("Raw bytes after writing numTensors: ");
+   // for (int i = 0; i < 2; i++) printf("%02X ", m_Bytestream[i]);
+   // printf("\n");
 
     printf("Encoding model with %d tensors\n", numTensors);
 
@@ -142,6 +142,7 @@ uint8_t* Decoder::decodeLayer(TensorMeta& tensor, uint8_t* ptr)
     uint32_t headerBytes = reader.getBytesRead();
     uint8_t* payloadPtr = ptr + headerBytes;
 
+    printf("Pointer after reading header: %p\n", payloadPtr);
     // Compute number of weights
     uint32_t numWeights = 1;
     for (uint32_t i = 0; i < numDims; i++)
@@ -192,8 +193,10 @@ void Decoder::decodeModel(std::vector<TensorMeta>& modelTensors, const std::vect
     // Decode number of tensors from raw header (not BAC encoded)
     BitstreamReader reader(bytestream.data() );
 
+    printf("Bytestream pointer in decodeModel: %p\n", bytestream.data());
+
     uint32_t numTensors = reader.readBits(MAX_TENSORS_BITS); // read numTensors
-    printf("Decoded numTensors: %d\n", numTensors);
+    //printf("Decoded numTensors: %d\n", numTensors);
     reader.alignToByte(); // align to byte after reading numTensors
 
     printf("Decoding model with %d tensors\n", numTensors);
@@ -202,10 +205,10 @@ void Decoder::decodeModel(std::vector<TensorMeta>& modelTensors, const std::vect
 
     // pointer after global header
     uint8_t* ptr = const_cast<uint8_t*>(bytestream.data()) + (reader.getBytesRead());
-
+    printf("Pointer after reading numTensors: %p\n", ptr);
     for (uint32_t i = 0; i < numTensors; i++)
     {
-        decodeLayer(modelTensors[i], ptr);   // fills TensorMeta directly
+        ptr = decodeLayer(modelTensors[i], ptr);   // fills TensorMeta directly
     }
     //finishDecoding();
 }

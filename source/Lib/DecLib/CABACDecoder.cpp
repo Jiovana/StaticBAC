@@ -9,7 +9,7 @@ void BACDecoder::startBacDecoding(uint8_t* pBytestream)
 {
   //g_logger->setTensorName("CABACDecoder_log");
   m_BinDecoder.setByteStreamBuf(pBytestream);
-  m_BinDecoder.startBinDecoder();
+  // m_BinDecoder.startBinDecoder();
   ////printf("CABACDecoder: Started decoding\n");
 }
 
@@ -59,7 +59,7 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
   m_tensorType = static_cast<TensorType>(reader.readBits(1)); // weight or bias
   // m_tensorType = static_cast<TensorType>(m_BinDecoder.decodeBinEP());
   tensor.tensorType = m_tensorType;
-   printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
+  // printf("Decoded tensor type: %d\n", static_cast<uint32_t>(m_tensorType));
   binsRead += 1; // 1 bit for tensor type
 
   // decode bitwidth
@@ -95,8 +95,8 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
 
   reader.alignToByte(); // align to byte after reading header
 
-  printf("Decoded tensor header: id=%d type=%d bitwidth=%d numDims=%d totalHeaderBits=%llu\n",
-      tensor.tensorId, static_cast<uint32_t>(tensor.tensorType), static_cast<uint32_t>(tensor.tensorBitwidth), numDims, binsRead);
+ // printf("Decoded tensor header: id=%d type=%d bitwidth=%d numDims=%d totalHeaderBits=%llu\n",
+   //   tensor.tensorId, static_cast<uint32_t>(tensor.tensorType), static_cast<uint32_t>(tensor.tensorBitwidth), numDims, binsRead);
 
   return binsRead;
 }
@@ -110,12 +110,16 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
   const uint32_t chunkSize = 2048 ; // small chunk for low RAM = for 32bits = 8KB
   uint32_t numChunks = (numWeights + chunkSize - 1) >> 11; // 11 because of 2048
 
+  uint8_t*startPtr = m_BinDecoder.getByteStreamPtr();
   for (uint32_t c = 0; c < numChunks; c++)
   {
-    m_BinDecoder.startBinDecoder();
+    m_BinDecoder.startBinDecoder(startPtr);
+    //printf("Pointer after BAC init: %p\n", m_BinDecoder.getByteStreamPtr());
     m_CtxModeler.resetNeighborCtx();
+    
+
     //printf("Chunk %d decoding start ptr: %p\n", c, m_BinDecoder.getByteStreamPtr());
-    printf("Chunk %d decoding start\n", c);
+    //printf("Chunk %d decoding start\n", c);
     uint32_t start = c * chunkSize;
     uint32_t end   = std::min(start + chunkSize, numWeights);
 
@@ -146,6 +150,7 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
     // ---------- read k parameter for Rice-Golomb coding
     uint8_t k = uae_v(2); // read k as 2-bit fixed length for simplicity
     scaledBits += 2;
+   // printf("Chunk %d decoding with localMean=%d, k=%d\n", c, localMean, k);
 
 
     // --------------- BAC decode weights
@@ -153,16 +158,21 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
     {
       int32_t decodedVal = 0;
       scaledBits += decodeWeightVal(decodedVal, k); 
-      int32_t residual = decodedVal;
 
-      pWeights[i] =  residual + localMean;
+      pWeights[i] =  decodedVal + localMean;
      // ////printf("Decoded weight %d: value=%d\n", i,  pWeights[i]);
       m_CtxModeler.updateNeighborCtx(decodedVal);
       //printf("CHUNK[%d] - Decoded value %d\n", c, pWeights[i]);
 
     }
     m_BinDecoder.decodeBinTrm(); // read termination bit for the chunk
+    //  printf("Chunk %d decoding end ptr before finish: %p\n", c, m_BinDecoder.getByteStreamPtr());
+
     m_BinDecoder.finish();
+
+    uint32_t bytesRead = m_BinDecoder.getBytesRead();
+    startPtr += bytesRead; // move startPtr for next chunk
+    //printf("Chunk %d decoding end ptr after finish: %p\n", c, m_BinDecoder.getByteStreamPtr());
   }
   return scaledBits;
 }
@@ -180,7 +190,7 @@ uint64_t BACDecoder::decodeWeights(int32_t *pWeights, uint32_t numWeights)
 
 }
 
-
+//int countd = 0;
 uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
 { 
   
@@ -188,7 +198,9 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
 
   const int32_t sigctx = m_CtxModeler.getSigCtxId();
   uint32_t sigFlag = m_BinDecoder.decodeBin(m_CtxStore, sigctx, m_tensorType);
-  //printf("Decoded sigFlag: %d\n", sigFlag);
+  //if (countd < 10)  // Limit the number of printf statements
+    //printf("Decoded sigFlag: %d\n", sigFlag);
+  
   bitsUsed += 1; // 1 bit for sigFlag
 
 
@@ -201,7 +213,7 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
   // sign 
   int32_t signCtx = m_CtxModeler.getSignFlagCtxId();
   uint32_t signFlag = m_BinDecoder.decodeBin(m_CtxStore, signCtx, m_tensorType);
-  //printf("Decoded signFlag: %d\n", signFlag);
+  //if (countd < 10) printf("Decoded signFlag: %d\n", signFlag);
   bitsUsed += 1; // 1 bit for signFlag
 
   // branch flag
@@ -210,12 +222,12 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
 
   if (branchFlag)
   {
-     //printf("big value went to rem.. \n");
+    // if (countd < 10) printf("Decoded branchFlag: %d (large residual case)\n", branchFlag);
     // large residual case, directly decode remAbsLevel without gtx flags
     uint32_t remAbsLevel = 0;
     bitsUsed += decodeAbsRem(remAbsLevel, k);
-    decodedIntVal = signFlag ? -int32_t(remAbsLevel + 6) : int32_t(remAbsLevel + 6);
-   
+    decodedIntVal = signFlag ? -int32_t(remAbsLevel + 5) : int32_t(remAbsLevel + 5);
+  // if (countd < 10) printf("Decoded weight value: %d (remAbsLevel=%d)\n", decodedIntVal, remAbsLevel);
     return bitsUsed;
   } else {
     // small residual case, decode gtx flags first
@@ -231,7 +243,7 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
         remAbsLevel++;
       numGreaterFlagsDecoded++;
 
-      //////printf("Decoded grXFlag: %d (numGreaterFlagsDecoded=%d)\n", grXFlag, numGreaterFlagsDecoded);
+      //if (countd < 10) printf("Decoded grXFlag: %d (numGreaterFlagsDecoded=%d)\n", grXFlag, numGreaterFlagsDecoded);
     } while (grXFlag && numGreaterFlagsDecoded < m_NumGtxFlags);
 
     //if (grXFlag) { // last grxFlag means decoded value greater than four
@@ -241,8 +253,8 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
     decodedIntVal = remAbsLevel + 1; // add 1 to get the original abs value
     decodedIntVal = signFlag ? -decodedIntVal : decodedIntVal;
 
-    //printf("Decoded weight value: %d\n", decodedIntVal);
-
+    //if (countd < 10) printf("Decoded weight value: %d\n", decodedIntVal);
+    //countd++;
     return bitsUsed;
   }
 }

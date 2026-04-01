@@ -25,26 +25,28 @@ const uint32_t BinDec::m_auiGoRiceRange[ 10 ] =
 
 void BinDec::setByteStreamBuf( uint8_t* byteStreamBuf )
 {
-    m_Bytes       = byteStreamBuf;
+    m_Bytes = byteStreamBuf;
+    m_ByteStreamPtr = byteStreamBuf;   // initialize working pointer
 }
 
 
-void BinDec::startBinDecoder()
+void BinDec::startBinDecoder( uint8_t* ptr)
 {
+    m_ByteStreamPtr = ptr; // set pointer to start of payload
     m_BytesRead   = 0;
     m_BitsNeeded  = -8;
 
     m_Range = 510;
 
-    CHECK( m_Bytes == nullptr, "Bitstream is not initialized!" );
+    CHECK( m_ByteStreamPtr == nullptr, "Bitstream is not initialized!" );
 
     // Primes the 15-bit Value window from first 2 bytes — unchanged
-    m_Value = 256 * m_Bytes[ 0 ] + m_Bytes[ 1 ];
-    m_ByteStreamPtr   = m_Bytes + 2;
+    m_Value = 256 * m_ByteStreamPtr[ 0 ] + m_ByteStreamPtr[ 1 ];
+    m_ByteStreamPtr   += 2;
     m_BytesRead      += 2;
 
-    printf("Init: ptr=%p value=%d bitsNeeded=%d\n",
-       m_ByteStreamPtr, m_Value, m_BitsNeeded);
+    //printf("Init: ptr=%p value=%d bitsNeeded=%d\n",
+    //   m_ByteStreamPtr, m_Value, m_BitsNeeded);
 }
 
 
@@ -128,7 +130,7 @@ uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramTyp
         m_BitsNeeded -= 8;
         m_BytesRead++;
 
-        printf("Reading byte at %p\n", m_ByteStreamPtr);
+       // printf("Reading byte at %p\n", m_ByteStreamPtr);
     }
 
 

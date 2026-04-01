@@ -53,7 +53,7 @@ public:
     ~BinDec() {}
 
 public:
-    void          startBinDecoder      (                                     );
+    void          startBinDecoder      (     uint8_t* ptr                      ); 
     void          setByteStreamBuf     ( uint8_t* byteStreamBuf              );
 
     uint32_t      decodeBinold            ( StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType );  

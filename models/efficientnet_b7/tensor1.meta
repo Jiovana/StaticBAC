@@ -1,3 +1,3 @@
 numTensors 1
 
-3 features.1.0.block.0.0.weight weight 8 4 64 1 3 3 0.021877222317122816
+69 features.2.2.block.0.0.weight weight 8 4 288 48 1 1 0.004285302837590724
