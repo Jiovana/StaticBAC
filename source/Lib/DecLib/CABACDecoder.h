@@ -37,14 +37,14 @@ public:
     /* Decodes tensor header and metadata */
     uint64_t    decodeTensorHeader     ( uint32_t* shape, uint32_t& numDims, TensorMeta &tensor, BitstreamReader& reader );
     /* Decodes tensor weights */
-    uint64_t    decodeWeights          ( int32_t* pWeights, uint32_t numWeights );
+    uint8_t*    decodeWeights          ( int32_t* pWeights, uint32_t numWeights, uint8_t* payloadPtr );
     /* Bytes consumed from bitstream */
     uint32_t  getBytesRead();
 
 protected:
 
   
-  uint64_t decodeWeightsChunks(int32_t* pWeights, uint32_t numWeights);
+  uint8_t* decodeWeightsChunks(int32_t* pWeights, uint32_t numWeights, uint8_t* payloadPtr);
   uint64_t decodeWeightVal    ( int32_t &decodedIntVal, uint8_t k );
   int32_t  decodeAbsRem       ( uint32_t& remainder, uint32_t k );
    

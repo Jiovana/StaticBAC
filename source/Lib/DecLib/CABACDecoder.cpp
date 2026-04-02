@@ -4,6 +4,9 @@
 #include <sstream>
 
 static constexpr uint32_t MAX_TENSORS_BITS = 12;   // allows up to 4096 tensors
+#define CHUNK_SIZE_BITS 16
+#define CHUNK_SIZE (1 << (CHUNK_SIZE_BITS-1)) // number of weights per chunk, e.g. 16K weights per chunk
+
 
 void BACDecoder::startBacDecoding(uint8_t* pBytestream)
 {
@@ -102,19 +105,32 @@ uint64_t BACDecoder::decodeTensorHeader(uint32_t* shape, uint32_t& numDims, Tens
 }
 
 
-uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights)
+uint8_t* BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights, uint8_t* payloadPtr)
 {
   int width = getBitwidthFromEnum(m_tensorBitwidth);
   uint64_t scaledBits = 0;
 
-  const uint32_t chunkSize = 2048 ; // small chunk for low RAM = for 32bits = 8KB
-  uint32_t numChunks = (numWeights + chunkSize - 1) >> 11; // 11 because of 2048
+  const uint32_t chunkSize = CHUNK_SIZE; // small chunk for low RAM 
+  uint32_t numChunks = (numWeights + chunkSize - 1) >> (CHUNK_SIZE_BITS - 1); 
+  if ((numWeights + chunkSize - 1) >> 32 != 0){
+    printf("Warning: numChunks exceeds 32-bit limit!\n");
+  }
 
-  uint8_t*startPtr = m_BinDecoder.getByteStreamPtr();
   for (uint32_t c = 0; c < numChunks; c++)
   {
-    m_BinDecoder.startBinDecoder(startPtr);
-    //printf("Pointer after BAC init: %p\n", m_BinDecoder.getByteStreamPtr());
+    // ---- read chunk size ----
+    BitstreamReader reader(payloadPtr);
+
+    uint32_t chunkSizeBytes = reader.readBits(CHUNK_SIZE_BITS);
+    reader.alignToByte();
+
+    uint8_t* chunkPtr = payloadPtr + reader.getBytesRead();
+
+    // ---- start BAC on chunk payload ----
+    m_BinDecoder.startBinDecoder(chunkPtr);
+
+   // printf("Chunk %d: size=%u, payloadPtr=%p\n", c, chunkSizeBytes, chunkPtr);
+
     m_CtxModeler.resetNeighborCtx();
     
 
@@ -135,6 +151,14 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
       ////printf ("Tensor decoded as raw EP bins.\n");
       m_BinDecoder.decodeBinTrm(); // read termination bit for the chunk
       m_BinDecoder.finish();
+
+      uint8_t* nextPtr = chunkPtr + chunkSizeBytes;
+      if (nextPtr < payloadPtr) {
+          fprintf(stderr, "ERROR: pointer wrap-around detected!\n");
+          return nullptr;
+      }
+      payloadPtr = nextPtr;
+    //  printf("Chunk %d decoding end ptr after finish: %p\n", c, m_BinDecoder.getByteStreamPtr());
       continue;
     }
     // read local mean flag and value
@@ -165,29 +189,25 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
       //printf("CHUNK[%d] - Decoded value %d\n", c, pWeights[i]);
 
     }
-    m_BinDecoder.decodeBinTrm(); // read termination bit for the chunk
-    //  printf("Chunk %d decoding end ptr before finish: %p\n", c, m_BinDecoder.getByteStreamPtr());
 
+    m_BinDecoder.decodeBinTrm(); // read termination bit for the chunk
     m_BinDecoder.finish();
 
-    uint32_t bytesRead = m_BinDecoder.getBytesRead();
-    startPtr += bytesRead; // move startPtr for next chunk
-    //printf("Chunk %d decoding end ptr after finish: %p\n", c, m_BinDecoder.getByteStreamPtr());
+    uint8_t* nextPtr = chunkPtr + chunkSizeBytes;
+    if (nextPtr < payloadPtr) {
+          fprintf(stderr, "ERROR: pointer wrap-around detected!\n");
+          return nullptr;
+      }
+    payloadPtr = nextPtr;
+  //  printf("Chunk %d decoding end ptr after finish: %p\n", c, m_BinDecoder.getByteStreamPtr());
   }
-  return scaledBits;
+  return payloadPtr; // return pointer after decoding all chunks
 }
 
 
-uint64_t BACDecoder::decodeWeights(int32_t *pWeights, uint32_t numWeights)
+uint8_t* BACDecoder::decodeWeights(int32_t *pWeights, uint32_t numWeights, uint8_t* payloadPtr)
 {
-  uint32_t startBytes = m_BinDecoder.getBytesRead();
-
-  decodeWeightsChunks(pWeights, numWeights); 
-
-  uint32_t endBytes = m_BinDecoder.getBytesRead();
-
-  return endBytes - startBytes; 
-
+  return decodeWeightsChunks(pWeights, numWeights, payloadPtr); 
 }
 
 //int countd = 0;

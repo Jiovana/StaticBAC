@@ -1,3 +1,101 @@
-numTensors 1
+numTensors 99
 
-69 features.2.2.block.0.0.weight weight 8 4 288 48 1 1 0.004285302837590724
+101 features.2.4.block.2.fc1.weight weight 8 4 12 288 1 1 0.008453254289495019
+102 features.2.4.block.2.fc1.bias bias 12 1 12 4.877378635401303e-05
+103 features.2.4.block.2.fc2.weight weight 8 4 288 12 1 1 0.005228776990126589
+104 features.2.4.block.2.fc2.bias bias 12 1 288 5.4766847627105e-05
+105 features.2.4.block.3.0.weight weight 8 4 48 288 1 1 0.004591613890769997
+106 features.2.4.block.3.1.weight weight 8 1 48 0.02381386327320168
+107 features.2.4.block.3.1.bias bias 12 1 48 0.001647414021172933
+108 features.2.5.block.0.0.weight weight 8 4 288 48 1 1 0.004843076504217455
+109 features.2.5.block.0.1.weight weight 8 1 288 0.0249444091812734
+110 features.2.5.block.0.1.bias bias 12 1 288 0.0027929040796781796
+111 features.2.5.block.1.0.weight weight 8 4 288 1 3 3 0.0046960290122634975
+112 features.2.5.block.1.1.weight weight 8 1 288 0.048998409128332865
+113 features.2.5.block.1.1.bias bias 12 1 288 0.0015257836497317091
+114 features.2.5.block.2.fc1.weight weight 8 4 12 288 1 1 0.008693396080906246
+115 features.2.5.block.2.fc1.bias bias 12 1 12 8.334534658550625e-05
+116 features.2.5.block.2.fc2.weight weight 8 4 288 12 1 1 0.006612623883549315
+117 features.2.5.block.2.fc2.bias bias 12 1 288 9.848669687835505e-05
+118 features.2.5.block.3.0.weight weight 8 4 48 288 1 1 0.004524489681299114
+119 features.2.5.block.3.1.weight weight 8 1 48 0.026607060337488164
+120 features.2.5.block.3.1.bias bias 12 1 48 0.0014498691753196428
+121 features.2.6.block.0.0.weight weight 8 4 288 48 1 1 0.005860536134018243
+122 features.2.6.block.0.1.weight weight 8 1 288 0.025846534737621666
+123 features.2.6.block.0.1.bias bias 12 1 288 0.003156535128487615
+124 features.2.6.block.1.0.weight weight 8 4 288 1 3 3 0.006122551765830989
+125 features.2.6.block.1.1.weight weight 8 1 288 0.0481089084562502
+126 features.2.6.block.1.1.bias bias 12 1 288 0.00172860309122595
+127 features.2.6.block.2.fc1.weight weight 8 4 12 288 1 1 0.0076485741242454525
+128 features.2.6.block.2.fc1.bias bias 12 1 12 6.982631722916044e-05
+129 features.2.6.block.2.fc2.weight weight 8 4 288 12 1 1 0.005246369941245086
+130 features.2.6.block.2.fc2.bias bias 12 1 288 5.4071220551803225e-05
+131 features.2.6.block.3.0.weight weight 8 4 48 288 1 1 0.005475287736104178
+132 features.2.6.block.3.1.weight weight 8 1 48 0.029068516920588573
+133 features.2.6.block.3.1.bias bias 12 1 48 0.0012240113342186852
+134 features.3.0.block.0.0.weight weight 8 4 288 48 1 1 0.010528740990216187
+135 features.3.0.block.0.1.weight weight 8 1 288 0.029954955527021702
+136 features.3.0.block.0.1.bias bias 12 1 288 0.0022253455128617167
+137 features.3.0.block.1.0.weight weight 8 4 288 1 5 5 0.005491579840624517
+138 features.3.0.block.1.1.weight weight 8 1 288 0.03433437048027457
+139 features.3.0.block.1.1.bias bias 12 1 288 0.002734896261177392
+140 features.3.0.block.2.fc1.weight weight 8 4 12 288 1 1 0.001597571319465002
+141 features.3.0.block.2.fc1.bias bias 12 1 12 2.902160381814041e-06
+142 features.3.0.block.2.fc2.weight weight 8 4 288 12 1 1 0.0018915123737725061
+143 features.3.0.block.2.fc2.bias bias 12 1 288 0.00013295909945475155
+144 features.3.0.block.3.0.weight weight 8 4 80 288 1 1 0.009491772150297229
+145 features.3.0.block.3.1.weight weight 8 1 80 0.10398156113517078
+146 features.3.0.block.3.1.bias bias 12 1 80 1.9004561806561864e-06
+147 features.3.1.block.0.0.weight weight 8 4 480 80 1 1 0.0031830721462491715
+148 features.3.1.block.0.1.weight weight 8 1 480 0.02026166600024264
+149 features.3.1.block.0.1.bias bias 12 1 480 0.002191024948566808
+150 features.3.1.block.1.0.weight weight 8 4 480 1 5 5 0.005614486377121332
+151 features.3.1.block.1.1.weight weight 8 1 480 0.047140827087258905
+152 features.3.1.block.1.1.bias bias 12 1 480 0.0015021294345566078
+153 features.3.1.block.2.fc1.weight weight 8 4 20 480 1 1 0.0063402916055582195
+154 features.3.1.block.2.fc1.bias bias 12 1 20 5.7302408091149165e-05
+155 features.3.1.block.2.fc2.weight weight 8 4 480 20 1 1 0.004315940906053881
+156 features.3.1.block.2.fc2.bias bias 12 1 480 5.0847197867838165e-05
+157 features.3.1.block.3.0.weight weight 8 4 80 480 1 1 0.0038272160153835473
+158 features.3.1.block.3.1.weight weight 8 1 80 0.037373051779381675
+159 features.3.1.block.3.1.bias bias 12 1 80 0.0014102985166201327
+160 features.3.2.block.0.0.weight weight 8 4 480 80 1 1 0.003204143928404896
+161 features.3.2.block.0.1.weight weight 8 1 480 0.02234850168647956
+162 features.3.2.block.0.1.bias bias 12 1 480 0.002273240820902741
+163 features.3.2.block.1.0.weight weight 8 4 480 1 5 5 0.00508794160048431
+164 features.3.2.block.1.1.weight weight 8 1 480 0.04061079492458072
+165 features.3.2.block.1.1.bias bias 12 1 480 0.001625203263435307
+166 features.3.2.block.2.fc1.weight weight 8 4 20 480 1 1 0.007768482243843602
+167 features.3.2.block.2.fc1.bias bias 12 1 20 6.542039255278904e-05
+168 features.3.2.block.2.fc2.weight weight 8 4 480 20 1 1 0.006835668966355396
+169 features.3.2.block.2.fc2.bias bias 12 1 480 5.9593360269477876e-05
+170 features.3.2.block.3.0.weight weight 8 4 80 480 1 1 0.002893224303356616
+171 features.3.2.block.3.1.weight weight 8 1 80 0.030511934333796897
+172 features.3.2.block.3.1.bias bias 12 1 80 0.0013427612905525452
+173 features.3.3.block.0.0.weight weight 8 4 480 80 1 1 0.00360621809601093
+174 features.3.3.block.0.1.weight weight 8 1 480 0.022132523310683244
+175 features.3.3.block.0.1.bias bias 12 1 480 0.002150087808307913
+176 features.3.3.block.1.0.weight weight 8 4 480 1 5 5 0.005323316231576172
+177 features.3.3.block.1.1.weight weight 8 1 480 0.04851426630991376
+178 features.3.3.block.1.1.bias bias 12 1 480 0.0018091704082056005
+179 features.3.3.block.2.fc1.weight weight 8 4 20 480 1 1 0.00765042732354259
+180 features.3.3.block.2.fc1.bias bias 12 1 20 8.452971591870898e-05
+181 features.3.3.block.2.fc2.weight weight 8 4 480 20 1 1 0.007008499654737325
+182 features.3.3.block.2.fc2.bias bias 12 1 480 8.162883046911843e-05
+183 features.3.3.block.3.0.weight weight 8 4 80 480 1 1 0.0033554585515252365
+184 features.3.3.block.3.1.weight weight 8 1 80 0.025946408643583448
+185 features.3.3.block.3.1.bias bias 12 1 80 0.0008834807981924521
+186 features.3.4.block.0.0.weight weight 8 4 480 80 1 1 0.002960528493408081
+187 features.3.4.block.0.1.weight weight 8 1 480 0.05017581880534182
+188 features.3.4.block.0.1.bias bias 12 1 480 0.0026271236056571905
+189 features.3.4.block.1.0.weight weight 8 4 480 1 5 5 0.0044160170362463474
+190 features.3.4.block.1.1.weight weight 8 1 480 0.044303672062461816
+191 features.3.4.block.1.1.bias bias 12 1 480 0.0013097130996914128
+192 features.3.4.block.2.fc1.weight weight 8 4 20 480 1 1 0.007203605055856328
+193 features.3.4.block.2.fc1.bias bias 12 1 20 5.110076973922283e-05
+194 features.3.4.block.2.fc2.weight weight 8 4 480 20 1 1 0.0044259692993636225
+195 features.3.4.block.2.fc2.bias bias 12 1 480 5.3871924625220884e-05
+196 features.3.4.block.3.0.weight weight 8 4 80 480 1 1 0.0033503320400487093
+197 features.3.4.block.3.1.weight weight 8 1 80 0.027660498233404877
+198 features.3.4.block.3.1.bias bias 12 1 80 0.0009345375766395277
+199 features.3.5.block.0.0.weight weight 8 4 480 80 1 1 0.0030037312723230633

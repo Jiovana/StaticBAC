@@ -15,7 +15,7 @@ public:
     void      startBinEncoder      ();
     void      setByteStreamBuf     ( std::vector<uint8_t> *byteStreamBuf );
 
-    std::vector<uint8_t>*getByteStreamBuf() { return m_ByteBuf; }
+    std::vector<uint8_t>* getByteStreamBuf() { return m_ByteBuf; }
 
     uint32_t  encodeBinold            ( uint32_t bin,  const StaticCtx &ctxMdl, uint8_t ctxId,  TensorType paramType   );
     uint32_t  encodeBin            ( uint32_t bin,  const StaticCtx &ctxMdl, uint8_t ctxId,  TensorType paramType   );
@@ -27,7 +27,7 @@ public:
 
     void      encodeBinTrm         ( unsigned bin );
     void      finish               (              );
-    void      terminate_write      (              );
+    
 protected:
     void      write_out         ();
 private:
@@ -37,7 +37,6 @@ private:
     uint8_t                 m_BufferedByte;
     uint32_t                m_NumBufferedBytes;
     uint32_t                m_BitsLeft;
-    static const uint32_t   m_auiGoRiceRange[ 10 ];
 };
 
 #endif // !__BINENC__

@@ -28,12 +28,6 @@ inline uint32_t clz32(uint32_t x)
 
 
 
-const uint32_t BinEnc::m_auiGoRiceRange[ 10 ] =
-{
-    6, 5, 6, 3, 3, 3, 3, 3, 3, 3
-};
-
-
 void BinEnc::startBinEncoder()
 {
     m_Low                = 0;

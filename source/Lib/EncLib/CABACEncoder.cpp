@@ -21,10 +21,13 @@
 #include <cmath>
 #include <algorithm>
 #include <sstream>
+#include <cassert>
 //#include "Utils/global_logger.h"
 
 
 static constexpr uint32_t MAX_TENSORS_BITS = 12;   // allows up to 4096 tensors
+#define CHUNK_SIZE_BITS 16
+#define CHUNK_SIZE (1 << (CHUNK_SIZE_BITS-1)) // number of weights per chunk, e.g. 16K weights per chunk
 
 //--------------------------------------------------------------
 // startBacEncoding
@@ -466,17 +469,28 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
     uint64_t scaledBits = 0;
     int width = getBitwidthFromEnum(m_tensorBitwidth);
 
-    const uint32_t chunkSize = 2048 ; // small chunk for low RAM = for 32bits =~ 65KB 
-    uint32_t numChunks = (numWeights + chunkSize - 1) >> 11; // shift for efficiency
+    const uint32_t chunkSize = CHUNK_SIZE; // small chunk for low RAM, 32k weights per chunk is 128KB for int32
+    uint32_t numChunks = (numWeights + chunkSize - 1) >> (CHUNK_SIZE_BITS - 1); // shift for efficiency
+    if ((numWeights + chunkSize - 1) >> 32 != 0){
+      printf("Warning: numChunks exceeds 32-bit limit!\n");
+    }
 
     double avgBPE = 0.0;
 
     bool skipChunk;
 
+
+    std::vector<uint8_t>* mainBuffer = m_BinEncoder.getByteStreamBuf(); // keep pointer to main buffer for later
+
     std::vector<int32_t> scaledBuf(chunkSize);
     for (uint32_t c = 0; c < numChunks; c++)
     {
-      //printf("Pointer before BAC init: %p\n", m_BinEncoder.getByteStreamBuf());
+      //printf("Pointer before BAC init: %p\n", m_BinEncoder.getByteStreamBuf()->data());
+
+      std::vector<uint8_t> chunkBuffer;
+      BitstreamWriter chunkWriter(&chunkBuffer);
+
+      m_BinEncoder.setByteStreamBuf(&chunkBuffer);
       m_BinEncoder.startBinEncoder();
       m_CtxModeler.resetNeighborCtx();
 
@@ -575,6 +589,21 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
         }
         m_BinEncoder.encodeBinTrm(1);
         m_BinEncoder.finish();
+
+        // ---- finalize chunk (same as normal path!) ----
+        uint32_t chunkSizeBytes = chunkBuffer.size();
+       // printf("End Chunk %d: chunkSizeBytes=%d\n", c, chunkSizeBytes);
+
+        BitstreamWriter mainWriter(mainBuffer); // use main buffer writer to write chunk header
+        mainWriter.writeBits(chunkSizeBytes, CHUNK_SIZE_BITS);
+        mainWriter.flushToByte();
+
+        mainBuffer->insert(mainBuffer->end(),
+                            chunkBuffer.begin(),
+                            chunkBuffer.end());
+
+        m_BinEncoder.setByteStreamBuf(mainBuffer); 
+       // printf("Pointer at end of buffer SKIP: %p\n", m_BinEncoder.getByteStreamBuf()->data() + m_BinEncoder.getByteStreamBuf()->size());
         continue;
       }
 
@@ -611,6 +640,27 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
 
       m_BinEncoder.encodeBinTrm(1);
       m_BinEncoder.finish();
+
+      uint32_t chunkSizeBytes = chunkBuffer.size();
+      assert(chunkSizeBytes < (1 << CHUNK_SIZE_BITS) && "Error: chunk size exceeds header limit!"); // ensure chunk size fits in header
+
+     // printf("End Chunk %d: chunkSizeBytes=%d\n", c, chunkSizeBytes);
+
+      // ---- write chunk header to MAIN bitstream ----
+      BitstreamWriter mainWriter(mainBuffer);
+
+      // write chunk size
+      mainWriter.writeBits(chunkSizeBytes, CHUNK_SIZE_BITS);
+      mainWriter.flushToByte();   // IMPORTANT: byte align before raw copy
+
+      // append chunk payload
+      mainBuffer->insert(mainBuffer->end(),
+                          chunkBuffer.begin(),
+                          chunkBuffer.end());
+
+      // ---- restore encoder to main buffer ----
+      m_BinEncoder.setByteStreamBuf(mainBuffer);
+    //  printf("Pointer at end of buffer: %p\n", m_BinEncoder.getByteStreamBuf()->data() + m_BinEncoder.getByteStreamBuf()->size());
 
     }
   

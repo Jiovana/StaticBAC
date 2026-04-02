@@ -29,7 +29,7 @@ uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint3
 
     m_BACEncoder.setBitwidthAndType(tensor.tensorBitwidth, tensor.tensorType);
 
-    //std::cout << "Encoding tensor: " << tensor.name << "\n";
+    //std::cout << "Encoding tensor: " << tensor.name << " with numWeights: " << numWeights << "\n";
 
     // Encode tensor header
     uint64_t headerBitsLocal =
@@ -142,7 +142,7 @@ uint8_t* Decoder::decodeLayer(TensorMeta& tensor, uint8_t* ptr)
     uint32_t headerBytes = reader.getBytesRead();
     uint8_t* payloadPtr = ptr + headerBytes;
 
-    printf("Pointer after reading header: %p\n", payloadPtr);
+   // printf("Pointer after reading header: %p\n", payloadPtr);
     // Compute number of weights
     uint32_t numWeights = 1;
     for (uint32_t i = 0; i < numDims; i++)
@@ -150,16 +150,16 @@ uint8_t* Decoder::decodeLayer(TensorMeta& tensor, uint8_t* ptr)
 
     // Resize tensor data to hold decoded weights
     tensor.data.resize(numWeights);
-    printf("Decoding tensor: id=%d type=%d bitwidth=%d numDims=%d numWeights=%d\n",
-        tensor.tensorId, static_cast<uint32_t>(tensor.tensorType), static_cast<uint32_t>(tensor.tensorBitwidth), numDims, numWeights);
+   // printf("Decoding tensor: id=%d type=%d bitwidth=%d numDims=%d numWeights=%d\n",
+       // tensor.tensorId, static_cast<uint32_t>(tensor.tensorType), static_cast<uint32_t>(tensor.tensorBitwidth), numDims, numWeights);
 
-    m_BACDecoder.startBacDecoding(payloadPtr); // set BAC decoder to start of payload 
+    //m_BACDecoder.startBacDecoding(payloadPtr); // set BAC decoder to start of payload 
 
     // Decode weights
-    uint32_t bytesUsedByBAC = m_BACDecoder.decodeWeights(tensor.data.data(), numWeights);
+    uint8_t* endPtr = m_BACDecoder.decodeWeights(tensor.data.data(), numWeights, payloadPtr); // decodeWeights returns pointer after weights
 
 
-     return payloadPtr + bytesUsedByBAC; // return pointer to next tensor header (or end of stream)
+     return endPtr; // return pointer to next tensor header (or end of stream)
 }
 
 ///////////////////////////////////////////////////////////////
@@ -205,10 +205,11 @@ void Decoder::decodeModel(std::vector<TensorMeta>& modelTensors, const std::vect
 
     // pointer after global header
     uint8_t* ptr = const_cast<uint8_t*>(bytestream.data()) + (reader.getBytesRead());
-    printf("Pointer after reading numTensors: %p\n", ptr);
+   // printf("Pointer after reading numTensors: %p\n", ptr);
     for (uint32_t i = 0; i < numTensors; i++)
     {
         ptr = decodeLayer(modelTensors[i], ptr);   // fills TensorMeta directly
+      //  printf("Pointer after decoding tensor %d: %p\n", i, ptr);
     }
     //finishDecoding();
 }

@@ -752,11 +752,11 @@ int main(int argc, char* argv[])
         decSampler.start();
         auto decStart = std::chrono::high_resolution_clock::now();
         
-        decoder.setStream(const_cast<std::vector<uint8_t>&>(bytestream));
+        //decoder.setStream(const_cast<std::vector<uint8_t>&>(bytestream));
 
         decoder.initCtxModels(numGtxFlags);
         printf("Start decoding...\n");
-        decoder.decodeModel(decodedModel);
+        decoder.decodeModel(decodedModel, bytestream);
 
         auto decEnd = std::chrono::high_resolution_clock::now();
         MemoryStats decMemStats = decSampler.stop(baselineDecMem);
