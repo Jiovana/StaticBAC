@@ -3,6 +3,7 @@ import os
 import torch
 import csv
 import torchvision.models as models
+from transformers import AutoTokenizer, AutoModelForSequenceClassification, AutoModelForCausalLM
 
 BITWIDTH_MAP = {
     0:4, 1:8, 2:12, 3:16, 4:20, 5:24, 6:32
@@ -154,22 +155,28 @@ def main():
 
     #model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
     model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
+    #model = models.efficientnet_b7(weights=models.EfficientNet_B7_Weights.IMAGENET1K_V1)
     #model = models.vit_b_16(weights= models.ViT_B_16_Weights.IMAGENET1K_V1)
+    #model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-SST-2")
+    #model = AutoModelForCausalLM.from_pretrained("openai-community/openai-gpt").to("cpu")
 
 
     # paths
-    folder_param = "efficientnet_tensors_decoded"
+    #folder_param = "efficientnet_tensors_decoded"
     #folder_param = "efficientnet_tensors_decoded"
     #folder_buffer = "resnet_buffers_decoded"
+    folder_param = "../efficientnet_b0_decoded"
 
-    encoder_meta_param = "models/efficientnet_tensors.meta"
+    #encoder_meta_param = "models/efficientnet_tensors.meta"
     #encoder_meta_buffer = "models/resnet_buffers.meta"
+    encoder_meta_param = "../models/efficientnet_b0/tensors.meta"
 
     qstep_param, id_to_name = read_encoder_meta(encoder_meta_param)
     #qstep_buffer = read_qsteps_from_meta(encoder_meta_buffer)
 
-    meta_param = read_decoded_meta(os.path.join(folder_param, "decoded_tensors.meta"))
+    #meta_param = read_decoded_meta(os.path.join(folder_param, "decoded_tensors.meta"))
     #meta_buffer = read_decoded_meta(os.path.join(folder_buffer, "decoded_tensors.meta"))
+    meta_param = read_decoded_meta(os.path.join(folder_param, "decoded_tensors.meta"))
 
 
     param_names = [name for name, _ in model.named_parameters()]
@@ -201,7 +208,7 @@ def main():
     all_data.update(param_data)
     all_data.update(buffer_data)
 
-    out_path = "efficientnet_reconstructed.npz"
+    out_path = "efficientnet_b0_reconstructed.npz"
     np.savez(out_path, **all_data)
 
     print(f"\nSaved NPZ → {out_path}")

@@ -12,10 +12,10 @@ def recommend_batch_size(model_name, device="cpu"):
         if "resnet" in model_name:
             return 128      # good balance
         if "efficientnet" in model_name:
-            return 256
+            return 16      # efficientnet_b7 is large, may need 16 or 8 on CPU
         if "vit" in model_name:
             return 256
-    return 64  # safe fallback
+    return 32  # safe fallback
 
 
 def check_reconstruction_errors(model, loaded_tensors):
@@ -31,7 +31,8 @@ def check_reconstruction_errors(model, loaded_tensors):
     """
     errors = {}
     sd = model.state_dict()
-    print(f"Names in sd: {sd.keys()}")
+    print(f"Names in sd: {list(sd.keys())[:20]}")
+    
     for name, recon in loaded_tensors.items():
         if name not in sd:
             print(f"WARNING: {name} not found in model state_dict, skipping.")
@@ -120,9 +121,12 @@ def meta_to_torch_name_vit(meta_name: str) -> str:
 
 def main():
     torch.set_num_threads(8)
-    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    device = "cpu"
+
+    # --- Use GPU if available ---
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
+    torch.backends.cudnn.benchmark = True  # improve performance for fixed input sizes
+
     imagenet_val_dir = r"C:\Users\gomes\OneDrive\Documentos\imagenet\ILSVRC\Data\CLS-LOC\val"
     
     
@@ -144,6 +148,7 @@ def main():
     else:
         raise ValueError("Unknown model name")
 
+    model.to(device)
     model.eval()
 
     # === Use native transforms ===
@@ -154,18 +159,14 @@ def main():
         root=imagenet_val_dir,
         transform=transform
     )
-    dataloader = DataLoader(dataset, batch_size=recommend_batch_size(model_name, device), shuffle=False, num_workers=8)
+    dataloader = DataLoader(dataset, batch_size=recommend_batch_size(model_name, device), shuffle=False, num_workers=4, pin_memory=True)
 
 
     # load reconstructed tensors
     #torch.serialization.add_safe_globals([np.core.multiarray._reconstruct])
     #
-    npz = np.load("efficientnet_reconstructed.npz")
-    #npz_path = r"C:\Users\gomes\OneDrive\Documentos\GitHub\nncodec2_work\example\compression scripts\multi_model_quant_eval_run5/efficientnet_b0_reconstructed_tensors.npz"
-    #npz = np.load(npz_path)
-    # choose precision: 8 or 16
-    bits = 8
-    prefix = f"b{bits}__"
+    npz = np.load("efficientnet_b0_reconstructed.npz")
+
 
     # build dict matching state_dict keys
     loaded = {}
@@ -173,24 +174,19 @@ def main():
     for k in npz.files:
         # remove "param_000_" or "buffer_000_"
         raw_name = k.split("_", 2)[-1]
-        name = meta_to_torch_name_efficient(raw_name)
+       # print(f"Processing NPZ key: {k} -> raw name: {raw_name}")
+        #name = meta_to_torch_name_efficient(raw_name)
+        name = meta_to_torch_name_vit(raw_name)
 
         arr = npz[k].astype(np.float32)
         loaded[name] = arr
 
-
-    """ for k in npz.files:
-        print(k)
-        if not k.startswith(prefix):
-            continue
-        name = k[len(prefix):]            # get original key
-        arr = npz[k].astype(np.float32)
-        loaded[name] = arr """
     
     print("Loaded tensors:", len(loaded))
-    print("Example keys:", list(loaded.keys())[:10])
+    print("Example keys:", list(loaded.keys())[:20])
 
     sd = model.state_dict()
+    print(f"Names in sd: {list(sd.keys())[:20]}")
 
     # Check reconstruction errors
     errors = check_reconstruction_errors(model, loaded)
@@ -199,7 +195,7 @@ def main():
     max_errors = []
     mean_errors = []
     for name, e in errors.items():
-        print(f"{name}: max={e['max_abs']:.6f}, mean={e['mean_abs']:.6f}")
+       # print(f"{name}: max={e['max_abs']:.6f}, mean={e['mean_abs']:.6f}")
         max_errors.append(e['max_abs'])
         mean_errors.append(e['mean_abs'])
 
@@ -209,14 +205,14 @@ def main():
     # overwrite matching keys
     for name, val in loaded.items():
         if name in sd:
-            sd[name] = torch.from_numpy(val).to(dtype=sd[name].dtype)
+            sd[name] = torch.from_numpy(val).to(dtype=sd[name].dtype, device=device)
         else:
             print("WARNING: stored key not in model:", name)
 
     model.load_state_dict(sd, strict=True)
     model.eval()
    
-    print(f"Model {model_name} successfully reconstructed for {bits} bits !")
+    print(f"Model {model_name} successfully reconstructed !") 
 
  
 
@@ -227,8 +223,8 @@ def main():
 
     with torch.no_grad():
         for images, labels in tqdm(dataloader, desc=f"Inference {model_name}"):
-            images = images.to(device)
-            labels = labels.to(device)
+            images = images.to(device, non_blocking=True)
+            labels = labels.to(device, non_blocking=True)
             outputs = model(images)
 
             # Top-1

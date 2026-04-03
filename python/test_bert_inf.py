@@ -11,183 +11,37 @@ BITWIDTH_MAP = {
     0:4, 1:8, 2:12, 3:16, 4:20, 5:24, 6:32
 }
 
-
-# Path to your CSV file
-qstep_file = r"C:\Users\gomes\OneDrive\Documentos\GitHub\nncodec2_work\example\compression scripts\bert_quant_eval_mixed_run5\compression_results.csv"
-
-def build_id_to_name_map(model, decoded_meta):
-    sd = model.state_dict()
-    keys = list(sd.keys())
-
-    if len(keys) != len(decoded_meta):
-        raise RuntimeError(
-            f"Mismatch: model has {len(keys)} tensors but decoded_meta has {len(decoded_meta)}"
-        )
-
-    id_to_name = {}
-
-    for i, t in enumerate(decoded_meta):
-        tensor_id = t["idx"]
-        name = keys[i]
-
-        # 🔒 Strong safety check
-        if list(sd[name].shape) != list(t["shape"]):
-            raise RuntimeError(
-                f"Shape mismatch at ID {tensor_id}: "
-                f"{name} {list(sd[name].shape)} vs decoded {list(t['shape'])}"
-            )
-
-        id_to_name[tensor_id] = name
-
-    print("ID → name mapping built and verified.")
-    return id_to_name
-
-# ------------------------------------------------------------
-# read decoded meta
-# ------------------------------------------------------------
-def read_decoded_meta(path):
-
-    tensors = []
-
-    with open(path) as f:
-        lines = f.readlines()
-
-    for line in lines:
-
-        line = line.strip()
-
-        if not line:
-            continue
-
-        if line.startswith("numTensors"):
-            continue
-
-        parts = line.split()
-
-        # safety check
-        if len(parts) < 6:
-            continue
-
-        idx = int(parts[0])
-        filename = parts[1]
-        bw_enum = int(parts[3])
-        dims = int(parts[4])
-
-        shape = tuple(map(int, parts[5:5+dims]))
-
-        tensors.append({
-            "idx": idx,
-            "filename": filename,
-            "bitwidth": BITWIDTH_MAP[bw_enum],
-            "shape": shape
-        })
-
-    return tensors
-
-
-# ------------------------------------------------------------
-# load tensor binary
-# ------------------------------------------------------------
-def load_tensor(path, bitwidth, shape):
-
-    # decoded tensors appear to be stored as int32
-    dtype = np.int32
-
-    arr = np.fromfile(path, dtype=dtype)
-
-    expected = np.prod(shape)
-
-    if arr.size != expected:
-        raise RuntimeError(
-            f"{path}: expected {expected} values but found {arr.size}"
-        )
-
-    arr = arr.reshape(shape)
-
-    return torch.from_numpy(arr)
-
-
-# ------------------------------------------------------------
-# inject tensors by order
-# ------------------------------------------------------------
-def load_by_id(model, decoded_meta, folder, qstep_file):
+def check_reconstruction_errors(model, loaded_tensors):
     """
-    Load decoded tensors into a model by order, reconstructing them using qstep.
-    
+    Compare reconstructed tensors (loaded_tensors) against the original model.
+
     Args:
-        model: PyTorch model.
-        decoded_meta: List of dictionaries with keys ['filename', 'bitwidth', 'shape'] for each tensor.
-        folder: Folder where decoded tensors are stored.
-        qstep_file: CSV file containing qsteps for all tensors.
+        model: Original pre-trained PyTorch model (state_dict is used for reference)
+        loaded_tensors: dict mapping param names -> numpy arrays (reconstructed)
+
+    Returns:
+        errors: dict mapping param name -> dict(max_abs, mean_abs)
     """
-    # Load qsteps into a dict: param_name -> qstep
-    tensor_qsteps = {}
-    with open(qstep_file, newline='') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            name = row['param_name']
-            qstep = float(row['qstep'])
-            tensor_qsteps[name] = qstep
-
+    errors = {}
     sd = model.state_dict()
+    print(f"Names in sd: {sd.keys()}")
+    for name, recon in loaded_tensors.items():
+        if name not in sd:
+            print(f"WARNING: {name} not found in model state_dict, skipping.")
+            continue
+        orig = sd[name].cpu().numpy().astype(np.float32)
+        if orig.shape != recon.shape:
+            print(f"WARNING: shape mismatch for {name}: model {orig.shape}, reconstructed {recon.shape}")
+            continue
+        abs_diff = np.abs(orig - recon)
+        max_err = np.max(abs_diff)
+        mean_err = np.mean(abs_diff)
+        errors[name] = {"max_abs": max_err, "mean_abs": mean_err}
 
-    id_to_name = build_id_to_name_map(model, decoded_meta)
+       # print(f"original: {orig} | recon: {recon} \n")
 
-    with torch.no_grad():
-        for t in decoded_meta:
-            tensor_id = t["idx"]
-            param_name = id_to_name[tensor_id]
-            bin_path = os.path.join(folder, t["filename"])
+    return errors
 
-            # Load integer tensor
-            tensor = load_tensor(bin_path, t["bitwidth"], t["shape"])
-
-            # Reconstruct using qstep
-            if param_name not in tensor_qsteps:
-                raise ValueError(f"qstep for {param_name} not found in qstep file")
-            qstep = tensor_qsteps[param_name]
-
-            tensor = tensor.to(torch.float32) * qstep
-
-            # Ensure dtype matches model
-            tensor_torch = tensor.to(sd[param_name].dtype)
-
-            if sd[param_name].shape != tensor_torch.shape:
-                print("Shape mismatch:", param_name, sd[param_name].shape, tensor_torch.shape)
-                raise RuntimeError(f"Shape mismatch for {param_name}")
-
-            # Copy reconstructed tensor to model
-            sd[param_name].copy_(tensor_torch)
-
-            if not torch.allclose(sd[param_name], tensor_torch):
-                raise RuntimeError(f"Copy failed for {param_name}")
-
-    print("All tensors loaded and reconstructed successfully.")
-
-
-
-
-
-def load_qsteps(csv_file):
-    # Create a dictionary to store qstep per tensor
-    tensor_qsteps = {}
-
-    with open(csv_file, newline='') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            # Extract tensor name and qstep
-            name = row['param_name']
-            qstep = float(row['qstep'])
-            shape_str = row['shape']  # e.g., "(768, 3072)"
-            shape = tuple(int(x) for x in shape_str.strip("()").split(","))
-
-            # Store qstep and shape in dict
-            tensor_qsteps[name] = {
-                "qstep": qstep,
-                "shape": shape,
-                "dtype": np.float32  # you can adjust if needed
-            }
-    return tensor_qsteps
 
 # ------------------------------------------------------------
 # evaluation
@@ -224,36 +78,57 @@ def evaluate(model, tokenizer, dataset):
 if __name__ == "__main__":
 
     MODEL_NAME = "textattack/bert-base-uncased-SST-2"
-
     DECODED_FOLDER = "bert_decoded"
-    META_PATH = os.path.join(DECODED_FOLDER, "decoded_tensors.meta")
+
 
     print("Loading model...")
-    model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+    model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME).to("cpu").eval()
 
-    print("Reading decoded metadata...")
-    decoded_meta = read_decoded_meta(META_PATH)
-    print("Decoded tensors:", len(decoded_meta))
+    npz = np.load("bert_reconstructed.npz")
+    bits = 8
 
-    for name, param in model.named_parameters():
-        print(name, torch.mean(param).item())
-        break
+    loaded = {}
+    for k in npz.files:
+        raw_name = k.split("_", 2)[-1]
+        if raw_name.startswith("param_") or raw_name.startswith("buffer_"):
+            print(f"WARNING: key {k} still has param_/buffer_ prefix, skipping.")
+            continue
+        arr = npz[k].astype(np.float32)
+        loaded[raw_name] = arr
 
-    print("Reconstructing weights...")
-    load_by_id(model, decoded_meta, DECODED_FOLDER, qstep_file)
+    print("Loaded tensors:", len(loaded))
+    print("Example keys:", list(loaded.keys())[:10])    
 
-    for name, param in model.named_parameters():
-        print(name, torch.mean(param).item())
-        break
+    sd = model.state_dict()
+
+    # Check reconstruction errors
+    errors = check_reconstruction_errors(model, loaded)
+
+    print("=== Reconstruction error summary ===")
+    max_errors = []
+    mean_errors = []
+    for name, e in errors.items():
+        print(f"{name}: max={e['max_abs']:.6f}, mean={e['mean_abs']:.6f}")
+        max_errors.append(e['max_abs'])
+        mean_errors.append(e['mean_abs'])
+
+    print(f"Overall max error: {np.max(max_errors):.6f}")
+    print(f"Overall mean error: {np.mean(mean_errors):.6f}")
+
+    # overwrite matching keys
+    for name, val in loaded.items():
+        if name in sd:
+            sd[name] = torch.from_numpy(val).to(dtype=sd[name].dtype)
+        else:
+            print("WARNING: stored key not in model:", name)
+
+    model.load_state_dict(sd, strict=True)
+    model.eval()
+   
+    print(f"Model BERT successfully reconstructed for {bits} bits !")
 
 
-    model_orig = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
-
-    for (n1, p1), (n2, p2) in zip(model_orig.named_parameters(), model.named_parameters()):
-        diff = torch.max(torch.abs(p1 - p2)).item()
-        print(n1, diff)
-        break
-
+    # === Inference ===
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     dataset = load_dataset("sst2", split="validation[:1000]")

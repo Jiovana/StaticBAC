@@ -426,6 +426,9 @@ def main():
     # They must NOT be quantized to preserve correctness
     # We store them as raw int32 with bitwidth=32
     for name, buf in tqdm(model.named_buffers(), desc="buffers"):
+        if name not in model.state_dict():
+            print(f"WARNING: buffer {name} not found in state_dict, skipping.")
+            continue
         arr = buf.detach().cpu().numpy().astype(np.float32)
         tensor_kind = "buffer"
 
