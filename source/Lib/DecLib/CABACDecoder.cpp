@@ -157,6 +157,7 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
 
   decodedIntVal = 0;
 
+  OP_BRANCH();
   if (!sigFlag)
     return bitsUsed;
   
@@ -171,8 +172,8 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
   uint32_t branchFlag = m_BinDecoder.decodeBin(m_CtxStore, 12, m_tensorType); // assuming context 8 is for branch flag
   bitsUsed += 1; // 1 bit for branch flag
 
-  if (branchFlag)
-  {
+  OP_BRANCH();
+  if (branchFlag) {
      //printf("big value went to rem.. \n");
     // large residual case, directly decode remAbsLevel without gtx flags
     uint32_t remAbsLevel = 0;
@@ -187,6 +188,8 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
     uint8_t numGreaterFlagsDecoded = 0;
 
     do {
+      OP_BRANCH();
+      g_ops.loops++;
       uint32_t ctxIdx = m_CtxModeler.getGtxCtxId(signFlag);
       grXFlag = m_BinDecoder.decodeBin(m_CtxStore, ctxIdx, m_tensorType);
       bitsUsed  += 1; // 1 bit for grXFlag
@@ -218,12 +221,6 @@ int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
   uint8_t plusBits = 0;
    //printf(" width %d \n", bitwidth);
 
-  if (bitwidth < 2)
-  {
-      remainder = m_BinDecoder.decodeBinsEP(bitwidth);
-      return bitwidth;
-  }
-
   // ---- 1. Decode MSBs (context-coded) ----
   uint32_t msb1 = m_BinDecoder.decodeBin(m_CtxStore, 6, m_tensorType);
   uint32_t msb2 = m_BinDecoder.decodeBin(m_CtxStore, 7, m_tensorType);
@@ -233,12 +230,14 @@ int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
 
   uint32_t msb3 = 0, msb4 = 0, msb5 = 0, msb6 = 0;
   if (m_tensorBitwidth == TensorBitwidth::BW_12) {
+    OP_BRANCH();
     msb3 = m_BinDecoder.decodeBin(m_CtxStore, 8, m_tensorType);
     msb4 = m_BinDecoder.decodeBin(m_CtxStore, 9, m_tensorType);
     binsUsed += 2; // 2 bits for MSBs
     plusBits += 2;
     //printf ("msb3 %d msb4 %d plusb %d \n", msb3, msb4, plusBits);
   } else if (m_tensorBitwidth >= TensorBitwidth::BW_16) {
+      OP_BRANCH();
       msb3 = m_BinDecoder.decodeBin(m_CtxStore, 8, m_tensorType);
       msb4 = m_BinDecoder.decodeBin(m_CtxStore, 9, m_tensorType);
       msb5 = m_BinDecoder.decodeBin(m_CtxStore, 10, m_tensorType);
@@ -260,6 +259,8 @@ int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
 
   while (true)
   {
+      OP_BRANCH();
+      g_ops.loops++;
       uint32_t bin = m_BinDecoder.decodeBinEP();
       binsUsed++;
       if (bin == 0)

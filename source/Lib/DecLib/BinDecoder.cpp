@@ -81,139 +81,155 @@ uint32_t BinDec::decodeBinold( StaticCtx &ctxMdl, uint8_t ctxId, TensorType para
 uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType)
 {
     //printf("DecodeBin called: range %d value %d \n", m_Range, m_Value );
-    uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType);
-    uint32_t mps  = ctxMdl.getMPS(ctxId, paramType);
+    uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType); OP_MEM();
+    uint32_t mps  = ctxMdl.getMPS(ctxId, paramType); OP_MEM();
 
-    uint32_t rmps = m_Range - rlps;
+    //uint32_t rmps = m_Range - rlps;
+    uint32_t rmps = OP_SUB(m_Range - rlps);
 
     // determine LPS
-    bool isLPS = (m_Value >= (rmps << 7));
+    bool isLPS = OP_CMP(m_Value >= OP_SHL(rmps, 7)); OP_BRANCH();
 
     // reconstruct bin
-    uint32_t bin = isLPS ? (mps ^ 1) : mps;
+    uint32_t bin = isLPS ? (mps ^ 1) : mps; OP_BRANCH();
 
-    // update range
-    m_Range = isLPS ? rlps : rmps;
+    // update range 
+    m_Range = isLPS ? rlps : rmps; OP_BRANCH();
 
     // update value if LPS
-    if (isLPS)
-        m_Value -= (rmps << 7);
-
-    // renormalize
-    // while (m_Range < 256)
-    // {
-    //     m_Range <<= 1;
-    //     m_Value <<= 1;
-    //     m_BitsNeeded++;
-
-    //     if (m_BitsNeeded >= 0)
-    //     {
-    //         m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
-    //         m_BitsNeeded -= 8;
-    //         m_BytesRead++;
-    //     }
-    // }
-    uint32_t n = clz32(m_Range) - 23;
-
-    m_Range <<= n;
-    m_Value <<= n;
-    m_BitsNeeded += n;
-
-    if (m_BitsNeeded >= 0)
-    {
-        m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
-        m_BitsNeeded -= 8;
-        m_BytesRead++;
+    if (isLPS) {
+        OP_BRANCH();
+        m_Value = OP_SUB(m_Value - OP_SHL(rmps, 7));
     }
 
+       
+    uint32_t n = OP_SUB(clz32(m_Range) - 23);
+
+    m_Range = OP_SHL(m_Range, n);
+    m_Value = OP_SHL(m_Value, n);
+    m_BitsNeeded = OP_ADD(m_BitsNeeded + n);
+
+    if (OP_CMP(m_BitsNeeded >= 0)) {
+        OP_BRANCH();
+
+        uint8_t byte = *m_ByteStreamPtr++;
+        m_Value = OP_ADD(m_Value + OP_SHL(byte, m_BitsNeeded));
+        OP_MEM();
+
+        m_BitsNeeded = OP_SUB(m_BitsNeeded - 8);
+        m_BytesRead++; // optional: OP_MEM()
+    }
+
+    g_ops.regularBins++;
 
     return bin;
 }
 
 uint32_t BinDec::decodeBinEP()
 {
-    m_Value            += m_Value;
-    if (++m_BitsNeeded >= 0)
-    {
-        m_Value          += (*m_ByteStreamPtr++);
-        m_BitsNeeded      = -8;
-        m_BytesRead++;
+    m_Value = OP_ADD(m_Value + m_Value);
+    ++m_BitsNeeded;
+    if (OP_CMP(m_BitsNeeded >= 0)) {
+        OP_BRANCH();
+        uint8_t byte = *m_ByteStreamPtr++;
+        m_Value = OP_ADD(m_Value + byte); OP_MEM();
+        m_BitsNeeded = -8;
     }
     uint32_t bin = 0;
-    uint32_t SR  = m_Range << 7;
-    if (m_Value >= SR)
-    {
-        m_Value   -= SR;
-        bin        = 1;
+    uint32_t SR = OP_SHL(m_Range, 7);
+
+    if (OP_CMP(m_Value >= SR)) {
+        OP_BRANCH();
+
+        m_Value = OP_SUB(m_Value - SR);
+        bin = 1;
     }
+    g_ops.bypassBins++;
     return bin;
 }
 
 uint32_t BinDec::decodeBinsEP( uint32_t numBins )
 {
-    if (m_Range == 256)
-    {
+    if (OP_CMP(m_Range == 256)) {
+        OP_BRANCH();
         uint32_t remBins = numBins;
         uint32_t bins    = 0;
-        while (remBins > 0)
-        {
-            uint32_t binsToRead = std::min<uint32_t>(remBins, 8); //read bytes if able to take advantage of the system's byte-read function
-            uint32_t binMask    = (1 << binsToRead) - 1;
-            uint32_t newBins    = (m_Value >> (15 - binsToRead)) & binMask;
-            bins                = (bins << binsToRead) | newBins;
-            m_Value             = (m_Value << binsToRead) & 0x7FFF;
+        while (OP_CMP(remBins > 0)) {
+            g_ops.loops++;
+            OP_BRANCH();
+
+            uint32_t binsToRead = std::min<uint32_t>(remBins, 8);
+            uint32_t binMask    = OP_SUB((1 << binsToRead) - 1);
+           uint32_t newBins = OP_SHR(m_Value, (15 - binsToRead)) & binMask;
+
+            bins = OP_ADD((bins << binsToRead) | newBins);
+            m_Value = OP_SHL(m_Value, binsToRead) & 0x7FFF;
             remBins            -= binsToRead;
             m_BitsNeeded       += binsToRead;
-            if (m_BitsNeeded >= 0)
-            {
-                m_Value          |= (*m_ByteStreamPtr++) << m_BitsNeeded;
-                m_BitsNeeded     -= 8;
-                m_BytesRead++;
+           if (OP_CMP(m_BitsNeeded >= 0)) {
+                OP_BRANCH();
+                uint8_t byte = *m_ByteStreamPtr++;
+                m_Value |= OP_SHL(byte, m_BitsNeeded);
+                OP_MEM();
+
+                m_BitsNeeded = OP_SUB(m_BitsNeeded - 8);
             }
         }
-
+        g_ops.bypassBins += numBins;
         return bins;
     }
     uint32_t remBins = numBins;
-    uint32_t bins    = 0;
-    while (remBins > 8)
-    {
-        m_Value     = (m_Value << 8) + ((*m_ByteStreamPtr++) << (8 + m_BitsNeeded));
-        uint32_t SR =   m_Range << 15;
-        m_BytesRead++;
+    uint32_t bins = 0;
+    while (OP_CMP(remBins > 8)) {
+        g_ops.loops++;
+        OP_BRANCH();
+        uint8_t byte = *m_ByteStreamPtr++; OP_MEM();
 
-        for (int i = 0; i < 8; i++)
-        {
-            bins += bins;
-            SR  >>= 1;
-            if (m_Value >= SR)
-            {
-                bins++;
-                m_Value -= SR;
+        uint32_t tmp1 = OP_SHL(m_Value, 8);
+        uint32_t tmp2 = OP_SHL(byte, 8 + m_BitsNeeded);
+        m_Value = OP_ADD(tmp1 + tmp2);
+        uint32_t SR = OP_SHL(m_Range, 15);
+
+        for (uint32_t i = 0; OP_CMP(i < 8); i++) {
+            g_ops.loops++;
+            OP_BRANCH();
+            bins = OP_ADD(bins + bins);
+            SR = OP_SHR(SR, 1);
+            if (OP_CMP(m_Value >= SR)) {
+                OP_BRANCH();
+                bins = OP_ADD(bins + 1);
+                m_Value = OP_SUB(m_Value - SR);
             }
         }
-        remBins -= 8;
-    }
-    m_BitsNeeded   += remBins;
-    m_Value       <<= remBins;
-    if (m_BitsNeeded >= 0)
-    {
-        m_Value      += (*m_ByteStreamPtr++) << m_BitsNeeded;
-        m_BitsNeeded -= 8;
+        remBins = OP_SUB(remBins - 8);
         m_BytesRead++;
     }
-    uint32_t SR = m_Range << (remBins + 7);
-    for (uint32_t i = 0; i < remBins; i++)
-    {
-        bins += bins;
-        SR  >>= 1;
-        if (m_Value >= SR)
-        {
-            bins++;
-            m_Value -= SR;
+
+    m_BitsNeeded = OP_ADD(m_BitsNeeded + remBins);
+    m_Value = OP_SHL(m_Value, remBins);
+    if (OP_CMP(m_BitsNeeded >= 0)) {
+        OP_BRANCH();
+        uint8_t byte = *m_ByteStreamPtr++; OP_MEM();
+        uint32_t tmp1 = OP_SHL(byte, m_BitsNeeded);
+        m_Value = OP_ADD(m_Value + tmp1);
+        m_BitsNeeded = OP_SUB(m_BitsNeeded - 8);
+        m_BytesRead++;
+    }
+
+    uint32_t SR = OP_SHL(m_Range, remBins + 7);
+    for (uint32_t i = 0; OP_CMP(i < remBins); i++) {
+        g_ops.loops++;
+        OP_BRANCH();
+        bins = OP_ADD(bins + bins);
+        SR = OP_SHR(SR, 1);
+        if (OP_CMP(m_Value >= SR)) {
+            OP_BRANCH();
+            bins = OP_ADD(bins + 1);
+            m_Value = OP_SUB(m_Value - SR);
         }
     }
 
+    g_ops.bypassBins += numBins;
     return bins;
 }
 

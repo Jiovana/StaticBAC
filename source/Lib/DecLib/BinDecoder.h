@@ -43,8 +43,8 @@ POSSIBILITY OF SUCH DAMAGE.
 #define __BINDEC__
 
 #include "CommonLib/ContextModel.h"
+#include "Utils/OpCounter.h"
 #include <iostream>
-
 
 class BinDec
 {

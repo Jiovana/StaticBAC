@@ -9,6 +9,7 @@
 #include "CommonLib/Quant.h"
 #include "CommonLib/Scan.h"
 #include "BinDecoder.h"
+#include "Utils/OpCounter.h"
 
 class BACDecoder
 {

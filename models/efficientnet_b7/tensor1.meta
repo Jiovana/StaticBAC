@@ -1,3 +1,12 @@
-numTensors 1
+numTensors 10
 
+0 features.0.0.weight weight 8 4 64 3 3 3 0.01817085135197768
+1 features.0.1.weight weight 8 1 64 0.06774435840334006
+2 features.0.1.bias bias 12 1 64 0.005905779743649964
 3 features.1.0.block.0.0.weight weight 8 4 64 1 3 3 0.021877222317122816
+4 features.1.0.block.0.1.weight weight 8 1 64 0.03741304776434273
+5 features.1.0.block.0.1.bias bias 12 1 64 0.004277903838111351
+6 features.1.0.block.1.fc1.weight weight 8 4 16 64 1 1 0.004500573789766189
+7 features.1.0.block.1.fc1.bias bias 12 1 16 2.388410455829971e-05
+8 features.1.0.block.1.fc2.weight weight 8 4 64 16 1 1 0.0035981641480477616
+9 features.1.0.block.1.fc2.bias bias 12 1 64 0.00012162638623254825

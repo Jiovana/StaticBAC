@@ -32,7 +32,7 @@
 //#define TENSOR_BIN_DIR "models/gpt_tensors_binaries/"
 //#define META_FILE "models/gpt_tensors.meta"
 #define TENSOR_BIN_DIR "models/efficientnet_b7/binaries/"
-#define META_FILE "models/efficientnet_b7/tensors.meta"
+#define META_FILE "models/efficientnet_b7/tensor1.meta"
 
 #define MODEL_NAME "efficientnet_b7"
 
@@ -430,7 +430,7 @@ int main()
 
     encoder.initCtxModels(numGtxFlags);
     const std::vector<uint8_t>& bytestream =
-        encoder.encodeModel(modelTensors, false);
+        encoder.encodeModel(modelTensors);
 
     auto encEnd = std::chrono::high_resolution_clock::now();
 
