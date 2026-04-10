@@ -12,7 +12,7 @@ SRC      = \
 	source/Lib/CommonLib/ContextModeler.cpp \
     source/Lib/Test/test_model_args.cpp
 
-TARGET = staticBac
+TARGET = StaticBac
 
 all: $(TARGET)
 

@@ -472,15 +472,25 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       int32_t localMean = sum >> shift;
 
       bool useMean = (std::abs(localMean) > 4);
+      if (!useMean) localMean = 0; // if mean is small, we won't use it, so set to 0 to avoid confusion
 
 
 
       // ---------- pass 2: residual + meanResidual -------------
-      for (uint32_t i = start; i < end; i++)
-      {
-          residual = pWeights[i] - localMean;
-          sumRes += std::abs(residual);
+      if (useMean) {
+          for (uint32_t i = start; i < end; i++)
+          {
+              residual = pWeights[i] - localMean;
+              sumRes += std::abs(residual);
+          }
+      } else {
+          for (uint32_t i = start; i < end; i++)
+          {
+              residual = pWeights[i];
+              sumRes += std::abs(residual);
+          }
       }
+    
 
       // --------------- mean abs residual ---------------
       int32_t meanRes = sumRes / len;
@@ -502,14 +512,11 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       {
           int32_t residual = pWeights[i] - localMean;
 
-          int32_t scaled;
 
-          scaled = residual;
-
-          scaledBuf[i - start] = scaled;
+          scaledBuf[i - start] = residual; // store scaled residual for later encoding
 
           /// compute bins per element (rough bit estimation)
-          uint32_t absScaled = std::abs(scaled);
+          uint32_t absScaled = std::abs(residual);
           if (absScaled == 0) estBits += 1 ; // sig only (minimal)
           else if (absScaled <= 5) {
               estBits += 1 + 1 + absScaled; // sig + sign + branch + grXFlags (branch included in absscaled)
@@ -557,9 +564,7 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       if (useMean) {
           iae_v(width, localMean);
           scaledBits += width;
-      } else {
-          localMean = 0;
-      }
+      } 
 
     
       // send k  

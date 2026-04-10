@@ -430,7 +430,7 @@ int main()
 
     encoder.initCtxModels(numGtxFlags);
     const std::vector<uint8_t>& bytestream =
-        encoder.encodeModel(modelTensors, false);
+        encoder.encodeModel(modelTensors);
 
     auto encEnd = std::chrono::high_resolution_clock::now();
 
