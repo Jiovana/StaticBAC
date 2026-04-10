@@ -27,18 +27,18 @@
 
 
 
-//#define TENSOR_BIN_DIR "models/bert/binaries/"
-//#define META_FILE "models/bert/tensors.meta"
+#define TENSOR_BIN_DIR "models/bert/binaries/"
+#define META_FILE "models/bert/tensors.meta"
 //#define TENSOR_BIN_DIR "models/gpt/binaries/"
 //#define META_FILE "models/gpt/tensors.meta"
 //#define TENSOR_BIN_DIR "models/resnet50/binaries/"
 //#define META_FILE "models/resnet50/tensors.meta"
-#define TENSOR_BIN_DIR "models/vit_b16/binaries/"
-#define META_FILE "models/vit_b16/tensors.meta"
-//#define TENSOR_BIN_DIR "models/efficientnet_b0/binaries/"
-//#define META_FILE "models/efficientnet_b0/tensors.meta"
+//#define TENSOR_BIN_DIR "models/vit_b16/binaries/"
+//#define META_FILE "models/vit_b16/tensors.meta"
+//#define TENSOR_BIN_DIR "models/efficientnet_b7/binaries/"
+//#define META_FILE "models/efficientnet_b7/tensors.meta"
 
-#define MODEL_NAME "vit_b16"
+#define MODEL_NAME "bert"
 
 // ============================================================
 // Peak Memory Sampler — mirrors Python psutil RSS sampling
@@ -454,7 +454,7 @@ int main()
 
     uint64_t compressedBits = bytestream.size() * 8;
 
-    std::ofstream f("vit_b16_bitstream.bin", std::ios::binary);
+    std::ofstream f(std::string(MODEL_NAME) + "_bitstream.bin", std::ios::binary);
     f.write(reinterpret_cast<const char*>(bytestream.data()),
         bytestream.size());
 
@@ -555,7 +555,7 @@ int main()
 
 
     /// save decoded tensormeta
-    saveDecodedModel(decodedModel, ("vit_b16_decoded"));
+    saveDecodedModel(decodedModel, (std::string(MODEL_NAME) + "_decoded"));
 
 
     // --------------------------------------------------

@@ -127,7 +127,7 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
 
       pWeights[i] =  residual + localMean;
      // ////printf("Decoded weight %d: value=%d\n", i,  pWeights[i]);
-      m_CtxModeler.updateNeighborCtx(decodedVal);
+      m_CtxModeler.updateNeighborCtx(decodedVal); OP_MEM();
       //printf("CHUNK[%d] - Decoded value %d\n", c, pWeights[i]);
 
     }
@@ -149,7 +149,7 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
   
   uint64_t bitsUsed = 0;
 
-  const int32_t sigctx = m_CtxModeler.getSigCtxId();
+  const int32_t sigctx = m_CtxModeler.getSigCtxId(); OP_BRANCH(); OP_MEM();
   uint32_t sigFlag = m_BinDecoder.decodeBin(m_CtxStore, sigctx, m_tensorType);
   //printf("Decoded sigFlag: %d\n", sigFlag);
   bitsUsed += 1; // 1 bit for sigFlag
@@ -163,7 +163,7 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
   
 
   // sign 
-  int32_t signCtx = m_CtxModeler.getSignFlagCtxId();
+  int32_t signCtx = m_CtxModeler.getSignFlagCtxId(); OP_MEM();
   uint32_t signFlag = m_BinDecoder.decodeBin(m_CtxStore, signCtx, m_tensorType);
   //printf("Decoded signFlag: %d\n", signFlag);
   bitsUsed += 1; // 1 bit for signFlag
@@ -190,7 +190,7 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
     do {
       OP_BRANCH();
       g_ops.loops++;
-      uint32_t ctxIdx = m_CtxModeler.getGtxCtxId(signFlag);
+      uint32_t ctxIdx = m_CtxModeler.getGtxCtxId(signFlag); OP_MEM(); OP_BRANCH();
       grXFlag = m_BinDecoder.decodeBin(m_CtxStore, ctxIdx, m_tensorType);
       bitsUsed  += 1; // 1 bit for grXFlag
       if (grXFlag)

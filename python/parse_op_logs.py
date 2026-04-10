@@ -3,8 +3,8 @@ import re
 import pandas as pd
 
 LOG_DIR = "..\\op_logs"
-TENSORMETA_PATH = "..\\models\\vit_b16\\tensors.meta"
-OUTPUT_CSV = "op_stats_vit_b16.csv"
+TENSORMETA_PATH = "..\\models\\bert\\tensors.meta"
+OUTPUT_CSV = "op_stats_bert.csv"
 
 
 # -----------------------------
