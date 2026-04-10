@@ -1,4 +1,6 @@
 #include "..\CommonLib\TypeDef.h"
+#include <sstream>
+
 
 #ifndef OP_COUNTER_H
 #define OP_COUNTER_H
@@ -33,5 +35,31 @@ extern OpCounter g_ops;
 #define OP_BRANCH() (g_ops.branch++)
 
 #define OP_MEM()    (g_ops.mem++)
+
+
+inline std::string dumpOps(const OpCounter& ops)
+{
+    std::ostringstream oss;
+
+    oss << "==== Operation Counters ====\n";
+    oss << "add: " << ops.add << "\n";
+    oss << "sub: " << ops.sub << "\n";
+    oss << "mul: " << ops.mul << "\n";
+    oss << "shift: " << ops.shift << "\n";
+    oss << "cmp: " << ops.cmp << "\n";
+    oss << "branch: " << ops.branch << "\n";
+    oss << "mem: " << ops.mem << "\n";
+
+    oss << "regularBins: " << ops.regularBins << "\n";
+    oss << "bypassBins: " << ops.bypassBins << "\n";
+    oss << "loops: " << ops.loops << "\n";
+
+    return oss.str();
+}
+
+inline void resetOps(OpCounter& ops)
+{
+    ops = OpCounter(); // clean reset
+}
 
 #endif // OP_COUNTER_H

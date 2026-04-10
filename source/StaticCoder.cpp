@@ -3,6 +3,7 @@
 #include <iostream>
 #include <math.h>
 #include "StaticCoder.h"
+#include "Lib/Utils/global_logger.h"
 
 static constexpr uint32_t MAX_TENSORS_BITS = 12;   // allows up to 4096 tensors
 static constexpr uint32_t MAX_TENSOR_DIMS  = 8;    // max tensor rank supported
@@ -22,6 +23,7 @@ static constexpr uint32_t MAX_TENSOR_DIMS  = 8;    // max tensor rank supported
 /// @return total number of bits used for this tensor
 ///
 ///////////////////////////////////////////////////////////////
+
 uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint32_t& headerBits)
 {
     const uint32_t numWeights = tensor.data.size();
@@ -40,9 +42,9 @@ uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint3
 
     headerBits = headerBitsLocal;
     bitsUsed += headerBitsLocal;
-
     // encode weights
     bitsUsed += m_BACEncoder.encodeWeights(tensor.data.data(), numWeights);
+
     return bitsUsed;
 }
 
@@ -116,6 +118,7 @@ void Decoder::setStream( std::vector<uint8_t>& Bytestream )
 /// @param tensor TensorMeta structure to fill
 ///
 ///////////////////////////////////////////////////////////////
+uint32_t tensor_count = 0;
 void Decoder::decodeLayer(TensorMeta& tensor)
 {
 
@@ -135,8 +138,17 @@ void Decoder::decodeLayer(TensorMeta& tensor)
     // Resize tensor data to hold decoded weights
     tensor.data.resize(numWeights);
 
+    g_logger->setTensorName("tensor_" + std::to_string(tensor_count));
+    resetOps(g_ops);
+
     // Decode weights
     m_BACDecoder.decodeWeights(tensor.data.data(), numWeights);
+
+    g_logger->log("Tensor: " + std::to_string(tensor_count));
+    g_logger->log("Num elements: " + std::to_string(numWeights));
+    g_logger->log(dumpOps(g_ops));
+
+    tensor_count++;
 
 }
 

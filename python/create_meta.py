@@ -374,7 +374,7 @@ def main():
     model.eval()
 
     bin_dir = os.path.join(args.out_dir, "binaries")
-    meta_file = os.path.join(args.out_dir, "tensor.meta")
+    meta_file = os.path.join(args.out_dir, "tensors.meta")
 
     os.makedirs(bin_dir, exist_ok=True)
 
