@@ -45,6 +45,7 @@
 
 #txt files
 *.txt
+*.hex
 
 #numpy files
 *.npz
