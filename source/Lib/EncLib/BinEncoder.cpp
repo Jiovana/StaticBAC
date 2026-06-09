@@ -1,60 +1,32 @@
-/* -----------------------------------------------------------------------------
-The copyright in this software is being made available under the Clear BSD
-License, included below. No patent rights, trademark rights and/or
-other Intellectual Property Rights other than the copyrights concerning
-the Software are granted under this license.
-
-The Clear BSD License
-
-Copyright (c) 2019-2025, Fraunhofer-Gesellschaft zur Förderung der angewandten Forschung e.V. & The NNCodec Authors.
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted (subject to the limitations in the disclaimer below) provided that
-the following conditions are met:
-
-     * Redistributions of source code must retain the above copyright notice,
-     this list of conditions and the following disclaimer.
-
-     * Redistributions in binary form must reproduce the above copyright
-     notice, this list of conditions and the following disclaimer in the
-     documentation and/or other materials provided with the distribution.
-
-     * Neither the name of the copyright holder nor the names of its
-     contributors may be used to endorse or promote products derived from this
-     software without specific prior written permission.
-
-NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY
-THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
-CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
-CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
-BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
-IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE.
-
-
-------------------------------------------------------------------------------------------- */
 #include <random>
 #include <algorithm>
 
 #include "BinEncoder.h"
 #include <bitset>
 #include <iostream>
-#include "Utils/Profiler.h"
+//#include "Utils/global_logger.h"
+#include <sstream>
 
-#if _WIN32
-inline uint32_t __builtin_clz(uint32_t x)
-{
-    unsigned long position;
-    _BitScanReverse(&position, x);
-    return 31 - position;
-}
+
+#include <cstdint>
+#if defined(_MSC_VER)
+#include <intrin.h>
 #endif
+
+
+inline uint32_t clz32(uint32_t x)
+{
+#if defined(_MSC_VER)
+    unsigned long pos;
+    _BitScanReverse(&pos, x);
+    return 31u - pos;
+#else
+    return __builtin_clz(x);
+#endif
+}
+
+
+
 
 const uint32_t BinEnc::m_auiGoRiceRange[ 10 ] =
 {
@@ -76,16 +48,15 @@ void BinEnc::setByteStreamBuf( std::vector<uint8_t> *byteStreamBuf )
     m_ByteBuf = byteStreamBuf;
 }
 
-
-uint32_t BinEnc::encodeBin( uint32_t bin, SBMPCtx &ctxMdl )
+//read only context
+uint32_t BinEnc::encodeBinold( uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType )
 {
-  //PROFILE_SCOPE("encodeBin", 0);
-  uint32_t rlps = ctxMdl.getRLPS( m_Range );
+  uint8_t rlps = ctxMdl.getRLPS( ctxId, paramType );
   m_Range -= rlps;
 
-  int32_t minusBin = -(int32_t)bin;
+  uint32_t mps = ctxMdl.getMPS( ctxId, paramType );
 
-  if (minusBin == ctxMdl.getMinusMPS() )
+  if (bin == mps)
   {
     if (m_Range < 256)
     {
@@ -93,7 +64,7 @@ uint32_t BinEnc::encodeBin( uint32_t bin, SBMPCtx &ctxMdl )
       m_Low += m_Low;
       m_BitsLeft -= 1;
       if (m_BitsLeft < 12){
-        { //PROFILE_SCOPE("encodeBin_write_out_IF", 0);
+        { 
         write_out();
         }
       }
@@ -101,32 +72,54 @@ uint32_t BinEnc::encodeBin( uint32_t bin, SBMPCtx &ctxMdl )
   }
   else
   {
-    uint32_t n = __builtin_clz(rlps) - 23;
+    uint32_t n = clz32(rlps) - 23;
     m_Low += m_Range;
     m_Range = rlps << n;
     m_Low <<= n;
     m_BitsLeft -= n;
     if (m_BitsLeft < 12){
-      { //PROFILE_SCOPE("encodeBin_write_out_ELSE", 0);
+      { 
       write_out();
       }
     }
   }
-  
-  ctxMdl.updateState( minusBin );
-  return 0;
+  return 1;
 }
 
-void BinEnc::pseudoEncodeBin( uint32_t bin, SBMPCtxOptimizer &ctxMdl )
+
+uint32_t BinEnc::encodeBin(uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType)
 {
-  //PROFILE_SCOPE("pseudoEncodeBin", 0);
-    ctxMdl.accumulateBits( -(int32_t)bin );
-    ctxMdl.updateStates( -(int32_t)bin );
+    uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType);
+    uint32_t mps  = ctxMdl.getMPS(ctxId, paramType);
+
+    //std::ostringstream ss;
+   // std::cout << "===> Inside encodeBin: start with Range=" << m_Range << " Low=" << m_Low << " Bits left=" << m_BitsLeft;
+    //LOG_LINE(g_logger, ss.str());
+
+    uint32_t rmps = m_Range - rlps;
+
+    // determine if bin is LPS
+    bool isLPS = (bin != mps);
+
+    // update range
+    m_Range = isLPS ? rlps : rmps;
+
+    // update low if not LPS
+    if (!isLPS)
+        m_Low += rlps; // adds RLPS in MPS case
+
+    uint32_t n = clz32(m_Range) - 23;
+    m_Range <<= n;
+    m_Low <<= n;
+    m_BitsLeft -= n;
+    if (m_BitsLeft < 12) write_out();
+
+    return 1;
 }
 
 uint32_t BinEnc::encodeBinEP( uint32_t bin )
 {
-  //PROFILE_SCOPE("encodeBinEP", 0);
+  
     m_Low <<= 1;
     if (bin)
     {
@@ -135,7 +128,7 @@ uint32_t BinEnc::encodeBinEP( uint32_t bin )
     m_BitsLeft--;
     if (m_BitsLeft < 12)
     {
-      { //PROFILE_SCOPE("encodeBinEP_write_out", 0);
+      { 
         write_out();
       }
     }
@@ -145,9 +138,9 @@ uint32_t BinEnc::encodeBinEP( uint32_t bin )
 
 uint32_t BinEnc::encodeBinsEP( uint32_t bins, uint32_t numBins )
 {
-  //PROFILE_SCOPE("encodeBinsEP", 0);
-    CHECK( bins >= ( 1u << numBins ), printf( "%i can not be coded with %i EP-Bins", bins, numBins ) )
-    
+    if (numBins < 32)
+      CHECK( bins >= ( 1u << numBins ), printf( "%i can not be coded with %i EP-Bins\n", bins, numBins ) )
+
     if (m_Range == 256)
     {
         uint32_t remBins = numBins;
@@ -161,7 +154,7 @@ uint32_t BinEnc::encodeBinsEP( uint32_t bins, uint32_t numBins )
             m_BitsLeft         -= binsToCode;
             if (m_BitsLeft < 12)
             {
-                { //PROFILE_SCOPE("encodeBinsEP_write_out1", 0);
+                { 
                 write_out();
                 }
             }
@@ -179,7 +172,7 @@ uint32_t BinEnc::encodeBinsEP( uint32_t bins, uint32_t numBins )
         m_BitsLeft       -= 8;
         if (m_BitsLeft < 12)
         {
-            { //PROFILE_SCOPE("encodeBinsEP_write_out2", 0);
+            { 
             write_out();
             }
         }
@@ -189,17 +182,17 @@ uint32_t BinEnc::encodeBinsEP( uint32_t bins, uint32_t numBins )
     m_BitsLeft -= numBins;
     if (m_BitsLeft < 12)
     { 
-      {//PROFILE_SCOPE("encodeBinsEP_write_out3", 0);
+      {
         write_out();
         }
     }
+
     return 0;
 }
 
 
 void BinEnc::write_out()
 {
-  //PROFILE_SCOPE("write_out", 0);
     uint32_t lead_byte = m_Low >> (24 - m_BitsLeft);
     m_BitsLeft += 8;
     m_Low &= 0xffffffffu >> m_BitsLeft;

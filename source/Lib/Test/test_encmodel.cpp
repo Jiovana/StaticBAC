@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "../EncLib/CABACEncoder.h"  // your header
+#include "../EncLib/CABACEncoder.h"  
 #include "../EncLib/BinEncoder_simple.h"
 #include "../CommonLib/ContextModel.h"
 #include "../../StaticCoder.h" 
@@ -32,7 +32,7 @@
 //#define TENSOR_BIN_DIR "models/gpt_tensors_binaries/"
 //#define META_FILE "models/gpt_tensors.meta"
 #define TENSOR_BIN_DIR "models/efficientnet_b7/binaries/"
-#define META_FILE "models/efficientnet_b7/tensors.meta"
+#define META_FILE "models/efficientnet_b7/tensor1.meta"
 
 #define MODEL_NAME "efficientnet_b7"
 

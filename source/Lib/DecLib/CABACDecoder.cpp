@@ -6,7 +6,7 @@ static constexpr uint32_t MAX_TENSORS_BITS = 12;   // allows up to 4096 tensors
 
 void BACDecoder::startBacDecoding(uint8_t* pBytestream)
 {
-  //g_logger->setTensorName("CABACDecoder_log");
+  g_logger->setTensorName("io_logs");
   m_BinDecoder.setByteStreamBuf(pBytestream);
   m_BinDecoder.startBinDecoder();
   ////printf("CABACDecoder: Started decoding\n");
@@ -168,7 +168,7 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
   bitsUsed += 1; // 1 bit for signFlag
 
   // branch flag
-  uint32_t branchFlag = m_BinDecoder.decodeBin(m_CtxStore, 12, m_tensorType); // assuming context 8 is for branch flag
+  uint32_t branchFlag = m_BinDecoder.decodeBin(m_CtxStore, 12, m_tensorType); // assuming context 12 is for branch flag
   bitsUsed += 1; // 1 bit for branch flag
 
   if (branchFlag)

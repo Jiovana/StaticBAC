@@ -7,7 +7,7 @@
 class SimpleLogger
 {
 public:
-    SimpleLogger(const std::string &baseDir = "ctx_logs")
+    SimpleLogger(const std::string &baseDir = "io_logs")
         : baseDirectory(baseDir)
     {
         // create logs directory if needed (C++17)

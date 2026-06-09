@@ -44,6 +44,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "CommonLib/ContextModel.h"
 #include <iostream>
+#include "CommonLib/TypeDef.h"
 
 
 class BinDec
