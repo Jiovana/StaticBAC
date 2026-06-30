@@ -140,7 +140,7 @@ Based on DeepCABAC and NNCodec https://github.com/d-becking/nncodec2
 #include <fstream>
 #include <vector>
 #include "../EncLib/CABACEncoder.h"  // your header
-#include "../EncLib/BinEncoder_simple.h"
+#include "../EncLib/BinEncoder.h"
 #include "../CommonLib/ContextModel.h"
 #include "../../StaticCoder.h" 
 #include "../CommonLib/TypeDef.h"

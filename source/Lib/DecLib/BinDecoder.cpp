@@ -84,10 +84,9 @@ uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramTyp
     uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType);
     uint32_t mps  = ctxMdl.getMPS(ctxId, paramType);
 
-    uint32_t rmps = m_Range - rlps;
-
     // determine LPS
-    bool isLPS = (m_Value >= (rmps << 7));
+    bool isLPS = (m_Value < (rlps << 7)); // uses RLPS directly 
+    uint32_t rmps = m_Range - rlps; // this is performed in parallel with LPS determination to save time
 
     // reconstruct bin
     uint32_t bin = isLPS ? (mps ^ 1) : mps;
@@ -96,24 +95,15 @@ uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramTyp
     m_Range = isLPS ? rlps : rmps;
 
     // update value if LPS
-    if (isLPS)
-        m_Value -= (rmps << 7);
+    if (!isLPS) // MPS case subtracts RLPS - no wait 
+        m_Value -= (rlps << 7);
 
-    // renormalize
-    // while (m_Range < 256)
-    // {
-    //     m_Range <<= 1;
-    //     m_Value <<= 1;
-    //     m_BitsNeeded++;
+    assert(m_Range > 0);
+    assert(m_Range < 512);
 
-    //     if (m_BitsNeeded >= 0)
-    //     {
-    //         m_Value += (*m_ByteStreamPtr++) << m_BitsNeeded;
-    //         m_BitsNeeded -= 8;
-    //         m_BytesRead++;
-    //     }
-    // }
     uint32_t n = clz32(m_Range) - 23;
+
+    assert(n <= 8);
 
     m_Range <<= n;
     m_Value <<= n;

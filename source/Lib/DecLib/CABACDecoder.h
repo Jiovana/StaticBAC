@@ -6,8 +6,6 @@
 
 #include "CommonLib/ContextModel.h"
 #include "CommonLib/ContextModeler.h"
-#include "CommonLib/Quant.h"
-#include "CommonLib/Scan.h"
 #include "BinDecoder.h"
 
 class BACDecoder

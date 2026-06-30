@@ -9,7 +9,7 @@
 #include <fstream>
 #include <vector>
 #include "../EncLib/CABACEncoder.h"  // your header
-#include "../EncLib/BinEncoder_simple.h"
+#include "../EncLib/BinEncoder.h"
 #include "../CommonLib/ContextModel.h"
 #include "../../StaticCoder.h" 
 #include "../CommonLib/TypeDef.h"
@@ -27,14 +27,14 @@
 
 
 
-//#define TENSOR_BIN_DIR "models/bert_tensors_binaries/"
-//#define META_FILE "models/bert_tensors.meta"
+#define TENSOR_BIN_DIR "models/bert/binaries/"
+#define META_FILE "models/bert/tensors.meta"
 //#define TENSOR_BIN_DIR "models/gpt_tensors_binaries/"
 //#define META_FILE "models/gpt_tensors.meta"
-#define TENSOR_BIN_DIR "models/efficientnet_b7/binaries/"
-#define META_FILE "models/efficientnet_b7/tensors.meta"
+//#define TENSOR_BIN_DIR "models/efficientnet_b7/binaries/"
+//#define META_FILE "models/efficientnet_b7/tensors.meta"
 
-#define MODEL_NAME "efficientnet_b7"
+#define MODEL_NAME "bert"
 
 // ============================================================
 // Peak Memory Sampler — mirrors Python psutil RSS sampling

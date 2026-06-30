@@ -85,8 +85,6 @@ uint32_t BinEnc::encodeBin(uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId,
     uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType);
     uint32_t mps  = ctxMdl.getMPS(ctxId, paramType);
 
-    //std::ostringstream ss;
-
     uint32_t rmps = m_Range - rlps;
 
     // determine if bin is LPS
@@ -95,38 +93,33 @@ uint32_t BinEnc::encodeBin(uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId,
     // update range
     m_Range = isLPS ? rlps : rmps;
 
-    // update low if LPS
-    if (isLPS)
-        m_Low += rmps;
+    // update low if not LPS
+    if (!isLPS)
+        m_Low += rlps; // adds RLPS in MPS case
 
-    // renormalize
-    while (m_Range < 256)
-    {
-        m_Range <<= 1;
-        m_Low   <<= 1;
-        m_BitsLeft--;
+    assert(m_Range > 0);
+    assert(m_Range < 512);
 
-        if (m_BitsLeft < 12)
-            write_out();
-    }
+    uint32_t n = clz32(m_Range) - 23;
+
+    assert(n <= 8);
+
+    m_Range <<= n;
+    m_Low <<= n;
+    m_BitsLeft -= n;
+    if (m_BitsLeft < 12) write_out();
 
     return 1;
 }
 
-uint32_t BinEnc::encodeBinEP( uint32_t bin )
-{
-  
+uint32_t BinEnc::encodeBinEP( uint32_t bin ){
     m_Low <<= 1;
-    if (bin)
-    {
+    if (bin) {
         m_Low += m_Range;
     }
     m_BitsLeft--;
-    if (m_BitsLeft < 12)
-    {
-      { 
-        write_out();
-      }
+    if (m_BitsLeft < 12){
+      write_out();
     }
     return 0;
 }
