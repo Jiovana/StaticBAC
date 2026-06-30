@@ -5,7 +5,7 @@ SRC      = \
 	source/StaticCoder.cpp \
 	source/Lib/Utils/global_logger.cpp \
     source/Lib/EncLib/CABACEncoder.cpp \
-	source/Lib/EncLib/BinEncoder_simple.cpp \
+	source/Lib/EncLib/BinEncoder.cpp \
 	source/Lib/DecLib/CABACDecoder.cpp \
 	source/Lib/DecLib/BinDecoder.cpp \
 	source/Lib/CommonLib/ContextModel.cpp \

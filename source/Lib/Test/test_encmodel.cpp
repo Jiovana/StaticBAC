@@ -9,7 +9,7 @@
 #include <fstream>
 #include <vector>
 #include "../EncLib/CABACEncoder.h"  
-#include "../EncLib/BinEncoder_simple.h"
+#include "../EncLib/BinEncoder.h"
 #include "../CommonLib/ContextModel.h"
 #include "../../StaticCoder.h" 
 #include "../CommonLib/TypeDef.h"
