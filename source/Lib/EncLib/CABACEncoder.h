@@ -8,7 +8,7 @@
 #include <limits>
 #include <iostream>
 #include <algorithm>
-//#include "Utils/global_logger.h" 
+#include "Utils/global_logger.h" 
 #include <sstream>
 #include <cstdint>
 #include <cmath>
