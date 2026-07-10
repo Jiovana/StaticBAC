@@ -1,0 +1,174 @@
+numTensors 172
+
+0 tensor_0.bin 1 1 2 50257 768 
+1 tensor_1.bin 1 1 2 1024 768 
+2 tensor_2.bin 1 1 1 768 
+3 tensor_3.bin 1 2 1 768 
+4 tensor_4.bin 1 1 2 768 2304 
+5 tensor_5.bin 1 2 1 2304 
+6 tensor_6.bin 1 1 2 768 768 
+7 tensor_7.bin 1 2 1 768 
+8 tensor_8.bin 1 1 1 768 
+9 tensor_9.bin 1 2 1 768 
+10 tensor_10.bin 1 1 2 768 3072 
+11 tensor_11.bin 1 2 1 3072 
+12 tensor_12.bin 1 1 2 3072 768 
+13 tensor_13.bin 1 2 1 768 
+14 tensor_14.bin 1 1 1 768 
+15 tensor_15.bin 1 2 1 768 
+16 tensor_16.bin 1 1 2 768 2304 
+17 tensor_17.bin 1 2 1 2304 
+18 tensor_18.bin 1 1 2 768 768 
+19 tensor_19.bin 1 2 1 768 
+20 tensor_20.bin 1 1 1 768 
+21 tensor_21.bin 1 2 1 768 
+22 tensor_22.bin 1 1 2 768 3072 
+23 tensor_23.bin 1 2 1 3072 
+24 tensor_24.bin 1 1 2 3072 768 
+25 tensor_25.bin 1 2 1 768 
+26 tensor_26.bin 1 1 1 768 
+27 tensor_27.bin 1 2 1 768 
+28 tensor_28.bin 1 1 2 768 2304 
+29 tensor_29.bin 1 2 1 2304 
+30 tensor_30.bin 1 1 2 768 768 
+31 tensor_31.bin 1 2 1 768 
+32 tensor_32.bin 1 1 1 768 
+33 tensor_33.bin 1 2 1 768 
+34 tensor_34.bin 1 1 2 768 3072 
+35 tensor_35.bin 1 2 1 3072 
+36 tensor_36.bin 1 1 2 3072 768 
+37 tensor_37.bin 1 2 1 768 
+38 tensor_38.bin 1 1 1 768 
+39 tensor_39.bin 1 2 1 768 
+40 tensor_40.bin 1 1 2 768 2304 
+41 tensor_41.bin 1 2 1 2304 
+42 tensor_42.bin 1 1 2 768 768 
+43 tensor_43.bin 1 2 1 768 
+44 tensor_44.bin 1 1 1 768 
+45 tensor_45.bin 1 2 1 768 
+46 tensor_46.bin 1 1 2 768 3072 
+47 tensor_47.bin 1 2 1 3072 
+48 tensor_48.bin 1 1 2 3072 768 
+49 tensor_49.bin 1 2 1 768 
+50 tensor_50.bin 1 1 1 768 
+51 tensor_51.bin 1 2 1 768 
+52 tensor_52.bin 1 1 2 768 2304 
+53 tensor_53.bin 1 2 1 2304 
+54 tensor_54.bin 1 1 2 768 768 
+55 tensor_55.bin 1 2 1 768 
+56 tensor_56.bin 1 1 1 768 
+57 tensor_57.bin 1 2 1 768 
+58 tensor_58.bin 1 1 2 768 3072 
+59 tensor_59.bin 1 2 1 3072 
+60 tensor_60.bin 1 1 2 3072 768 
+61 tensor_61.bin 1 2 1 768 
+62 tensor_62.bin 1 1 1 768 
+63 tensor_63.bin 1 2 1 768 
+64 tensor_64.bin 1 1 2 768 2304 
+65 tensor_65.bin 1 2 1 2304 
+66 tensor_66.bin 1 1 2 768 768 
+67 tensor_67.bin 1 2 1 768 
+68 tensor_68.bin 1 1 1 768 
+69 tensor_69.bin 1 2 1 768 
+70 tensor_70.bin 1 1 2 768 3072 
+71 tensor_71.bin 1 2 1 3072 
+72 tensor_72.bin 1 1 2 3072 768 
+73 tensor_73.bin 1 2 1 768 
+74 tensor_74.bin 1 1 1 768 
+75 tensor_75.bin 1 2 1 768 
+76 tensor_76.bin 1 1 2 768 2304 
+77 tensor_77.bin 1 2 1 2304 
+78 tensor_78.bin 1 1 2 768 768 
+79 tensor_79.bin 1 2 1 768 
+80 tensor_80.bin 1 1 1 768 
+81 tensor_81.bin 1 2 1 768 
+82 tensor_82.bin 1 1 2 768 3072 
+83 tensor_83.bin 1 2 1 3072 
+84 tensor_84.bin 1 1 2 3072 768 
+85 tensor_85.bin 1 2 1 768 
+86 tensor_86.bin 1 1 1 768 
+87 tensor_87.bin 1 2 1 768 
+88 tensor_88.bin 1 1 2 768 2304 
+89 tensor_89.bin 1 2 1 2304 
+90 tensor_90.bin 1 1 2 768 768 
+91 tensor_91.bin 1 2 1 768 
+92 tensor_92.bin 1 1 1 768 
+93 tensor_93.bin 1 2 1 768 
+94 tensor_94.bin 1 1 2 768 3072 
+95 tensor_95.bin 1 2 1 3072 
+96 tensor_96.bin 1 1 2 3072 768 
+97 tensor_97.bin 1 2 1 768 
+98 tensor_98.bin 1 1 1 768 
+99 tensor_99.bin 1 2 1 768 
+100 tensor_100.bin 1 1 2 768 2304 
+101 tensor_101.bin 1 2 1 2304 
+102 tensor_102.bin 1 1 2 768 768 
+103 tensor_103.bin 1 2 1 768 
+104 tensor_104.bin 1 1 1 768 
+105 tensor_105.bin 1 2 1 768 
+106 tensor_106.bin 1 1 2 768 3072 
+107 tensor_107.bin 1 2 1 3072 
+108 tensor_108.bin 1 1 2 3072 768 
+109 tensor_109.bin 1 2 1 768 
+110 tensor_110.bin 1 1 1 768 
+111 tensor_111.bin 1 2 1 768 
+112 tensor_112.bin 1 1 2 768 2304 
+113 tensor_113.bin 1 2 1 2304 
+114 tensor_114.bin 1 1 2 768 768 
+115 tensor_115.bin 1 2 1 768 
+116 tensor_116.bin 1 1 1 768 
+117 tensor_117.bin 1 2 1 768 
+118 tensor_118.bin 1 1 2 768 3072 
+119 tensor_119.bin 1 2 1 3072 
+120 tensor_120.bin 1 1 2 3072 768 
+121 tensor_121.bin 1 2 1 768 
+122 tensor_122.bin 1 1 1 768 
+123 tensor_123.bin 1 2 1 768 
+124 tensor_124.bin 1 1 2 768 2304 
+125 tensor_125.bin 1 2 1 2304 
+126 tensor_126.bin 1 1 2 768 768 
+127 tensor_127.bin 1 2 1 768 
+128 tensor_128.bin 1 1 1 768 
+129 tensor_129.bin 1 2 1 768 
+130 tensor_130.bin 1 1 2 768 3072 
+131 tensor_131.bin 1 2 1 3072 
+132 tensor_132.bin 1 1 2 3072 768 
+133 tensor_133.bin 1 2 1 768 
+134 tensor_134.bin 1 1 1 768 
+135 tensor_135.bin 1 2 1 768 
+136 tensor_136.bin 1 1 2 768 2304 
+137 tensor_137.bin 1 2 1 2304 
+138 tensor_138.bin 1 1 2 768 768 
+139 tensor_139.bin 1 2 1 768 
+140 tensor_140.bin 1 1 1 768 
+141 tensor_141.bin 1 2 1 768 
+142 tensor_142.bin 1 1 2 768 3072 
+143 tensor_143.bin 1 2 1 3072 
+144 tensor_144.bin 1 1 2 3072 768 
+145 tensor_145.bin 1 2 1 768 
+146 tensor_146.bin 1 1 1 768 
+147 tensor_147.bin 1 2 1 768 
+148 tensor_148.bin 1 6 4 1 1 1024 1024 
+149 tensor_149.bin 1 6 0 
+150 tensor_150.bin 1 6 4 1 1 1024 1024 
+151 tensor_151.bin 1 6 0 
+152 tensor_152.bin 1 6 4 1 1 1024 1024 
+153 tensor_153.bin 1 6 0 
+154 tensor_154.bin 1 6 4 1 1 1024 1024 
+155 tensor_155.bin 1 6 0 
+156 tensor_156.bin 1 6 4 1 1 1024 1024 
+157 tensor_157.bin 1 6 0 
+158 tensor_158.bin 1 6 4 1 1 1024 1024 
+159 tensor_159.bin 1 6 0 
+160 tensor_160.bin 1 6 4 1 1 1024 1024 
+161 tensor_161.bin 1 6 0 
+162 tensor_162.bin 1 6 4 1 1 1024 1024 
+163 tensor_163.bin 1 6 0 
+164 tensor_164.bin 1 6 4 1 1 1024 1024 
+165 tensor_165.bin 1 6 0 
+166 tensor_166.bin 1 6 4 1 1 1024 1024 
+167 tensor_167.bin 1 6 0 
+168 tensor_168.bin 1 6 4 1 1 1024 1024 
+169 tensor_169.bin 1 6 0 
+170 tensor_170.bin 1 6 4 1 1 1024 1024 
+171 tensor_171.bin 1 6 0 

@@ -36,7 +36,7 @@ Supported Model Sources:
 Usage:
 -------------------------------------------------------------------------------
 
-    python export_model.py \
+    python create_meta.py \
         --model <model_name_or_path> \
         --out_dir <output_directory> \
         [--source hf|torchvision] \
@@ -161,7 +161,7 @@ import os
 import argparse
 import numpy as np
 import torch
-from torchvision import models, transforms, datasets
+from torchvision import transforms, datasets
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoModelForCausalLM, AutoModelForSequenceClassification
@@ -320,28 +320,47 @@ def load_model(name, source="hf", weights=None, quantized=False):
     raise RuntimeError(f"Could not load model: {name}")
 
 def load_torchvision_model(model_name, weights_name=None, quantized=False):
-    import torchvision.models as models
+    import importlib
+
+    if quantized:
+        models = importlib.import_module("torchvision.models.quantization")
+    else:
+        models = importlib.import_module("torchvision.models")
 
     print(f"Loading torchvision model: {model_name}")
 
-    # Dynamically get constructor
+    # Constructor
     if not hasattr(models, model_name):
-        raise ValueError(f"Unknown torchvision model: {model_name}")
+        raise ValueError(
+            f"Unknown torchvision model '{model_name}' "
+            f"in module {models.__name__}"
+        )
 
     model_fn = getattr(models, model_name)
 
+    # Resolve weight enum without eval()
     weights = None
-
     if weights_name is not None:
-        # Example: ResNet50_Weights.DEFAULT
-        weights = eval(f"models.{weights_name}")
+        obj = models
+        try:
+            for part in weights_name.split("."):
+                obj = getattr(obj, part)
+            weights = obj
+        except AttributeError:
+            raise ValueError(
+                f"Weight enum '{weights_name}' not found in "
+                f"{models.__name__}"
+            )
+
+    kwargs = {}
+
+    if weights is not None:
+        kwargs["weights"] = weights
 
     if quantized:
-        model = model_fn(weights=weights, quantize=True)
-    else:
-        model = model_fn(weights=weights)
+        kwargs["quantize"] = True
 
-    return model
+    return model_fn(**kwargs)
 # ============================================================
 # MAIN
 # ============================================================
