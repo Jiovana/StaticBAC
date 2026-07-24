@@ -51,7 +51,6 @@ public:
     ContextModeler()  {}
     ~ContextModeler() {}
 public:
-    void    init              (uint32_t cabac_unary_length=4);
     void    resetNeighborCtx  ();
     int32_t getSigCtxId       ( );
     int32_t getSignFlagCtxId  ();
@@ -60,7 +59,6 @@ public:
 
 private:
     int32_t neighborWeightVal;
-    uint32_t m_cabac_unary_length;
 
 };
 

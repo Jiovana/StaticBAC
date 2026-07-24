@@ -57,7 +57,7 @@ public:
     void          setByteStreamBuf     ( uint8_t* byteStreamBuf              );
 
     uint32_t      decodeBinold            ( StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType );  
-    uint32_t      decodeBin            ( StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType );  
+    uint32_t      decodeBin            ( StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType , uint8_t pred);  
 
     uint32_t      decodeBinEP          (                                     );
     uint32_t      decodeBinsEP         ( uint32_t numBins                    );

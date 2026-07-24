@@ -27,10 +27,10 @@
 
 
 
-#define TENSOR_BIN_DIR "models/vit_b16/binaries/"
-#define META_FILE "models/vit_b16/tensors.meta"
-//#define TENSOR_BIN_DIR "models/efficientnet_b0/binaries/"
-//#define META_FILE "models/efficientnet_b0/tensors.meta"
+//#define TENSOR_BIN_DIR "models/google-bert/binaries/"
+//#define META_FILE "models/google-bert/tensor1.meta"
+#define TENSOR_BIN_DIR "models/resnet50/binaries/"
+#define META_FILE "models/resnet50/tensors.meta"
 
 #define MODEL_NAME "bert"
 
@@ -389,6 +389,8 @@ void validateModel(
 int main()
 {
 
+   // freopen("decoder_trace.txt", "w", stdout);
+
     std::map<TensorBitwidth, CodingStats> stats;
 
     std::vector<TensorMeta> modelTensors;
@@ -415,7 +417,7 @@ int main()
 
     Encoder encoder;
 
-    uint32_t numGtxFlags = 4;
+    uint32_t numGtxFlags = 7;
 
     std::cout << "\n=== Encoding Model ===\n";
 
@@ -448,7 +450,7 @@ int main()
 
     uint64_t compressedBits = bytestream.size() * 8;
 
-    std::ofstream f("efficientnet_b7_bitstream.bin", std::ios::binary);
+    std::ofstream f("bert_bitstream.bin", std::ios::binary);
     f.write(reinterpret_cast<const char*>(bytestream.data()),
         bytestream.size());
 
@@ -549,7 +551,7 @@ int main()
 
 
     /// save decoded tensormeta
-    saveDecodedModel(decodedModel, ("efficientnet_b7_decoded"));
+    saveDecodedModel(decodedModel, ("bert_decoded"));
 
 
     // --------------------------------------------------

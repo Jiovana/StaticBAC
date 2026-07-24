@@ -45,7 +45,7 @@ void BinDec::startBinDecoder()
 }
 
 
-uint32_t BinDec::decodeBinold( StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType )
+/* uint32_t BinDec::decodeBinold( StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType )
 {
     uint32_t rlps    = ctxMdl.getRLPS( ctxId, paramType );
     uint32_t mps     = ctxMdl.getMPS( ctxId, paramType );
@@ -76,13 +76,15 @@ uint32_t BinDec::decodeBinold( StaticCtx &ctxMdl, uint8_t ctxId, TensorType para
     }
 
     return bin;
-}
+} */
 
-uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType)
+uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType, uint8_t pred)
 {
-    //printf("DecodeBin called: range %d value %d \n", m_Range, m_Value );
-    uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType);
-    uint32_t mps  = ctxMdl.getMPS(ctxId, paramType);
+   // printf("DecodeBin called: range %d value %d \n", m_Range, m_Value );
+    uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType, pred);
+    uint32_t mps  = ctxMdl.getMPS(ctxId, paramType, pred);
+
+  //  printf("RLPS=%d and MPS=%d \n ", rlps, mps);
 
     // determine LPS
     bool isLPS = (m_Value < (rlps << 7)); // uses RLPS directly 
@@ -122,6 +124,7 @@ uint32_t BinDec::decodeBin(StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramTyp
 
 uint32_t BinDec::decodeBinEP()
 {
+   // std::cout  << "DEC EP before value=" << m_Value  << " range=" << m_Range  << std::endl;
     m_Value            += m_Value;
     if (++m_BitsNeeded >= 0)
     {
@@ -136,6 +139,8 @@ uint32_t BinDec::decodeBinEP()
         m_Value   -= SR;
         bin        = 1;
     }
+
+   // std::cout        << "DEC EP returns "        << bin        << " value=" << m_Value        << std::endl;
     return bin;
 }
 

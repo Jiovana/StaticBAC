@@ -52,6 +52,13 @@ POSSIBILITY OF SUCH DAMAGE.
 //#include <pybind11/pybind11.h>
 
 
+enum Predictor {
+    PRED_NONE,
+    PRED_MEAN,
+    PRED_NEIGHBOR
+};
+
+
 
 enum class TensorType : uint8_t
 {
@@ -148,9 +155,31 @@ inline uint8_t getShiftFromMeanAndK(TensorBitwidth bw, int32_t mean, uint32_t k)
     return static_cast<uint8_t>(shift);
 }
 
+struct GTEntry{
+        uint32_t threshold; // limit for gt flag
+        uint32_t riceOffset; // offset to subtract
+        uint8_t ctxId; // associated context id
+    };
 
-struct TensorMeta
-{
+    // greater than flags
+    static constexpr GTEntry table[] ={
+        {0,0,2},
+        {1,0,3},
+        {2,0,3},
+        {3,0,3},
+        {4,0,3},
+        {5,0,3},
+        {6,0,3},
+        {7,0,3},
+        {8,0,3},
+        {9,0,3},
+        {15,15,4},
+        {31,31,5},
+        {63,63,6},
+    };
+
+
+struct TensorMeta{
     std::string name;                 // Tensor name (e.g., "encoder_layer_0_weight")
     uint16_t tensorId;                // Optional ID to preserve tensor mapping
 

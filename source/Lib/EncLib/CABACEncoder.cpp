@@ -50,27 +50,6 @@ void BACEncoder::startBacEncoding( std::vector<uint8_t>* pBytestream)
 }
 
 //--------------------------------------------------------------
-// initCtxMdls
-//
-// Initializes the context modeler used by the BAC encoder.
-//
-// Does not do much since contexts are static, just sets neighbor
-// to zero and the GtxFlags, which are constant anyway.
-//
-// Parameters:
-//   numGtxFlags  Maximum number of "greater-than-X" flags
-//                used in the unary coding of small magnitudes.
-//
-// Notes:
-//   Should be called once before encoding weights.
-//--------------------------------------------------------------
-void BACEncoder::initCtxMdls(uint32_t numGtxFlags)
-{
-  m_NumGtxFlags = numGtxFlags;
-  m_CtxModeler.init(numGtxFlags);
-}
-
-//--------------------------------------------------------------
 // encodeTensorHeader
 //
 // Encodes metadata describing a tensor before its weights
@@ -249,7 +228,7 @@ uint64_t BACEncoder::encodeWeights(const int32_t *pWeights, uint32_t numWeights)
 //   This function handles the "large residual" branch of the
 //   weight coding scheme.
 //--------------------------------------------------------------
-uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
+/* uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
   {
     LOG_LINE(g_logger, "========> EncWeight: xEncRemAbs value=" + std::to_string(value) + ", k=" + std::to_string(k));
     uint32_t scaledBits           = 0;
@@ -321,8 +300,30 @@ uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
 
     //printf("scaled bits %d\n", scaledBits);
     return scaledBits;
-  }
+  } */
 
+  uint32_t BACEncoder::encodeRice(uint32_t value, uint8_t k){
+    uint32_t bits = 0;
+    uint8_t kUpd = k + 1;
+
+    uint32_t q = value >> kUpd;
+    uint32_t r = value & ((1u << kUpd) - 1);
+
+    for(uint32_t i=0; i<q; i++){
+        m_BinEncoder.encodeBinEP(1);
+        bits++;
+    }
+
+    m_BinEncoder.encodeBinEP(0);
+    bits++;
+
+    m_BinEncoder.encodeBinsEP(r, kUpd);
+    bits += kUpd;
+
+    //LOG_LINE(g_logger,         "Rice value=" + std::to_string(value) +        ", k=" + std::to_string(kUpd) +        ", q=" + std::to_string(q) +        ", r=" + std::to_string(r));
+
+    return bits;
+}
 
 //--------------------------------------------------------------
 // encodeWeightBAC
@@ -336,13 +337,15 @@ uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
 //      |
 //      +-- signFlag
 //      |
-//      +-- branchFlag
+//      +-- greater than loop
 //           |
-//           +-- small magnitude branch (<= 5)
-//           |     -> sequence of greater-than-X flags
+//           +-- small magnitude part from 1 to 7
+//           |     
 //           |
-//           +-- large magnitude branch (> 5)
-//                 -> encodeAbsRem()
+//           +-- large magnitude part in groups 15 -> 31 -> 63
+//           |
+//           |
+//           +-- rice coding of the remainder 
 //
 // Parameters:
 //   value   Quantized residual value
@@ -350,64 +353,51 @@ uint32_t BACEncoder::encodeAbsRem( int32_t value, uint16_t k)
 //
 // Returns:
 //   Number of bins used to encode this weight.
-//
-// Notes:
-//   
 //--------------------------------------------------------------
-uint32_t BACEncoder::encodeWeightBAC( int32_t value, uint8_t k){
-    LOG_LINE(g_logger, "=========> encodeWeightsBAC: value=" + std::to_string(value) + ", k=" + std::to_string(k));
+uint32_t BACEncoder::encodeWeightBAC( int32_t value, uint8_t k, uint8_t pred){
+   // LOG_LINE(g_logger, "=========> encodeWeightsBAC: value=" + std::to_string(value) + ", k=" + std::to_string(k));
 
     uint32_t sigFlag        = value != 0 ? 1 : 0;
     int32_t  sigctx         = m_CtxModeler.getSigCtxId( );
-    uint32_t scaledBits     = m_BinEncoder.encodeBin(sigFlag, m_CtxStore, sigctx, m_tensorType);
+    uint32_t scaledBits     = m_BinEncoder.encodeBin(sigFlag, m_CtxStore, sigctx, m_tensorType, pred);
     //printf("sigflag %d \n", sigFlag);
-    LOG_LINE(g_logger, "sigflag= " + std::to_string(sigFlag) + ", sig ctx=" + std::to_string(sigctx));
+   // LOG_LINE(g_logger, "sigflag= " + std::to_string(sigFlag) + ", sig ctx=" + std::to_string(sigctx));
     
     if (sigFlag){
       uint32_t signFlag = value < 0 ? 1 : 0;
-      int32_t signCtx;
 
-      signCtx = m_CtxModeler.getSignFlagCtxId();
-      scaledBits += m_BinEncoder.encodeBin(signFlag, m_CtxStore, signCtx, m_tensorType); 
+      //signCtx = m_CtxModeler.getSignFlagCtxId();
+      //scaledBits += m_BinEncoder.encodeBin(signFlag, m_CtxStore, signCtx, m_tensorType); 
+      scaledBits += m_BinEncoder.encodeBinEP(signFlag); // encode sign as EP bin
+      
       //printf("signflag %d \n", sigFlag);
-      LOG_LINE(g_logger, "signflag=" + std::to_string(signFlag)+ ", sign ctx=" + std::to_string(signCtx));    
+     // LOG_LINE(g_logger, "signflag=" + std::to_string(signFlag));    
 
       uint32_t remAbsLevel = abs(value) - 1;
       //printf("remabs %d \n", remAbsLevel);
 
-      if (abs(value) > 5){
-        // bypass gtx flags and directly encode remAbsLevel using xEncRemAbs
-        scaledBits += m_BinEncoder.encodeBin(1, m_CtxStore, 12, m_tensorType); // set branch flag to 1 to indicate large residual
-        LOG_LINE(g_logger, "branchflag=" + std::to_string(1) + ", remabslevel=" + std::to_string(remAbsLevel) );
-        remAbsLevel -= 5; // we can subtract 5 here because values <=5 are handled in the small branch, this way we encode a smaller number in xEncRemAbs which is more efficient
-        scaledBits += encodeAbsRem( remAbsLevel, k); 
-        //printf("big value went to rem.. \n");
-      } else {
-        scaledBits += m_BinEncoder.encodeBin(0, m_CtxStore, 12, m_tensorType); // set branch flag to 0 to indicate small residual
+      uint32_t riceOffset = 7;
+      bool encodeRiceflag = false;
 
-        uint32_t grXFlag = remAbsLevel ? 1 : 0; //greater1
-        int32_t ctxIdx;
-
-        ctxIdx = m_CtxModeler.getGtxCtxId( signFlag);
-        scaledBits += m_BinEncoder.encodeBin(grXFlag, m_CtxStore, ctxIdx, m_tensorType);
-
-        uint32_t numGreaterFlagsCoded = 1;
-        ////printf("==> EncWeight: signctx=%d, ctxidx=%d, signFlag=%d, grXFlag=%d, scaledBits=%d\n", signCtx, ctxIdx, signFlag, grXFlag, scaledBits);
-        LOG_LINE(g_logger, "branchflag=" + std::to_string(0) + ", remabslevel=" + std::to_string(remAbsLevel) + ", gt1 flag=" + std::to_string(grXFlag) + ", gt1 ctx=" + std::to_string(ctxIdx));
-
-        while (grXFlag && (numGreaterFlagsCoded < m_NumGtxFlags) ){
-          remAbsLevel--;
-          grXFlag = remAbsLevel ? 1 : 0;
-          ctxIdx =  m_CtxModeler.getGtxCtxId(signFlag);         
-          scaledBits += m_BinEncoder.encodeBin(grXFlag, m_CtxStore, ctxIdx, m_tensorType);        
-          numGreaterFlagsCoded++;
-          ////printf("==> EncWeight: numGreaterFlagsCoded=%d, ctxidx=%d, remAbsLevel=%d, grXFlag=%d, scaledBits=%d\n", numGreaterFlagsCoded, ctxIdx, remAbsLevel, grXFlag, scaledBits);
-          LOG_LINE(g_logger, "num gtx flags enc=" + std::to_string(numGreaterFlagsCoded) + ", gtx flag=" + std::to_string(grXFlag) + ", gtx1 ctx=" + std::to_string(ctxIdx))
-        }
-
+      // greater than (GT) loop from fine to coarse groups: contexts G1, GT2-7, GT15, GT31, GT63
+      for(const auto& t : table){
+          uint8_t GTflag = remAbsLevel > t.threshold;
+         // LOG_LINE(g_logger, "GT" + std::to_string(t.threshold+1) +  "=" + std::to_string(GTflag));
+          scaledBits +=
+              m_BinEncoder.encodeBin(GTflag, m_CtxStore, t.ctxId, m_tensorType, pred);
+          if(!GTflag)
+            break;
+          
+          if(t.riceOffset){
+              riceOffset = t.riceOffset;
+              encodeRiceflag = true;
+          }
+          
       }
-      
-      
+
+      if(encodeRiceflag)
+        scaledBits += encodeRice(remAbsLevel-riceOffset,k);
+
     }
     return scaledBits;
   }
@@ -441,18 +431,17 @@ uint32_t BACEncoder::encodeWeightBAC( int32_t value, uint8_t k){
 //   coding when compression is predicted to be ineffective.
 //--------------------------------------------------------------
 uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numWeights){
-    LOG_LINE(g_logger, "=============> encodeWeightsChunks: numWeights=" + std::to_string(numWeights));
+   // LOG_LINE(g_logger, "=============> encodeWeightsChunks: numWeights=" + std::to_string(numWeights));
     uint64_t scaledBits = 0;
     int width = getBitwidthFromEnum(m_tensorBitwidth);
+
+    //m_estimator.printTable();
 
     const uint32_t chunkSize = 2048 ; // small chunk for low RAM = for 32bits =~ 65KB 
     uint32_t numChunks = (numWeights + chunkSize - 1) >> 11; // shift for efficiency
 
-    double avgBPE = 0.0;
-
     bool skipChunk;
 
-    std::vector<int32_t> scaledBuf(chunkSize);
     for (uint32_t c = 0; c < numChunks; c++){
       m_CtxModeler.resetNeighborCtx();
 
@@ -460,95 +449,112 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       uint32_t end   = std::min(start + chunkSize, numWeights);
       uint32_t len   = end - start;
 
-      int64_t sumRes = 0;
-      int32_t residual = 0;
 
       // ---- pass 1:compute local mean ----
       int64_t sum = 0;
       for (uint32_t i = start; i < end; i++)
           sum += pWeights[i];
 
-      uint32_t shift = std::ceil(std::log2(len));
-      int32_t localMean = sum >> shift;
+     // uint32_t shift = std::ceil(std::log2(len));
+      int32_t localMean = sum / len;
 
-      bool useMean = (std::abs(localMean) > 4);
-      if (!useMean) localMean = 0; // if mean is small, we won't use it, so set to 0 to avoid confusion
-
-
-
-      // ---------- pass 2: residual + meanResidual -------------
-      if (useMean) {
-          for (uint32_t i = start; i < end; i++)
-          {
-              residual = pWeights[i] - localMean;
-              sumRes += std::abs(residual);
-          }
-      } else {
-          for (uint32_t i = start; i < end; i++)
-          {
-              residual = pWeights[i];
-              sumRes += std::abs(residual);
-          }
-      }
     
+      // ---------- pass 2: evaluate predictors -------------
+      double bestCost = std::numeric_limits<double>::max();
+      Predictor pred= PRED_NONE;
+      uint8_t bestK = 0;
 
-      // --------------- mean abs residual ---------------
-      int32_t meanRes = sumRes / len;
-      if (meanRes == 0) meanRes = 1;
+      double predictorCost[3];
+      //uint8_t predictorK[3];
 
+      for(int predictor = PRED_NONE; predictor <= PRED_NEIGHBOR; predictor++){
+        int64_t sumAbs = 0;
+
+        for (uint32_t i = start; i < end; i++){
+          int32_t r;
+          switch (predictor){
+            case PRED_NONE:
+              r = pWeights[i];
+              break;
+            case PRED_MEAN:
+              r = pWeights[i] - localMean;
+              break;
+            case PRED_NEIGHBOR:
+              if (i == start)
+                r = pWeights[i];
+              else 
+                r = pWeights[i] - pWeights[i-1];
+              break;
+          }
+          sumAbs += std::abs(r);
+        }
+      int32_t meanAbs = sumAbs / len;
+      if (meanAbs == 0)
+        meanAbs = 1;    
+    
       // ---------- compute K --------------
       uint8_t k = 0;
-      if      (meanRes < 8)       k = 0;
-      else if (meanRes < 32)      k = 1;
-      else if (meanRes < 256)     k = 2;
-      else if (meanRes < 1024)    k = 3;
+      if      (meanAbs < 8)       k = 0;
+      else if (meanAbs < 32)      k = 1;
+      else if (meanAbs < 256)     k = 2;
       else                        k = 3;
-     
 
-      // ------------ pass 3 - histogram on scaled residuals 
-      uint64_t estBits = 0;
+      //predictorK[predictor] = k;
+      m_CtxModeler.resetNeighborCtx();
+
+      double cost = 0.0;
       
-      for (uint32_t i = start; i < end; i++)
-      {
-          int32_t residual = pWeights[i] - localMean;
+      for (uint32_t i = start; i < end; i++){
+        int32_t r;
 
-
-          scaledBuf[i - start] = residual; // store scaled residual for later encoding
-
-          /// compute bins per element (rough bit estimation)
-          uint32_t absScaled = std::abs(residual);
-          if (absScaled == 0) estBits += 1 ; // sig only (minimal)
-          else if (absScaled <= 5) {
-              estBits += 1 + 1 + absScaled; // sig + sign + branch + grXFlags (branch included in absscaled)
-          } else {
-              // rough estimate: MSBs + 1 unary + k + suffix
-              // here we can use xEncRemAbs logic without actual bin encoder calls
-              uint32_t minusBits = 2; // first 2 MSBs
-              if (width == 12) minusBits += 2;
-              else if (width >= 16) minusBits += 4;
-              uint32_t remAbs = absScaled - 5;
-              uint32_t q = remAbs >> (k+1);
-              //uint32_t r = remAbs & ((1 << (k+1)) - 1);
-              estBits += minusBits + 1 + q + 1 + (k+1); // MSBs + branch + unary + 0 term + suffix
-          }
+        switch (predictor){
+        case PRED_NONE:
+          r = pWeights[i];
+          break;
+        case PRED_MEAN:
+          r = pWeights[i] - localMean;
+          break;
+        case PRED_NEIGHBOR:
+          if (i == start)
+            r = pWeights[i];
+          else 
+            r = pWeights[i] - pWeights[i-1];
+          break;
+        }
+    
+        /// compute bins per element (rough bit estimation)
+        cost += estimateWeightBAC(r, k, predictor);
+        predictorCost[predictor] = cost;
+        m_CtxModeler.updateNeighborCtx(r);  
       }
-      estBits = round(estBits * 0.9); // reduce 10% to account for bac coded bins (pessimist)
 
-      double binsPerElement = double(estBits) / len;
+      if (cost < bestCost){
+        bestCost = cost;
+        pred = (Predictor)predictor;
+        bestK = k;
+      }
+    }
 
-      avgBPE += binsPerElement * len;
-
-      double normBPE = binsPerElement / width;
-
-      skipChunk = (normBPE > 0.98); // not sure
-      //bool skipChunk = (inneficiency > 1.03);
+      double bitsPerElement = bestCost / len;
+      skipChunk = (bitsPerElement > (width*0.98)); // not sure
 
       //send skip flag
       m_BinEncoder.encodeBinEP(skipChunk);
       scaledBits += 1;
 
-      LOG_LINE(g_logger, "bitwidth=" + std::to_string(width) + ", Local mean= " + std::to_string(localMean) + ", useMean=" + std::to_string(useMean) + ", meanRes=" + std::to_string(meanRes)
-        + ", k=" + std::to_string(k) + ", binsperElement=" + std::to_string(binsPerElement) + "SKIP?=" + std::to_string(skipChunk));
+      /*
+      LOG_LINE(
+        g_logger,
+        "bitwidth=" + std::to_string(width) +
+        ", predictor=" + std::to_string(pred) +
+        ", costNone=" + std::to_string(predictorCost[PRED_NONE]) +
+        ", costMean=" + std::to_string(predictorCost[PRED_MEAN]) +
+        ", costNeighbor=" + std::to_string(predictorCost[PRED_NEIGHBOR]) +
+        ", bestK=" + std::to_string(bestK) +
+        ", bitsPerElement=" + std::to_string(bitsPerElement) +
+        ", localMean=" + std::to_string(localMean) +
+        ", skip=" + std::to_string(skipChunk)
+      );       */
 
       if (skipChunk){
         ////printf("Skipping BAC chunk encoding. Encoding as raw EP bins instead...\n");
@@ -561,35 +567,94 @@ uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numW
       }
 
       // send mean flag and mean value
-      m_BinEncoder.encodeBinEP(useMean ? 1 : 0);
-      scaledBits += 1;
+      //m_BinEncoder.encodeBinEP(useLocalMean ? 1 : 0);
+      //scaledBits += 1;
+      uae_v(2, pred); // send predictor type
+      scaledBits += 2;
 
-      if (useMean) {
+      if (pred == PRED_MEAN) {
           iae_v(width, localMean);
           scaledBits += width;
       } 
    
       // send k  
-      uae_v(2, k); // send k as 2-bit 
+      uae_v(2, bestK); // send k as 2-bit 
       scaledBits += 2; // account for bits used to encode k 
 
-      // ------------ pass 3: bac encoding ----------------
-      for (uint32_t i = start; i < end; i++)
-      {
-        
-        int32_t scaled = scaledBuf[i-start];
-
-        scaledBits += encodeWeightBAC(scaled, k);
-        m_CtxModeler.updateNeighborCtx(scaled);  
-        //printf("CHUNK[%d] - Encoding value %d\n" , c, scaled);
-
-        }
+      // ------------ BAC encode ----------------
+      m_CtxModeler.resetNeighborCtx();
+      for (uint32_t i = start; i < end; i++){
+         // LOG_LINE(g_logger, "Value for BAC before mean/neighbor:" + std::to_string(pWeights[i]));
+          int32_t value;
+          switch (pred){
+          case PRED_NONE:
+              value = pWeights[i];
+              break;
+          case PRED_MEAN:
+              value = pWeights[i] - localMean;
+              break;
+          case PRED_NEIGHBOR:
+              if (i == start)
+                  value = pWeights[i];
+              else
+                  value = pWeights[i] - pWeights[i - 1];
+              break;
+          default:
+              value = pWeights[i];
+              break;
+          }
+       //   LOG_LINE(g_logger, "Value for BAC AFTER mean/neighbor:" + std::to_string(value));
+          scaledBits += encodeWeightBAC(value, bestK, pred);
+          m_CtxModeler.updateNeighborCtx(value);
+      }
     }
   
     return scaledBits;
 }
 
 
-
+double BACEncoder::estimateWeightBAC(int32_t residual, int k, uint8_t pred){
+    double cost = 0.0;
+    //-----------------------------
+    // SIG
+    //-----------------------------
+    cost += m_estimator.estimate( m_CtxModeler.getSigCtxId(),  residual != 0, m_tensorType, pred);
+    if(residual == 0)
+        return cost;
+    //-----------------------------
+    // SIGN (EP)
+    //-----------------------------
+    cost += 1.0;
+    //-----------------------------
+    // Absolute level
+    //-----------------------------
+    uint32_t remAbsLevel = std::abs(residual) - 1;
+    uint32_t riceOffset = 7;
+    //-----------------------------
+    // GT flags
+    //-----------------------------
+    for(const auto &t : table){
+        uint8_t gtFlag = remAbsLevel > t.threshold;
+        cost += m_estimator.estimate(t.ctxId, gtFlag, m_tensorType, pred);
+        if(!gtFlag)
+            break;
+        if(t.riceOffset)
+            riceOffset = t.riceOffset;
+    }
+    //-----------------------------
+    // Rice
+    //-----------------------------
+    if(remAbsLevel > 7){
+        uint32_t riceValue = remAbsLevel - riceOffset;
+        uint32_t q = riceValue >> (k + 1);
+        // unary prefix
+        cost += q;
+        // terminating zero
+        cost += 1;
+        // suffix
+        cost += (k + 1);
+    }
+    return cost;
+}
 
 

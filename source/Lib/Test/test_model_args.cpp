@@ -597,7 +597,6 @@ int main(int argc, char* argv[])
     
 
     std::vector<uint8_t> bytestream;
-    uint32_t numGtxFlags = 4;
     // --------------------------------------------------
     // ENCODING
     // --------------------------------------------------
@@ -613,7 +612,6 @@ int main(int argc, char* argv[])
 
         auto encStart = std::chrono::high_resolution_clock::now();
 
-        encoder.initCtxModels(numGtxFlags);
         bytestream = encoder.encodeModel(modelTensors);
 
         auto encEnd = std::chrono::high_resolution_clock::now();
@@ -754,7 +752,6 @@ int main(int argc, char* argv[])
         
         decoder.setStream(const_cast<std::vector<uint8_t>&>(bytestream));
 
-        decoder.initCtxModels(numGtxFlags);
         printf("Start decoding...\n");
         decoder.decodeModel(decodedModel);
 

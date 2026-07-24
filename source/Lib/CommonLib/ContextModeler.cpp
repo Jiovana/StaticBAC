@@ -42,13 +42,6 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "ContextModeler.h"
 
 
-void ContextModeler::init(uint32_t cabac_unary_length)
-{
-    //PROFILE_SCOPE("ContextModeler_init", 0);
-    neighborWeightVal = 0;
-    m_cabac_unary_length = cabac_unary_length;
-}
-
 void ContextModeler::resetNeighborCtx()
 {
     //PROFILE_SCOPE("ContextModeler_resetNeighborCtx", 0);
@@ -58,13 +51,7 @@ void ContextModeler::resetNeighborCtx()
 int32_t ContextModeler::getSigCtxId( )
 {
     //PROFILE_SCOPE("ContextModeler_getSigCtxId", 0);
-    int32_t ctxId = 0;
-
-    if (neighborWeightVal != 0)
-    {
-        ctxId = neighborWeightVal < 0 ? 1 : 2;
-    }
-    
+    int32_t ctxId = (neighborWeightVal == 0) ?  0 : 1;
     return ctxId;
 }
 

@@ -12,13 +12,6 @@ void BACDecoder::startBacDecoding(uint8_t* pBytestream)
   ////printf("CABACDecoder: Started decoding\n");
 }
 
-void BACDecoder::initCtxModels(uint32_t cabac_unary_length)
-{
-  m_NumGtxFlags = cabac_unary_length;
-  m_CtxModeler.init(cabac_unary_length);
-  ////printf("CABACDecoder: Context models initialized with cabac_unary_length=%d\n", cabac_unary_length);
-}
-
 
 int32_t BACDecoder::iae_v(uint8_t v)
 {
@@ -104,11 +97,12 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
       continue;
     }
     // read local mean flag and value
-    bool useMean = m_BinDecoder.decodeBinEP();
-    scaledBits += 1;
+    //bool useMean = m_BinDecoder.decodeBinEP();
+    uint32_t pred = uae_v(2);
+    scaledBits += 2;
 
     int32_t localMean = 0;
-    if (useMean) {
+    if (pred == PRED_MEAN) {
         localMean = iae_v(width);
         scaledBits += width;
     }
@@ -122,11 +116,21 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
     for (uint32_t i = start; i < end; i++)
     {
       int32_t decodedVal = 0;
-      scaledBits += decodeWeightVal(decodedVal, k); 
+      scaledBits += decodeWeightVal(decodedVal, k, pred); 
       int32_t residual = decodedVal;
 
-      pWeights[i] =  residual + localMean;
-     // ////printf("Decoded weight %d: value=%d\n", i,  pWeights[i]);
+      if (pred == PRED_MEAN)
+        pWeights[i] =  residual + localMean;
+      else if (pred == PRED_NEIGHBOR){
+        if ( i == start)
+          pWeights[i] = residual;
+        else 
+          pWeights[i] = residual + pWeights[i-1];
+      } else
+        pWeights[i] = residual;
+
+
+      //printf("[CHUNK] Pred: %d, mean: %d, Decoded weight %d: value=%d\n", pred, localMean, i,  pWeights[i]);
       m_CtxModeler.updateNeighborCtx(decodedVal);
       //printf("CHUNK[%d] - Decoded value %d\n", c, pWeights[i]);
 
@@ -144,73 +148,91 @@ uint64_t BACDecoder::decodeWeights(int32_t *pWeights, uint32_t numWeights)
 }
 
 
-uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k )
-{ 
-  
-  uint64_t bitsUsed = 0;
+uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k, uint8_t pred ){ 
+    uint64_t binsUsed = 0;
+    //printf("===> dECODING k=%d, pred=%d \n", k, pred );
+    // SIG flag
+    uint32_t sigFlag = m_BinDecoder.decodeBin(m_CtxStore,  m_CtxModeler.getSigCtxId(), m_tensorType, pred);
+    binsUsed += 1; // 1 bin for sigFlag
 
-  const int32_t sigctx = m_CtxModeler.getSigCtxId();
-  uint32_t sigFlag = m_BinDecoder.decodeBin(m_CtxStore, sigctx, m_tensorType);
-  //printf("Decoded sigFlag: %d\n", sigFlag);
-  bitsUsed += 1; // 1 bit for sigFlag
+    if (!sigFlag){
+      decodedIntVal = 0;
+      return binsUsed;
+    }
 
+    // sign EP
+    uint32_t signFlag = m_BinDecoder.decodeBinEP();
+    binsUsed += 1; // 1 bit for signFlag
 
-  decodedIntVal = 0;
-
-  if (!sigFlag)
-    return bitsUsed;
-  
-
-  // sign 
-  int32_t signCtx = m_CtxModeler.getSignFlagCtxId();
-  uint32_t signFlag = m_BinDecoder.decodeBin(m_CtxStore, signCtx, m_tensorType);
-  //printf("Decoded signFlag: %d\n", signFlag);
-  bitsUsed += 1; // 1 bit for signFlag
-
-  // branch flag
-  uint32_t branchFlag = m_BinDecoder.decodeBin(m_CtxStore, 12, m_tensorType); // assuming context 8 is for branch flag
-  bitsUsed += 1; // 1 bit for branch flag
-
-  if (branchFlag)
-  {
-     //printf("big value went to rem.. \n");
-    // large residual case, directly decode remAbsLevel without gtx flags
+    // greater than loop
     uint32_t remAbsLevel = 0;
-    bitsUsed += decodeAbsRem(remAbsLevel, k);
-    decodedIntVal = signFlag ? -int32_t(remAbsLevel + 6) : int32_t(remAbsLevel + 6);
-   
-    return bitsUsed;
-  } else {
-    // small residual case, decode gtx flags first
-    uint32_t remAbsLevel = 0; 
-    uint32_t grXFlag = 0;
-    uint8_t numGreaterFlagsDecoded = 0;
+    uint32_t riceOffset  = 7;
 
-    do {
-      uint32_t ctxIdx = m_CtxModeler.getGtxCtxId(signFlag);
-      grXFlag = m_BinDecoder.decodeBin(m_CtxStore, ctxIdx, m_tensorType);
-      bitsUsed  += 1; // 1 bit for grXFlag
-      if (grXFlag)
-        remAbsLevel++;
-      numGreaterFlagsDecoded++;
+   // printf("SIG=%d and SIGN=%d\n", sigFlag, signFlag);
 
-      //////printf("Decoded grXFlag: %d (numGreaterFlagsDecoded=%d)\n", grXFlag, numGreaterFlagsDecoded);
-    } while (grXFlag && numGreaterFlagsDecoded < m_NumGtxFlags);
+    bool decodeRiceFlag = false;
 
-    //if (grXFlag) { // last grxFlag means decoded value greater than four
-     // remAbsLevel ++;
-    //}
+    for(const auto& t : table){
+      uint32_t gtFlag = m_BinDecoder.decodeBin(  m_CtxStore,   t.ctxId,   m_tensorType, pred);
+      binsUsed++;
+      //printf("GT flag%d=%d\n", t.threshold, gtFlag);
 
-    decodedIntVal = remAbsLevel + 1; // add 1 to get the original abs value
-    decodedIntVal = signFlag ? -decodedIntVal : decodedIntVal;
+      if(!gtFlag)
+        break;
 
-    //printf("Decoded weight value: %d\n", decodedIntVal);
+      if(t.riceOffset){
+          riceOffset = t.riceOffset;
+          remAbsLevel = t.riceOffset;
+          decodeRiceFlag = true;
+      } else {
+          remAbsLevel = t.threshold + 1;
+      }
+      //printf("Riceoffset=%d, remabslevel=%d \n", riceOffset, remAbsLevel);
+    }
 
-    return bitsUsed;
-  }
+    // rice remainder
+    if(decodeRiceFlag){
+      uint32_t riceValue;
+      binsUsed += decodeRice(riceValue, k);
+      remAbsLevel += riceValue;
+    }
+
+  // restore original value
+  decodedIntVal = remAbsLevel + 1; // add 1 to get the original abs value
+  if(signFlag)
+    decodedIntVal = -decodedIntVal;
+
+  //printf("Final decoded int val %d \n", decodedIntVal);
+  return binsUsed;
+  
 }
 
-int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
+
+uint64_t BACDecoder::decodeRice(uint32_t& value, uint8_t k)
+{
+    uint64_t bits = 0;
+    uint8_t kUpd = k + 1;
+    //-------------------------
+    // Unary prefix
+    //-------------------------
+    uint32_t q = 0;
+    while(m_BinDecoder.decodeBinEP()){
+        q++;
+        bits++;
+    }
+    bits++;     // terminating zero
+    //-------------------------
+    // Suffix
+    //-------------------------
+    uint32_t r = m_BinDecoder.decodeBinsEP(kUpd);
+    bits += kUpd;
+    value = (q << kUpd) | r;
+
+    //printf("Rice decodded: kupd %d q %d r %d value %d \n ", kUpd, q, r, value);
+    return bits;
+}
+
+/* int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
 {
   //printf("==> decodeAbsRem , rem %d k %d \n", remainder, k);
   uint32_t binsUsed = 0;
@@ -292,7 +314,7 @@ int32_t BACDecoder::decodeAbsRem(uint32_t& remainder, uint32_t k)
 
   //printf("finish: remainder %d lowermsk %d lower %d \n", remainder, lowerMask, lower);
   return binsUsed;
-}
+} */
 
 uint32_t BACDecoder::getBytesRead()
 {

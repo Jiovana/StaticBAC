@@ -44,12 +44,61 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "TypeDef.h"
 
+namespace{
+
+    constexpr uint8_t NUM_CTX  = 7;
+    constexpr uint8_t NUM_PRED = 3;
+
+    constexpr uint8_t rlpsTable[2][NUM_PRED][NUM_CTX] =
+        {
+            // WEIGHTS
+            {
+                // NONE
+                {81,25,99,52,227,110,25},
+                // MEAN
+                {25,15,75,43,249,117,50},
+                // NEIGHBOR
+                {67,28,121,61,222,126,43}
+            },
+            // BIASES
+            {
+                // NONE
+                {190,26,20,8,66,116,161},
+                // MEAN
+                {8,9,62,22,56,196,203},
+                // NEIGHBOR
+                {142,31,170,10,55,105,151}
+            }
+        };
+
+        // Weight MPS is identical for every predictor
+        constexpr uint8_t weightMps[NUM_CTX] =
+        {
+            1,1,1,1,0,0,0
+        };
+
+        // Bias MPS
+        constexpr uint8_t biasMps[NUM_PRED][NUM_CTX] =
+        {
+            // NONE
+            {0,1,1,1,1,1,1},
+            // MEAN
+            {1,1,1,1,1,1,0},
+            // NEIGHBOR
+            {1,1,1,1,1,1,1}
+        };
+}
+
 class StaticCtx
 {
 public:
 
-    uint8_t getRLPS( uint8_t ctxId,  TensorType paramType ) const;
-    uint8_t getMPS( uint8_t ctxId, TensorType paramType ) const;
+    static constexpr double CABAC_RANGE = 512.0;
+
+    static uint8_t getRLPS( uint8_t ctxId,  TensorType paramType, uint8_t pred ) ;
+    static uint8_t getMPS( uint8_t ctxId, TensorType paramType, uint8_t pred ) ;
+
+
 
 
 };

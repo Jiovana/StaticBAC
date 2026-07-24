@@ -42,27 +42,17 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "ContextModel.h"
 #include <iostream>
 
-const uint8_t rps_table[2][13] = {
-  {44, 65, 37, 223, 59, 105, 10, 26, 41, 56, 72, 87, 154},
-  {27, 10, 38, 209, 42, 38, 15, 46, 82, 128, 154, 179, 102}
-};
 
-const uint8_t mps_table[2][13] = {
-  {1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1},
-  {1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1}
-};
-
-
-uint8_t StaticCtx::getRLPS( uint8_t ctxId,  TensorType paramType ) const
-{
+uint8_t StaticCtx::getRLPS( uint8_t ctxId,  TensorType paramType, uint8_t pred ) {
   //PROFILE_SCOPE("StaticCtx_getRLPS", 0);
     //std::cout << "getRLPS called with ctxId: " << (int)ctxId << " paramType: " << (int)paramType << std::endl;
     int type = paramType == TensorType::Weight ? 0 : 1; // example mapping, adjust as needed
-    return rps_table[type][ctxId];
+    return rlpsTable[type][pred][ctxId];
 }
 
-uint8_t StaticCtx::getMPS( uint8_t ctxId, TensorType paramType ) const
-{
-  int type = paramType == TensorType::Weight ? 0 : 1; // example mapping, adjust as needed
-  return mps_table[type][ctxId];
+uint8_t StaticCtx::getMPS( uint8_t ctxId, TensorType paramType, uint8_t pred )  {
+  if(paramType == TensorType::Weight)
+        return weightMps[ctxId];
+
+  return biasMps[pred][ctxId];
 }

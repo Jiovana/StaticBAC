@@ -304,18 +304,20 @@ def load_model(name, source="hf", weights=None, quantized=False):
 
     try:
         return AutoModelForCausalLM.from_pretrained(name)
-    except:
-        pass
+    except Exception as e:
+        print(e)
+    
 
     try:
         return AutoModelForSequenceClassification.from_pretrained(name)
-    except:
-        pass
+    except Exception as e:
+        print(e)
+        
 
     try:
         return AutoModel.from_pretrained(name)
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
     raise RuntimeError(f"Could not load model: {name}")
 
@@ -414,7 +416,7 @@ def main():
                 tensor_kind=tensor_kind
             )
         else:
-            arr = param.detach().cpu().numpy().astype(np.float32)
+            arr = param.detach().to(torch.float32).cpu().numpy()
             q, qstep, bitwidth = quantize_tensor(
                 arr,
                 use_quant=True,
@@ -445,7 +447,7 @@ def main():
     # They must NOT be quantized to preserve correctness
     # We store them as raw int32 with bitwidth=32
     for name, buf in tqdm(model.named_buffers(), desc="buffers"):
-        arr = buf.detach().cpu().numpy().astype(np.float32)
+        arr = buf.detach().to(torch.float32).cpu().numpy()
         tensor_kind = "buffer"
 
         # Always cast to int32, never quantize

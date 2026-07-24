@@ -41,7 +41,7 @@ uint64_t Encoder::encodeLayer(const TensorMeta& tensor, uint16_t tensorId, uint3
     headerBits = headerBitsLocal;
     bitsUsed += headerBitsLocal;
 
-    g_logger->setTensorName(tensor.name);
+   // g_logger->setTensorName(tensor.name);
 
     // encode weights
     bitsUsed += m_BACEncoder.encodeWeights(tensor.data.data(), numWeights);

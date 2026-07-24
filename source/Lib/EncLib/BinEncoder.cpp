@@ -41,7 +41,7 @@ void BinEnc::setByteStreamBuf( std::vector<uint8_t> *byteStreamBuf )
     m_ByteBuf = byteStreamBuf;
 }
 
-//read only context
+/* //read only context
 uint32_t BinEnc::encodeBinold( uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType )
 {
   uint8_t rlps = ctxMdl.getRLPS( ctxId, paramType );
@@ -77,13 +77,15 @@ uint32_t BinEnc::encodeBinold( uint32_t bin, const StaticCtx &ctxMdl, uint8_t ct
     }
   }
   return 1;
-}
+} */
 
 
-uint32_t BinEnc::encodeBin(uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType)
+uint32_t BinEnc::encodeBin(uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId, TensorType paramType, uint8_t pred)
 {
-    uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType);
-    uint32_t mps  = ctxMdl.getMPS(ctxId, paramType);
+   // LOG_LINE(g_logger, "Encode bin called Range= " + std::to_string(m_Range) + " Low= " + std::to_string(m_Low) );
+    uint32_t rlps = ctxMdl.getRLPS(ctxId, paramType, pred);
+    uint32_t mps  = ctxMdl.getMPS(ctxId, paramType, pred);
+   // LOG_LINE(g_logger, "RLPS= " + std::to_string(rlps) + " MPS= " + std::to_string(mps) );
 
     uint32_t rmps = m_Range - rlps;
 
@@ -113,6 +115,7 @@ uint32_t BinEnc::encodeBin(uint32_t bin, const StaticCtx &ctxMdl, uint8_t ctxId,
 }
 
 uint32_t BinEnc::encodeBinEP( uint32_t bin ){
+  //  LOG_LINE(g_logger, "Encode 1 EP called Bin = " + std::to_string(bin) + "  Range= " + std::to_string(m_Range) + " Low= " + std::to_string(m_Low) );
     m_Low <<= 1;
     if (bin) {
         m_Low += m_Range;

@@ -1,0 +1,3 @@
+numTensors 1
+
+3 bert.embeddings.LayerNorm.weight weight 8 1 768 0.007714804176134347

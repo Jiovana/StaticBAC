@@ -5,6 +5,7 @@
 #include  "../CommonLib/ContextModel.h"
 #include <iostream>
 #include "../CommonLib/TypeDef.h"
+#include "Utils/global_logger.h" 
 
 class BinEnc
 {
@@ -16,7 +17,7 @@ public:
     void      setByteStreamBuf     ( std::vector<uint8_t> *byteStreamBuf );
 
     uint32_t  encodeBinold            ( uint32_t bin,  const StaticCtx &ctxMdl, uint8_t ctxId,  TensorType paramType   );
-    uint32_t  encodeBin            ( uint32_t bin,  const StaticCtx &ctxMdl, uint8_t ctxId,  TensorType paramType   );
+    uint32_t  encodeBin            ( uint32_t bin,  const StaticCtx &ctxMdl, uint8_t ctxId,  TensorType paramType, uint8_t pred   );
 
     void      entryPointStart      () { m_Range = 256; }
 
