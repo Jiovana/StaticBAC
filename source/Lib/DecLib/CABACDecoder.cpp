@@ -107,16 +107,12 @@ uint64_t BACDecoder::decodeWeightsChunks(int32_t* pWeights , uint32_t numWeights
         scaledBits += width;
     }
 
-    // ---------- read k parameter for Rice-Golomb coding
-    uint8_t k = uae_v(2); // read k as 2-bit fixed length for simplicity
-    scaledBits += 2;
-
 
     // --------------- BAC decode weights
     for (uint32_t i = start; i < end; i++)
     {
       int32_t decodedVal = 0;
-      scaledBits += decodeWeightVal(decodedVal, k, pred); 
+      scaledBits += decodeWeightVal(decodedVal, pred); 
       int32_t residual = decodedVal;
 
       if (pred == PRED_MEAN)
@@ -148,7 +144,7 @@ uint64_t BACDecoder::decodeWeights(int32_t *pWeights, uint32_t numWeights)
 }
 
 
-uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k, uint8_t pred ){ 
+uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t pred ){ 
     uint64_t binsUsed = 0;
     //printf("===> dECODING k=%d, pred=%d \n", k, pred );
     // SIG flag
@@ -193,6 +189,19 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k, uint8_t 
     // rice remainder
     if(decodeRiceFlag){
       uint32_t riceValue;
+      uint8_t k = 0;
+        switch (riceOffset){
+          case 11:
+            k = 1; break;
+          case 15:
+            k = 2; break;
+          case 31:
+            k = 3; break;
+          case 63:
+            k = 4; break;
+          default:
+            k = 1; break;
+        }
       binsUsed += decodeRice(riceValue, k);
       remAbsLevel += riceValue;
     }
@@ -211,7 +220,6 @@ uint64_t BACDecoder::decodeWeightVal(int32_t &decodedIntVal, uint8_t k, uint8_t 
 uint64_t BACDecoder::decodeRice(uint32_t& value, uint8_t k)
 {
     uint64_t bits = 0;
-    uint8_t kUpd = k + 1;
     //-------------------------
     // Unary prefix
     //-------------------------
@@ -224,11 +232,11 @@ uint64_t BACDecoder::decodeRice(uint32_t& value, uint8_t k)
     //-------------------------
     // Suffix
     //-------------------------
-    uint32_t r = m_BinDecoder.decodeBinsEP(kUpd);
-    bits += kUpd;
-    value = (q << kUpd) | r;
+    uint32_t r = m_BinDecoder.decodeBinsEP(k);
+    bits += k;
+    value = (q << k) | r;
 
-    //printf("Rice decodded: kupd %d q %d r %d value %d \n ", kUpd, q, r, value);
+    //printf("Rice decodded: kupd %d q %d r %d value %d \n ", k, q, r, value);
     return bits;
 }
 

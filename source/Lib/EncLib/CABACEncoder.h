@@ -79,14 +79,14 @@ class BACEncoder{
   private:
 
     // new bit estimation based on actual RLPS values
-    double estimateWeightBAC(int32_t residual, int k, uint8_t pred);
+    double estimateWeightBAC(int32_t residual, uint8_t pred);
 
     ////////////////////////////////////////////////////////////
     /// Core BAC weight coding primitives
     ////////////////////////////////////////////////////////////
 
     uint32_t encodeRice(uint32_t value, uint8_t k);
-    uint32_t encodeWeightBAC(int32_t value, uint8_t k, uint8_t pred);
+    uint32_t encodeWeightBAC(int32_t value, uint8_t pred);
     uint32_t encodeAbsRem(int32_t value, uint16_t k);
 
     ////////////////////////////////////////////////////////////

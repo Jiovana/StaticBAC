@@ -27,8 +27,8 @@
 
 
 
-//#define TENSOR_BIN_DIR "models/google-bert/binaries/"
-//#define META_FILE "models/google-bert/tensor1.meta"
+//#define TENSOR_BIN_DIR "models/vgg19/binaries/"
+//#define META_FILE "models/vgg19/tensor.meta"
 #define TENSOR_BIN_DIR "models/resnet50/binaries/"
 #define META_FILE "models/resnet50/tensors.meta"
 
@@ -417,7 +417,6 @@ int main()
 
     Encoder encoder;
 
-    uint32_t numGtxFlags = 7;
 
     std::cout << "\n=== Encoding Model ===\n";
 
@@ -428,7 +427,6 @@ int main()
 
     auto encStart = std::chrono::high_resolution_clock::now();
 
-    encoder.initCtxModels(numGtxFlags);
     const std::vector<uint8_t>& bytestream =
         encoder.encodeModel(modelTensors);
 
@@ -527,7 +525,6 @@ int main()
     
     decoder.setStream(const_cast<std::vector<uint8_t>&>(bytestream));
 
-    decoder.initCtxModels(numGtxFlags);
     printf("start decoding...\n");
     decoder.decodeModel(decodedModel);
    // decoder.finishDecoding();

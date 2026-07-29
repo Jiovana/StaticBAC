@@ -33,7 +33,7 @@ protected:
 
   
   uint64_t decodeWeightsChunks(int32_t* pWeights, uint32_t numWeights);
-  uint64_t decodeWeightVal    ( int32_t &decodedIntVal, uint8_t k , uint8_t pred);
+  uint64_t decodeWeightVal    ( int32_t &decodedIntVal, uint8_t pred);
   int32_t  decodeAbsRem       ( uint32_t& remainder, uint32_t k );
   uint64_t decodeRice(uint32_t& value, uint8_t k);
    
