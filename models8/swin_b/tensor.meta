@@ -1,0 +1,355 @@
+numTensors 353
+
+0 features.0.0.weight weight 8 4 128 3 4 4 0.0020603488331714195
+1 features.0.0.bias bias 8 1 128 0.011849753798383454
+2 features.0.2.weight weight 8 1 128 0.03993412334002076
+3 features.0.2.bias bias 8 1 128 0.015253080183237223
+4 features.1.0.norm1.weight weight 8 1 128 0.011669408937873306
+5 features.1.0.norm1.bias bias 8 1 128 0.007880746983386259
+6 features.1.0.attn.relative_position_bias_table bias 8 2 169 4 0.06796745948671828
+7 features.1.0.attn.qkv.weight weight 8 2 384 128 0.0030922813745607406
+8 features.1.0.attn.qkv.bias bias 8 1 384 0.01934932111606573
+9 features.1.0.attn.proj.weight weight 8 2 128 128 0.0030301825182775695
+10 features.1.0.attn.proj.bias bias 8 1 128 0.005960696783217782
+11 features.1.0.norm2.weight weight 8 1 128 0.024281697228689773
+12 features.1.0.norm2.bias bias 8 1 128 0.010049279458726874
+13 features.1.0.mlp.0.weight weight 8 2 512 128 0.004980091324762712
+14 features.1.0.mlp.0.bias bias 8 1 512 0.01328872661773568
+15 features.1.0.mlp.3.weight weight 8 2 128 512 0.0023730220106495514
+16 features.1.0.mlp.3.bias bias 8 1 128 0.016262251964718446
+17 features.1.1.norm1.weight weight 8 1 128 0.012603527044095026
+18 features.1.1.norm1.bias bias 8 1 128 0.010675740267031686
+19 features.1.1.attn.relative_position_bias_table bias 8 2 169 4 0.08860373683285686
+20 features.1.1.attn.qkv.weight weight 8 2 384 128 0.003568517747439352
+21 features.1.1.attn.qkv.bias bias 8 1 384 0.013369157906832428
+22 features.1.1.attn.proj.weight weight 8 2 128 128 0.002405039060882323
+23 features.1.1.attn.proj.bias bias 8 1 128 0.0059080831645241996
+24 features.1.1.norm2.weight weight 8 1 128 0.019618636256378913
+25 features.1.1.norm2.bias bias 8 1 128 0.00893920501667287
+26 features.1.1.mlp.0.weight weight 8 2 512 128 0.0025180909242040724
+27 features.1.1.mlp.0.bias bias 8 1 512 0.012958441194561892
+28 features.1.1.mlp.3.weight weight 8 2 128 512 0.0037615715028169253
+29 features.1.1.mlp.3.bias bias 8 1 128 0.013437196130700216
+30 features.2.reduction.weight weight 8 2 256 512 0.0018576989527265583
+31 features.2.norm.weight weight 8 1 512 0.013611239063992038
+32 features.2.norm.bias bias 8 1 512 0.0107806913829006
+33 features.3.0.norm1.weight weight 8 1 256 0.006400061855161497
+34 features.3.0.norm1.bias bias 8 1 256 0.003771792588774475
+35 features.3.0.attn.relative_position_bias_table bias 8 2 169 8 0.082587117319157
+36 features.3.0.attn.qkv.weight weight 8 2 768 256 0.003007227207997549
+37 features.3.0.attn.qkv.bias bias 8 1 768 0.02174309530579778
+38 features.3.0.attn.proj.weight weight 8 2 256 256 0.002373785149036276
+39 features.3.0.attn.proj.bias bias 8 1 256 0.01654190378359114
+40 features.3.0.norm2.weight weight 8 1 256 0.01207311546575784
+41 features.3.0.norm2.bias bias 8 1 256 0.005396313741963086
+42 features.3.0.mlp.0.weight weight 8 2 1024 256 0.002309000844008248
+43 features.3.0.mlp.0.bias bias 8 1 1024 0.014284541824069396
+44 features.3.0.mlp.3.weight weight 8 2 256 1024 0.0022131788161423097
+45 features.3.0.mlp.3.bias bias 8 1 256 0.015871774775849695
+46 features.3.1.norm1.weight weight 8 1 256 0.009158767743608595
+47 features.3.1.norm1.bias bias 8 1 256 0.020734150428505856
+48 features.3.1.attn.relative_position_bias_table bias 8 2 169 8 0.04923511894272043
+49 features.3.1.attn.qkv.weight weight 8 2 768 256 0.0031833180334996615
+50 features.3.1.attn.qkv.bias bias 8 1 768 0.017570299811484436
+51 features.3.1.attn.proj.weight weight 8 2 256 256 0.001648361764014949
+52 features.3.1.attn.proj.bias bias 8 1 256 0.015569309594154854
+53 features.3.1.norm2.weight weight 8 1 256 0.012537167005848034
+54 features.3.1.norm2.bias bias 8 1 256 0.011614911370122242
+55 features.3.1.mlp.0.weight weight 8 2 1024 256 0.0019772550134105997
+56 features.3.1.mlp.0.bias bias 8 1 1024 0.012980623175223116
+57 features.3.1.mlp.3.weight weight 8 2 256 1024 0.0056045039596001826
+58 features.3.1.mlp.3.bias bias 8 1 256 0.03764873166159899
+59 features.4.reduction.weight weight 8 2 512 1024 0.001590172302053764
+60 features.4.norm.weight weight 8 1 1024 0.006721645499649678
+61 features.4.norm.bias bias 8 1 1024 0.008692349942493287
+62 features.5.0.norm1.weight weight 8 1 512 0.007746771857095099
+63 features.5.0.norm1.bias bias 8 1 512 0.004734303652159023
+64 features.5.0.attn.relative_position_bias_table bias 8 2 169 16 0.08816248031791385
+65 features.5.0.attn.qkv.weight weight 8 2 1536 512 0.00250249851592859
+66 features.5.0.attn.qkv.bias bias 8 1 1536 0.020126649545627984
+67 features.5.0.attn.proj.weight weight 8 2 512 512 0.0021120243336592926
+68 features.5.0.attn.proj.bias bias 8 1 512 0.03395596666254351
+69 features.5.0.norm2.weight weight 8 1 512 0.009587733749930495
+70 features.5.0.norm2.bias bias 8 1 512 0.008906001349886021
+71 features.5.0.mlp.0.weight weight 8 2 2048 512 0.0021326100510572843
+72 features.5.0.mlp.0.bias bias 8 1 2048 0.01522682881080673
+73 features.5.0.mlp.3.weight weight 8 2 512 2048 0.0019234431996693934
+74 features.5.0.mlp.3.bias bias 8 1 512 0.02637700841851169
+75 features.5.1.norm1.weight weight 8 1 512 0.005448756260441421
+76 features.5.1.norm1.bias bias 8 1 512 0.008870767141575472
+77 features.5.1.attn.relative_position_bias_table bias 8 2 169 16 0.07332674892735296
+78 features.5.1.attn.qkv.weight weight 8 2 1536 512 0.0028400404614312065
+79 features.5.1.attn.qkv.bias bias 8 1 1536 0.017123304990208393
+80 features.5.1.attn.proj.weight weight 8 2 512 512 0.0027434795709237745
+81 features.5.1.attn.proj.bias bias 8 1 512 0.02177161487893646
+82 features.5.1.norm2.weight weight 8 1 512 0.008004026999088604
+83 features.5.1.norm2.bias bias 8 1 512 0.013118012978273082
+84 features.5.1.mlp.0.weight weight 8 2 2048 512 0.002020186349268674
+85 features.5.1.mlp.0.bias bias 8 1 2048 0.014351391539973257
+86 features.5.1.mlp.3.weight weight 8 2 512 2048 0.0020647552540688312
+87 features.5.1.mlp.3.bias bias 8 1 512 0.018330183619616518
+88 features.5.2.norm1.weight weight 8 1 512 0.00747590791945677
+89 features.5.2.norm1.bias bias 8 1 512 0.008917972681425693
+90 features.5.2.attn.relative_position_bias_table bias 8 2 169 16 0.07582410351351493
+91 features.5.2.attn.qkv.weight weight 8 2 1536 512 0.002525818332470414
+92 features.5.2.attn.qkv.bias bias 8 1 1536 0.01988066937441995
+93 features.5.2.attn.proj.weight weight 8 2 512 512 0.0016714982331043505
+94 features.5.2.attn.proj.bias bias 8 1 512 0.029596321533872146
+95 features.5.2.norm2.weight weight 8 1 512 0.007513036296755396
+96 features.5.2.norm2.bias bias 8 1 512 0.013701171212685931
+97 features.5.2.mlp.0.weight weight 8 2 2048 512 0.0019525068996276002
+98 features.5.2.mlp.0.bias bias 8 1 2048 0.012003420951343003
+99 features.5.2.mlp.3.weight weight 8 2 512 2048 0.002892862077764121
+100 features.5.2.mlp.3.bias bias 8 1 512 0.01399408830588976
+101 features.5.3.norm1.weight weight 8 1 512 0.00791051380076509
+102 features.5.3.norm1.bias bias 8 1 512 0.009698288549785078
+103 features.5.3.attn.relative_position_bias_table bias 8 2 169 16 0.056680665549608725
+104 features.5.3.attn.qkv.weight weight 8 2 1536 512 0.0037253877516469506
+105 features.5.3.attn.qkv.bias bias 8 1 1536 0.01652617536014502
+106 features.5.3.attn.proj.weight weight 8 2 512 512 0.0019223887131126793
+107 features.5.3.attn.proj.bias bias 8 1 512 0.023573653169642578
+108 features.5.3.norm2.weight weight 8 1 512 0.007756495437716643
+109 features.5.3.norm2.bias bias 8 1 512 0.013150684502244079
+110 features.5.3.mlp.0.weight weight 8 2 2048 512 0.002014177794495093
+111 features.5.3.mlp.0.bias bias 8 1 2048 0.01146290795576228
+112 features.5.3.mlp.3.weight weight 8 2 512 2048 0.0051930696246188564
+113 features.5.3.mlp.3.bias bias 8 1 512 0.00919796536858919
+114 features.5.4.norm1.weight weight 8 1 512 0.008342243022031182
+115 features.5.4.norm1.bias bias 8 1 512 0.010925259795410126
+116 features.5.4.attn.relative_position_bias_table bias 8 2 169 16 0.09700359757554024
+117 features.5.4.attn.qkv.weight weight 8 2 1536 512 0.002532452609646368
+118 features.5.4.attn.qkv.bias bias 8 1 1536 0.018935930575908783
+119 features.5.4.attn.proj.weight weight 8 2 512 512 0.0019055925835729903
+120 features.5.4.attn.proj.bias bias 8 1 512 0.030518068577194385
+121 features.5.4.norm2.weight weight 8 1 512 0.008038216591551198
+122 features.5.4.norm2.bias bias 8 1 512 0.012185853887675357
+123 features.5.4.mlp.0.weight weight 8 2 2048 512 0.0019683268697587497
+124 features.5.4.mlp.0.bias bias 8 1 2048 0.012193605462220572
+125 features.5.4.mlp.3.weight weight 8 2 512 2048 0.00931422287838837
+126 features.5.4.mlp.3.bias bias 8 1 512 0.004316229150762824
+127 features.5.5.norm1.weight weight 8 1 512 0.009760861886185874
+128 features.5.5.norm1.bias bias 8 1 512 0.01406260425783043
+129 features.5.5.attn.relative_position_bias_table bias 8 2 169 16 0.05727059187281812
+130 features.5.5.attn.qkv.weight weight 8 2 1536 512 0.0027888063966005775
+131 features.5.5.attn.qkv.bias bias 8 1 1536 0.02048329846950648
+132 features.5.5.attn.proj.weight weight 8 2 512 512 0.0018205473570037044
+133 features.5.5.attn.proj.bias bias 8 1 512 0.0233705431760417
+134 features.5.5.norm2.weight weight 8 1 512 0.009047555582897044
+135 features.5.5.norm2.bias bias 8 1 512 0.011079621804911136
+136 features.5.5.mlp.0.weight weight 8 2 2048 512 0.0022729874308057216
+137 features.5.5.mlp.0.bias bias 8 1 2048 0.010882895710870377
+138 features.5.5.mlp.3.weight weight 8 2 512 2048 0.010338253220287287
+139 features.5.5.mlp.3.bias bias 8 1 512 0.0032523452333227576
+140 features.5.6.norm1.weight weight 8 1 512 0.009593458740085228
+141 features.5.6.norm1.bias bias 8 1 512 0.015509245748591454
+142 features.5.6.attn.relative_position_bias_table bias 8 2 169 16 0.05664325895030159
+143 features.5.6.attn.qkv.weight weight 8 2 1536 512 0.0023822294918449485
+144 features.5.6.attn.qkv.bias bias 8 1 1536 0.020425864207235134
+145 features.5.6.attn.proj.weight weight 8 2 512 512 0.0024054737853191595
+146 features.5.6.attn.proj.bias bias 8 1 512 0.03360948241662276
+147 features.5.6.norm2.weight weight 8 1 512 0.0100677277643292
+148 features.5.6.norm2.bias bias 8 1 512 0.010040262118857536
+149 features.5.6.mlp.0.weight weight 8 2 2048 512 0.0023189101300280963
+150 features.5.6.mlp.0.bias bias 8 1 2048 0.010537250075172238
+151 features.5.6.mlp.3.weight weight 8 2 512 2048 0.010406389201778828
+152 features.5.6.mlp.3.bias bias 8 1 512 0.00582983419049133
+153 features.5.7.norm1.weight weight 8 1 512 0.01137406803440837
+154 features.5.7.norm1.bias bias 8 1 512 0.016856340622336763
+155 features.5.7.attn.relative_position_bias_table bias 8 2 169 16 0.0516955310380153
+156 features.5.7.attn.qkv.weight weight 8 2 1536 512 0.0022922200914812117
+157 features.5.7.attn.qkv.bias bias 8 1 1536 0.015900593348772134
+158 features.5.7.attn.proj.weight weight 8 2 512 512 0.00218032057928212
+159 features.5.7.attn.proj.bias bias 8 1 512 0.021931467048190583
+160 features.5.7.norm2.weight weight 8 1 512 0.011237372613666849
+161 features.5.7.norm2.bias bias 8 1 512 0.007644823248672916
+162 features.5.7.mlp.0.weight weight 8 2 2048 512 0.0022455898078137903
+163 features.5.7.mlp.0.bias bias 8 1 2048 0.009921172530054232
+164 features.5.7.mlp.3.weight weight 8 2 512 2048 0.009949274015681575
+165 features.5.7.mlp.3.bias bias 8 1 512 0.009991991653178831
+166 features.5.8.norm1.weight weight 8 1 512 0.010343457938642456
+167 features.5.8.norm1.bias bias 8 1 512 0.016390965970830187
+168 features.5.8.attn.relative_position_bias_table bias 8 2 169 16 0.08727770033147972
+169 features.5.8.attn.qkv.weight weight 8 2 1536 512 0.0018817045469915225
+170 features.5.8.attn.qkv.bias bias 8 1 1536 0.018229615892429468
+171 features.5.8.attn.proj.weight weight 8 2 512 512 0.0025528893754896745
+172 features.5.8.attn.proj.bias bias 8 1 512 0.03180957729402416
+173 features.5.8.norm2.weight weight 8 1 512 0.01141459177600445
+174 features.5.8.norm2.bias bias 8 1 512 0.008393482178806814
+175 features.5.8.mlp.0.weight weight 8 2 2048 512 0.002705546271116619
+176 features.5.8.mlp.0.bias bias 8 1 2048 0.008714319926910609
+177 features.5.8.mlp.3.weight weight 8 2 512 2048 0.008631547807291102
+178 features.5.8.mlp.3.bias bias 8 1 512 0.013974203869042872
+179 features.5.9.norm1.weight weight 8 1 512 0.011807080597817595
+180 features.5.9.norm1.bias bias 8 1 512 0.01735900294071916
+181 features.5.9.attn.relative_position_bias_table bias 8 2 169 16 0.04564712030087191
+182 features.5.9.attn.qkv.weight weight 8 2 1536 512 0.0018877674144339748
+183 features.5.9.attn.qkv.bias bias 8 1 1536 0.02042721010496438
+184 features.5.9.attn.proj.weight weight 8 2 512 512 0.002494093262912273
+185 features.5.9.attn.proj.bias bias 8 1 512 0.023541558900617245
+186 features.5.9.norm2.weight weight 8 1 512 0.012433821718454495
+187 features.5.9.norm2.bias bias 8 1 512 0.00768773409403097
+188 features.5.9.mlp.0.weight weight 8 2 2048 512 0.0021952828091794437
+189 features.5.9.mlp.0.bias bias 8 1 2048 0.008664181882404622
+190 features.5.9.mlp.3.weight weight 8 2 512 2048 0.008165501352281883
+191 features.5.9.mlp.3.bias bias 8 1 512 0.009897213330338292
+192 features.5.10.norm1.weight weight 8 1 512 0.011237136675155086
+193 features.5.10.norm1.bias bias 8 1 512 0.01751367355964035
+194 features.5.10.attn.relative_position_bias_table bias 8 2 169 16 0.04868003708654869
+195 features.5.10.attn.qkv.weight weight 8 2 1536 512 0.0017637420729335516
+196 features.5.10.attn.qkv.bias bias 8 1 1536 0.023436915202004735
+197 features.5.10.attn.proj.weight weight 8 2 512 512 0.002940679770142563
+198 features.5.10.attn.proj.bias bias 8 1 512 0.029408409704546827
+199 features.5.10.norm2.weight weight 8 1 512 0.012731669671129056
+200 features.5.10.norm2.bias bias 8 1 512 0.006977024123859975
+201 features.5.10.mlp.0.weight weight 8 2 2048 512 0.0023382305127416206
+202 features.5.10.mlp.0.bias bias 8 1 2048 0.008405679258569944
+203 features.5.10.mlp.3.weight weight 8 2 512 2048 0.007326303592382127
+204 features.5.10.mlp.3.bias bias 8 1 512 0.009085994561920274
+205 features.5.11.norm1.weight weight 8 1 512 0.01149753372126611
+206 features.5.11.norm1.bias bias 8 1 512 0.01478694242909781
+207 features.5.11.attn.relative_position_bias_table bias 8 2 169 16 0.039443078318771085
+208 features.5.11.attn.qkv.weight weight 8 2 1536 512 0.0018015438727241586
+209 features.5.11.attn.qkv.bias bias 8 1 1536 0.018198791554718884
+210 features.5.11.attn.proj.weight weight 8 2 512 512 0.003369651073617411
+211 features.5.11.attn.proj.bias bias 8 1 512 0.017486855965993472
+212 features.5.11.norm2.weight weight 8 1 512 0.014749836869407156
+213 features.5.11.norm2.bias bias 8 1 512 0.007427146302480226
+214 features.5.11.mlp.0.weight weight 8 2 2048 512 0.001715348109836861
+215 features.5.11.mlp.0.bias bias 8 1 2048 0.008554412185397747
+216 features.5.11.mlp.3.weight weight 8 2 512 2048 0.005062114089162392
+217 features.5.11.mlp.3.bias bias 8 1 512 0.005256666690154321
+218 features.5.12.norm1.weight weight 8 1 512 0.011928329703986822
+219 features.5.12.norm1.bias bias 8 1 512 0.011469451106666445
+220 features.5.12.attn.relative_position_bias_table bias 8 2 169 16 0.05479550648990641
+221 features.5.12.attn.qkv.weight weight 8 2 1536 512 0.001720542887021695
+222 features.5.12.attn.qkv.bias bias 8 1 1536 0.019495214731433088
+223 features.5.12.attn.proj.weight weight 8 2 512 512 0.003958845949332955
+224 features.5.12.attn.proj.bias bias 8 1 512 0.024637939902441234
+225 features.5.12.norm2.weight weight 8 1 512 0.01736998011659971
+226 features.5.12.norm2.bias bias 8 1 512 0.007598353725191602
+227 features.5.12.mlp.0.weight weight 8 2 2048 512 0.0016518252176531618
+228 features.5.12.mlp.0.bias bias 8 1 2048 0.007977561248427814
+229 features.5.12.mlp.3.weight weight 8 2 512 2048 0.005505951670660723
+230 features.5.12.mlp.3.bias bias 8 1 512 0.01534157059852088
+231 features.5.13.norm1.weight weight 8 1 512 0.010796992062989712
+232 features.5.13.norm1.bias bias 8 1 512 0.010724817136833802
+233 features.5.13.attn.relative_position_bias_table bias 8 2 169 16 0.0834152980074038
+234 features.5.13.attn.qkv.weight weight 8 2 1536 512 0.0017328289976586287
+235 features.5.13.attn.qkv.bias bias 8 1 1536 0.022061582159517628
+236 features.5.13.attn.proj.weight weight 8 2 512 512 0.005629652609984949
+237 features.5.13.attn.proj.bias bias 8 1 512 0.015192302990117736
+238 features.5.13.norm2.weight weight 8 1 512 0.02690000438896248
+239 features.5.13.norm2.bias bias 8 1 512 0.01044947647057622
+240 features.5.13.mlp.0.weight weight 8 2 2048 512 0.0016610453503589407
+241 features.5.13.mlp.0.bias bias 8 1 2048 0.008620781064826877
+242 features.5.13.mlp.3.weight weight 8 2 512 2048 0.005128910700849204
+243 features.5.13.mlp.3.bias bias 8 1 512 0.02783312900673425
+244 features.5.14.norm1.weight weight 8 1 512 0.013366765036370947
+245 features.5.14.norm1.bias bias 8 1 512 0.006805920463525107
+246 features.5.14.attn.relative_position_bias_table bias 8 2 169 16 0.103954188127045
+247 features.5.14.attn.qkv.weight weight 8 2 1536 512 0.0017017096257126764
+248 features.5.14.attn.qkv.bias bias 8 1 1536 0.023377097844145718
+249 features.5.14.attn.proj.weight weight 8 2 512 512 0.005161903940505941
+250 features.5.14.attn.proj.bias bias 8 1 512 0.028272075231303255
+251 features.5.14.norm2.weight weight 8 1 512 0.03449294630554861
+252 features.5.14.norm2.bias bias 8 1 512 0.012908589829301279
+253 features.5.14.mlp.0.weight weight 8 2 2048 512 0.0016882467403013788
+254 features.5.14.mlp.0.bias bias 8 1 2048 0.008167460228278432
+255 features.5.14.mlp.3.weight weight 8 2 512 2048 0.005608443873273468
+256 features.5.14.mlp.3.bias bias 8 1 512 0.041957398988344385
+257 features.5.15.norm1.weight weight 8 1 512 0.011890921446655003
+258 features.5.15.norm1.bias bias 8 1 512 0.010511952202434342
+259 features.5.15.attn.relative_position_bias_table bias 8 2 169 16 0.11493696375383135
+260 features.5.15.attn.qkv.weight weight 8 2 1536 512 0.0018421390668838817
+261 features.5.15.attn.qkv.bias bias 8 1 1536 0.021101287473305846
+262 features.5.15.attn.proj.weight weight 8 2 512 512 0.005841630353479387
+263 features.5.15.attn.proj.bias bias 8 1 512 0.0267463580378883
+264 features.5.15.norm2.weight weight 8 1 512 0.030700243187903355
+265 features.5.15.norm2.bias bias 8 1 512 0.013437820646942194
+266 features.5.15.mlp.0.weight weight 8 2 2048 512 0.0019396382209279361
+267 features.5.15.mlp.0.bias bias 8 1 2048 0.010018230380852283
+268 features.5.15.mlp.3.weight weight 8 2 512 2048 0.008973350975209151
+269 features.5.15.mlp.3.bias bias 8 1 512 0.039485758169265334
+270 features.5.16.norm1.weight weight 8 1 512 0.013470939573972477
+271 features.5.16.norm1.bias bias 8 1 512 0.01465864871024076
+272 features.5.16.attn.relative_position_bias_table bias 8 2 169 16 0.12635743870110902
+273 features.5.16.attn.qkv.weight weight 8 2 1536 512 0.001964468231416929
+274 features.5.16.attn.qkv.bias bias 8 1 1536 0.01905861139561984
+275 features.5.16.attn.proj.weight weight 8 2 512 512 0.003947966228745806
+276 features.5.16.attn.proj.bias bias 8 1 512 0.02674292486623141
+277 features.5.16.norm2.weight weight 8 1 512 0.0282752872909184
+278 features.5.16.norm2.bias bias 8 1 512 0.017403044571294303
+279 features.5.16.mlp.0.weight weight 8 2 2048 512 0.002543485404578679
+280 features.5.16.mlp.0.bias bias 8 1 2048 0.015826864975231197
+281 features.5.16.mlp.3.weight weight 8 2 512 2048 0.006080807828879262
+282 features.5.16.mlp.3.bias bias 8 1 512 0.03685557746762187
+283 features.5.17.norm1.weight weight 8 1 512 0.012591497373484035
+284 features.5.17.norm1.bias bias 8 1 512 0.020322306690047153
+285 features.5.17.attn.relative_position_bias_table bias 8 2 169 16 0.11285491882940077
+286 features.5.17.attn.qkv.weight weight 8 2 1536 512 0.0020382059526672966
+287 features.5.17.attn.qkv.bias bias 8 1 1536 0.016745314983054232
+288 features.5.17.attn.proj.weight weight 8 2 512 512 0.00824174729214248
+289 features.5.17.attn.proj.bias bias 8 1 512 0.014749650326559158
+290 features.5.17.norm2.weight weight 8 1 512 0.019309833228448398
+291 features.5.17.norm2.bias bias 8 1 512 0.019212637170136913
+292 features.5.17.mlp.0.weight weight 8 2 2048 512 0.002966143806512658
+293 features.5.17.mlp.0.bias bias 8 1 2048 0.01597885999433138
+294 features.5.17.mlp.3.weight weight 8 2 512 2048 0.007504816432531753
+295 features.5.17.mlp.3.bias bias 8 1 512 0.02618059498283983
+296 features.6.reduction.weight weight 8 2 1024 2048 0.006038297041492294
+297 features.6.norm.weight weight 8 1 2048 0.013668221519889431
+298 features.6.norm.bias bias 8 1 2048 0.01149431088183488
+299 features.7.0.norm1.weight weight 8 1 1024 0.013181661661050064
+300 features.7.0.norm1.bias bias 8 1 1024 0.013449001936329117
+301 features.7.0.attn.relative_position_bias_table bias 8 2 169 32 0.1236311631341341
+302 features.7.0.attn.qkv.weight weight 8 2 3072 1024 0.0020332194708503784
+303 features.7.0.attn.qkv.bias bias 8 1 3072 0.025244305396275132
+304 features.7.0.attn.proj.weight weight 8 2 1024 1024 0.007649087182584554
+305 features.7.0.attn.proj.bias bias 8 1 1024 0.11789535313712657
+306 features.7.0.norm2.weight weight 8 1 1024 0.03461677125154687
+307 features.7.0.norm2.bias bias 8 1 1024 0.014203825573863588
+308 features.7.0.mlp.0.weight weight 8 2 4096 1024 0.002497052393740054
+309 features.7.0.mlp.0.bias bias 8 1 4096 0.013739536561797142
+310 features.7.0.mlp.3.weight weight 8 2 1024 4096 0.006575075661900005
+311 features.7.0.mlp.3.bias bias 8 1 1024 0.10057144918971903
+312 features.7.1.norm1.weight weight 8 1 1024 0.014819656280876848
+313 features.7.1.norm1.bias bias 8 1 1024 0.013607819277155826
+314 features.7.1.attn.relative_position_bias_table bias 8 2 169 32 0.1186096981948552
+315 features.7.1.attn.qkv.weight weight 8 2 3072 1024 0.0021291413188738
+316 features.7.1.attn.qkv.bias bias 8 1 3072 0.02247873688850731
+317 features.7.1.attn.proj.weight weight 8 2 1024 1024 0.007491671513302907
+318 features.7.1.attn.proj.bias bias 8 1 1024 0.11270604566645537
+319 features.7.1.norm2.weight weight 8 1 1024 0.031288624384441924
+320 features.7.1.norm2.bias bias 8 1 1024 0.014093782273818158
+321 features.7.1.mlp.0.weight weight 8 2 4096 1024 0.0025003187974198616
+322 features.7.1.mlp.0.bias bias 8 1 4096 0.020892959977720706
+323 features.7.1.mlp.3.weight weight 8 2 1024 4096 0.0068974305103347705
+324 features.7.1.mlp.3.bias bias 8 1 1024 0.09445965211918096
+325 norm.weight weight 8 1 1024 0.024403743659913615
+326 norm.bias bias 8 1 1024 0.002026953267590231
+327 head.weight weight 8 2 1000 1024 0.0012123226764095883
+328 head.bias bias 8 1 1000 0.004257852781832708
+329 features.1.0.attn.relative_position_index buffer 32 1 2401 1.0
+330 features.1.1.attn.relative_position_index buffer 32 1 2401 1.0
+331 features.3.0.attn.relative_position_index buffer 32 1 2401 1.0
+332 features.3.1.attn.relative_position_index buffer 32 1 2401 1.0
+333 features.5.0.attn.relative_position_index buffer 32 1 2401 1.0
+334 features.5.1.attn.relative_position_index buffer 32 1 2401 1.0
+335 features.5.2.attn.relative_position_index buffer 32 1 2401 1.0
+336 features.5.3.attn.relative_position_index buffer 32 1 2401 1.0
+337 features.5.4.attn.relative_position_index buffer 32 1 2401 1.0
+338 features.5.5.attn.relative_position_index buffer 32 1 2401 1.0
+339 features.5.6.attn.relative_position_index buffer 32 1 2401 1.0
+340 features.5.7.attn.relative_position_index buffer 32 1 2401 1.0
+341 features.5.8.attn.relative_position_index buffer 32 1 2401 1.0
+342 features.5.9.attn.relative_position_index buffer 32 1 2401 1.0
+343 features.5.10.attn.relative_position_index buffer 32 1 2401 1.0
+344 features.5.11.attn.relative_position_index buffer 32 1 2401 1.0
+345 features.5.12.attn.relative_position_index buffer 32 1 2401 1.0
+346 features.5.13.attn.relative_position_index buffer 32 1 2401 1.0
+347 features.5.14.attn.relative_position_index buffer 32 1 2401 1.0
+348 features.5.15.attn.relative_position_index buffer 32 1 2401 1.0
+349 features.5.16.attn.relative_position_index buffer 32 1 2401 1.0
+350 features.5.17.attn.relative_position_index buffer 32 1 2401 1.0
+351 features.7.0.attn.relative_position_index buffer 32 1 2401 1.0
+352 features.7.1.attn.relative_position_index buffer 32 1 2401 1.0

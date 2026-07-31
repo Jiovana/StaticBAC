@@ -194,55 +194,220 @@ def convert_bitdepth(q, bitwidth):
 # ============================================================
 # Quantization methods
 # ============================================================
+def optimal_uniform_quant(
+            x,
+            bitwidth,
+            search_steps=40,
+            mode="mse",
+            lambda_rd=0.5,
+    ):
+        """
+        Uniform quantizer optimized for MSE or rate-distortion.
 
-def optimal_uniform_quant(x, bitwidth, search_steps=40):
-    x = x.astype(np.float32)
-    Qmax = (1 << (bitwidth - 1)) - 1
+        Modes
+        -----
+        mse
+            Minimize reconstruction MSE only.
 
-    if x.size == 0 or np.all(x == 0):
-        return np.zeros_like(x, dtype=np.int32), 1.0
+        rd
+            Minimize:
+                J = distortion + lambda * entropy
 
-    std = float(np.std(x))
-    if std == 0:
-        return np.zeros_like(x, dtype=np.int32), 1.0
+            where entropy approximates coding rate.
+        """
 
-    qstep_min = max(std / (1 << (bitwidth + 2)), 1e-12)
-    qstep_max = max(std * 4.0, qstep_min * 2.0)
+        x = x.astype(np.float32)
 
-    phi = (1 + np.sqrt(5)) / 2.0
-    invphi = 1.0 / phi
+        Qmax = (1 << (bitwidth - 1)) - 1
 
-    a, b = qstep_min, qstep_max
-    c = b - (b - a) * invphi
-    d = a + (b - a) * invphi
+        if x.size == 0 or np.all(x == 0):
+            return np.zeros_like(x, dtype=np.int32), 1.0
 
-    def mse(qstep):
-        q = np.clip(np.round(x / qstep), -Qmax, Qmax)
-        return np.mean((x - q * qstep) ** 2)
 
-    fc, fd = mse(c), mse(d)
+        std = float(np.std(x))
 
-    for _ in range(search_steps):
-        if fc < fd:
-            b, d, fd = d, c, fc
-            c = b - (b - a) * invphi
-            fc = mse(c)
+        if std == 0:
+            return np.zeros_like(x, dtype=np.int32), 1.0
+
+
+        # ----------------------------------------------------------
+        # Search interval
+        # ----------------------------------------------------------
+
+        qstep_min = max(
+            std / (1 << (bitwidth + 2)),
+            1e-12
+        )
+
+        if mode == "mse":
+            qstep_max = std * 4.0
+
         else:
-            a, c, fc = c, d, fd
-            d = a + (b - a) * invphi
-            fd = mse(d)
+            # Do not allow collapse into all zeros
+            qstep_max = std * 4.0
 
-    qstep = (a + b) / 2.0
-    q = np.clip(np.round(x / qstep), -Qmax, Qmax)
 
-    return q.astype(np.int32), float(qstep)
+        phi = (1 + np.sqrt(5.0)) / 2.0
+        invphi = 1.0 / phi
+
+
+        a = qstep_min
+        b = qstep_max
+
+
+        c = b - (b-a)*invphi
+        d = a + (b-a)*invphi
+
+
+        # ----------------------------------------------------------
+        # RD cost function
+        # ----------------------------------------------------------
+
+        variance = np.mean(x*x) + 1e-12
+
+
+        def cost(qstep):
+
+            q = np.round(x / qstep)
+            q = np.clip(q, -Qmax, Qmax)
+
+
+            x_hat = q * qstep
+
+
+            # ----------------------------
+            # distortion
+            # ----------------------------
+
+            mse = np.mean((x - x_hat)**2)
+
+            mse /= variance
+
+
+            if mode == "mse":
+                return mse
+
+
+            # ----------------------------
+            # entropy (rate)
+            # ----------------------------
+
+            q_int = q.astype(np.int32).ravel()
+
+
+            hist = np.bincount(
+                q_int + Qmax,
+                minlength=2*Qmax+1
+            )
+
+
+            p = hist.astype(np.float64)
+
+            p /= p.sum()
+
+            p = p[p > 0]
+
+
+            entropy = -(p*np.log2(p)).sum()
+
+
+            # normalize to approximately [0,1]
+
+            entropy /= bitwidth
+
+
+            # ----------------------------
+            # RD objective
+            # ----------------------------
+
+            return (
+                mse +
+                lambda_rd * entropy
+            )
+
+
+        # ----------------------------------------------------------
+        # Golden section search
+        # ----------------------------------------------------------
+
+        fc = cost(c)
+        fd = cost(d)
+
+
+        for _ in range(search_steps):
+
+            if fc < fd:
+
+                b = d
+                d = c
+                fd = fc
+
+                c = b - (b-a)*invphi
+                fc = cost(c)
+
+            else:
+
+                a = c
+                c = d
+                fc = fd
+
+                d = a + (b-a)*invphi
+                fd = cost(d)
+
+
+        qstep = (a+b)/2.0
+
+
+        # ----------------------------------------------------------
+        # Final quantization
+        # ----------------------------------------------------------
+
+        q = np.round(x / qstep)
+
+        q = np.clip(
+            q,
+            -Qmax,
+            Qmax
+        )
+
+
+        # ----------------------------------------------------------
+        # Statistics
+        # ----------------------------------------------------------
+
+        q_int = q.astype(np.int32)
+
+        hist = np.bincount(
+            q_int.ravel()+Qmax,
+            minlength=2*Qmax+1
+        )
+
+        p = hist.astype(np.float64)
+        p /= p.sum()
+
+        p = p[p>0]
+
+        entropy = -(p*np.log2(p)).sum()
+
+
+        print(
+            f"step={qstep:.6e} "
+            f"Entropy={entropy:.3f} "
+            f"Zeros={100*np.mean(q_int==0):.2f}% "
+            f"Mean|q|={np.mean(np.abs(q_int)):.3f} "
+            f"MSE={np.mean((x-q_int*qstep)**2):.3e}"
+        )
+
+
+        return q_int, float(qstep)
+
 
 
 # Core quantization entry point
 # - Handles weights, biases, and buffers differently
 # - Always outputs int32 (for C++ compatibility)
 # - Bitwidth is used later for entropy coding, not storage
-def quantize_tensor(arr, use_quant=True, tensor_kind ="weight"):
+def quantize_tensor(arr, use_quant=True, tensor_kind ="weight", mode="mse", lambda_rd=0.5):
     numel = arr.size
 
 
@@ -254,17 +419,17 @@ def quantize_tensor(arr, use_quant=True, tensor_kind ="weight"):
         return arr, 1.0, 8
 
 
-    if numel < 32:
-        bitwidth = 12
-        qstep = np.max(np.abs(arr)) / (2**(bitwidth - 1) - 1 + 1e-8)
-        q = np.round(arr / qstep)
+    #if numel < 32:
+    #    bitwidth = 12
+    #    qstep = np.max(np.abs(arr)) / (2**(bitwidth - 1) - 1 + 1e-8)
+    #    q = np.round(arr / qstep)
 
-    elif tensor_kind == "weight":
-        bitwidth = 8
-        q, qstep = optimal_uniform_quant(arr, bitwidth)
-    else:
-        bitwidth = 12
-        q, qstep = optimal_uniform_quant(arr, bitwidth)
+    #elif tensor_kind == "weight":
+    bitwidth = 8
+    q, qstep = optimal_uniform_quant(arr, bitwidth, mode=mode, lambda_rd=lambda_rd)
+   # else:
+      #  bitwidth = 12
+       # q, qstep = optimal_uniform_quant(arr, bitwidth)
 
     q = convert_bitdepth(q, bitwidth)
 
@@ -384,6 +549,10 @@ def main():
     parser.add_argument("--quantized", action="store_true",
                         help="Load quantized torchvision model")
 
+    parser.add_argument("--quantizer", choices=["mse","rd"], default="mse", help="Pure MSE minimization or rate-distortion")
+
+    parser.add_argument("--lambda_rd", type=float, default = 0.5 , help="Lambda for rate-distortion, 0.0 = pure MSE, above=more compression")
+
     args = parser.parse_args()
 
     model = load_model(
@@ -420,7 +589,9 @@ def main():
             q, qstep, bitwidth = quantize_tensor(
                 arr,
                 use_quant=True,
-                tensor_kind=tensor_kind
+                tensor_kind=tensor_kind,
+                mode=args.quantizer,
+                lambda_rd=args.lambda_rd
             )
 
     

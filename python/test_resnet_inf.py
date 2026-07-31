@@ -121,13 +121,13 @@ def meta_to_torch_name_vit(meta_name: str) -> str:
 def main():
     torch.set_num_threads(8)
     #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    device = "cpu"
+    device = "cuda"
     print(f"Using device: {device}")
-    imagenet_val_dir = r"C:\Users\gomes\OneDrive\Documentos\imagenet\ILSVRC\Data\CLS-LOC\val"
+    imagenet_val_dir = r"C:\Users\Jiovana\Documents\imagenet_validation"
     
     
    # === Select model ===
-    model_name = "efficientnet_b0"  # or efficientnet_b0, vit_b_16
+    model_name = "resnet50"  # or efficientnet_b0, vit_b_16
 
     if model_name == "resnet50":
         weights = models.ResNet50_Weights.IMAGENET1K_V1
@@ -160,7 +160,7 @@ def main():
     # load reconstructed tensors
     #torch.serialization.add_safe_globals([np.core.multiarray._reconstruct])
     #
-    npz = np.load("efficientnet_reconstructed.npz")
+    npz = np.load("resnet50_lambda015_reconstructed.npz")
     #npz_path = r"C:\Users\gomes\OneDrive\Documentos\GitHub\nncodec2_work\example\compression scripts\multi_model_quant_eval_run5/efficientnet_b0_reconstructed_tensors.npz"
     #npz = np.load(npz_path)
     # choose precision: 8 or 16
@@ -172,11 +172,8 @@ def main():
 
     for k in npz.files:
         # remove "param_000_" or "buffer_000_"
-        raw_name = k.split("_", 2)[-1]
-        name = meta_to_torch_name_efficient(raw_name)
-
-        arr = npz[k].astype(np.float32)
-        loaded[name] = arr
+        name = k.split("_", 2)[-1].lstrip(".")
+        loaded[name] = npz[k].astype(np.float32)
 
 
     """ for k in npz.files:
@@ -214,7 +211,7 @@ def main():
             print("WARNING: stored key not in model:", name)
 
     model.load_state_dict(sd, strict=True)
-    model.eval()
+    model.to(device).eval()
    
     print(f"Model {model_name} successfully reconstructed for {bits} bits !")
 

@@ -1,0 +1,154 @@
+numTensors 152
+
+0 class_token other 8 3 1 1 768 0.0028897521693333717
+1 conv_proj.weight weight 8 4 768 3 16 16 0.0008323164866054518
+2 conv_proj.bias bias 8 1 768 0.001485637899056434
+3 encoder.pos_embedding other 8 3 1 197 768 0.002425996129145453
+4 encoder.layers.encoder_layer_0.ln_1.weight weight 8 1 768 0.0019559887081781096
+5 encoder.layers.encoder_layer_0.ln_1.bias bias 8 1 768 0.0008679931649960095
+6 encoder.layers.encoder_layer_0.self_attention.in_proj_weight weight 8 2 2304 768 0.003420706524276613
+7 encoder.layers.encoder_layer_0.self_attention.in_proj_bias bias 8 1 2304 0.0026404614339325706
+8 encoder.layers.encoder_layer_0.self_attention.out_proj.weight weight 8 2 768 768 0.0016745281693780955
+9 encoder.layers.encoder_layer_0.self_attention.out_proj.bias bias 8 1 768 0.0010634847936675704
+10 encoder.layers.encoder_layer_0.ln_2.weight weight 8 1 768 0.008124823684413696
+11 encoder.layers.encoder_layer_0.ln_2.bias bias 8 1 768 0.0008742987356221792
+12 encoder.layers.encoder_layer_0.mlp.0.weight weight 8 2 3072 768 0.0020533232029635202
+13 encoder.layers.encoder_layer_0.mlp.0.bias bias 8 1 3072 0.0009883930821241093
+14 encoder.layers.encoder_layer_0.mlp.3.weight weight 8 2 768 3072 0.0017763199537923812
+15 encoder.layers.encoder_layer_0.mlp.3.bias bias 8 1 768 0.0007117387625120886
+16 encoder.layers.encoder_layer_1.ln_1.weight weight 8 1 768 0.002974746916338343
+17 encoder.layers.encoder_layer_1.ln_1.bias bias 8 1 768 0.0017314189647658494
+18 encoder.layers.encoder_layer_1.self_attention.in_proj_weight weight 8 2 2304 768 0.0022729804014684552
+19 encoder.layers.encoder_layer_1.self_attention.in_proj_bias bias 8 1 2304 0.0029862422991734487
+20 encoder.layers.encoder_layer_1.self_attention.out_proj.weight weight 8 2 768 768 0.0014367438905041755
+21 encoder.layers.encoder_layer_1.self_attention.out_proj.bias bias 8 1 768 0.0007738213576362145
+22 encoder.layers.encoder_layer_1.ln_2.weight weight 8 1 768 0.0049699032352083766
+23 encoder.layers.encoder_layer_1.ln_2.bias bias 8 1 768 0.0012600434487879731
+24 encoder.layers.encoder_layer_1.mlp.0.weight weight 8 2 3072 768 0.0024875240458901654
+25 encoder.layers.encoder_layer_1.mlp.0.bias bias 8 1 3072 0.0009137037891946402
+26 encoder.layers.encoder_layer_1.mlp.3.weight weight 8 2 768 3072 0.003100636244678358
+27 encoder.layers.encoder_layer_1.mlp.3.bias bias 8 1 768 0.0005199603365017057
+28 encoder.layers.encoder_layer_2.ln_1.weight weight 8 1 768 0.004914317567467781
+29 encoder.layers.encoder_layer_2.ln_1.bias bias 8 1 768 0.002221449672272731
+30 encoder.layers.encoder_layer_2.self_attention.in_proj_weight weight 8 2 2304 768 0.0024289714518429656
+31 encoder.layers.encoder_layer_2.self_attention.in_proj_bias bias 8 1 2304 0.0028710278717329236
+32 encoder.layers.encoder_layer_2.self_attention.out_proj.weight weight 8 2 768 768 0.001329984896466177
+33 encoder.layers.encoder_layer_2.self_attention.out_proj.bias bias 8 1 768 0.000757375707566639
+34 encoder.layers.encoder_layer_2.ln_2.weight weight 8 1 768 0.00668758316440917
+35 encoder.layers.encoder_layer_2.ln_2.bias bias 8 1 768 0.0015555768097010123
+36 encoder.layers.encoder_layer_2.mlp.0.weight weight 8 2 3072 768 0.0020811961492210596
+37 encoder.layers.encoder_layer_2.mlp.0.bias bias 8 1 3072 0.0009002079441413342
+38 encoder.layers.encoder_layer_2.mlp.3.weight weight 8 2 768 3072 0.0019618168687724957
+39 encoder.layers.encoder_layer_2.mlp.3.bias bias 8 1 768 0.0006179579442966928
+40 encoder.layers.encoder_layer_3.ln_1.weight weight 8 1 768 0.005527820297279601
+41 encoder.layers.encoder_layer_3.ln_1.bias bias 8 1 768 0.0025792230166454084
+42 encoder.layers.encoder_layer_3.self_attention.in_proj_weight weight 8 2 2304 768 0.002641417550476584
+43 encoder.layers.encoder_layer_3.self_attention.in_proj_bias bias 8 1 2304 0.0019465424802501815
+44 encoder.layers.encoder_layer_3.self_attention.out_proj.weight weight 8 2 768 768 0.0012023611754772956
+45 encoder.layers.encoder_layer_3.self_attention.out_proj.bias bias 8 1 768 0.000873633915917004
+46 encoder.layers.encoder_layer_3.ln_2.weight weight 8 1 768 0.0054937391905707945
+47 encoder.layers.encoder_layer_3.ln_2.bias bias 8 1 768 0.0017539636962542703
+48 encoder.layers.encoder_layer_3.mlp.0.weight weight 8 2 3072 768 0.0017446912450823492
+49 encoder.layers.encoder_layer_3.mlp.0.bias bias 8 1 3072 0.000652296278787714
+50 encoder.layers.encoder_layer_3.mlp.3.weight weight 8 2 768 3072 0.0018195920188495587
+51 encoder.layers.encoder_layer_3.mlp.3.bias bias 8 1 768 0.0005895384355587585
+52 encoder.layers.encoder_layer_4.ln_1.weight weight 8 1 768 0.004960728954122935
+53 encoder.layers.encoder_layer_4.ln_1.bias bias 8 1 768 0.0020646791780029776
+54 encoder.layers.encoder_layer_4.self_attention.in_proj_weight weight 8 2 2304 768 0.0021154830047304864
+55 encoder.layers.encoder_layer_4.self_attention.in_proj_bias bias 8 1 2304 0.001666163211792547
+56 encoder.layers.encoder_layer_4.self_attention.out_proj.weight weight 8 2 768 768 0.0021813394535982918
+57 encoder.layers.encoder_layer_4.self_attention.out_proj.bias bias 8 1 768 0.0006475557704141558
+58 encoder.layers.encoder_layer_4.ln_2.weight weight 8 1 768 0.005579413221066733
+59 encoder.layers.encoder_layer_4.ln_2.bias bias 8 1 768 0.0022896571429003726
+60 encoder.layers.encoder_layer_4.mlp.0.weight weight 8 2 3072 768 0.001585408648049345
+61 encoder.layers.encoder_layer_4.mlp.0.bias bias 8 1 3072 0.0006064868731819279
+62 encoder.layers.encoder_layer_4.mlp.3.weight weight 8 2 768 3072 0.0016022988715692645
+63 encoder.layers.encoder_layer_4.mlp.3.bias bias 8 1 768 0.00046239939661257086
+64 encoder.layers.encoder_layer_5.ln_1.weight weight 8 1 768 0.005139089739377095
+65 encoder.layers.encoder_layer_5.ln_1.bias bias 8 1 768 0.002274414550677865
+66 encoder.layers.encoder_layer_5.self_attention.in_proj_weight weight 8 2 2304 768 0.0021692436374649445
+67 encoder.layers.encoder_layer_5.self_attention.in_proj_bias bias 8 1 2304 0.0014506298335118266
+68 encoder.layers.encoder_layer_5.self_attention.out_proj.weight weight 8 2 768 768 0.0015212205361399196
+69 encoder.layers.encoder_layer_5.self_attention.out_proj.bias bias 8 1 768 0.0006129341247349933
+70 encoder.layers.encoder_layer_5.ln_2.weight weight 8 1 768 0.5500000391857558
+71 encoder.layers.encoder_layer_5.ln_2.bias bias 8 1 768 0.002358104441210233
+72 encoder.layers.encoder_layer_5.mlp.0.weight weight 8 2 3072 768 0.0017319883207419992
+73 encoder.layers.encoder_layer_5.mlp.0.bias bias 8 1 3072 0.0006695212945350075
+74 encoder.layers.encoder_layer_5.mlp.3.weight weight 8 2 768 3072 0.0020181056418557847
+75 encoder.layers.encoder_layer_5.mlp.3.bias bias 8 1 768 0.0002802137891935269
+76 encoder.layers.encoder_layer_6.ln_1.weight weight 8 1 768 0.0057027189407629015
+77 encoder.layers.encoder_layer_6.ln_1.bias bias 8 1 768 0.002109150637550473
+78 encoder.layers.encoder_layer_6.self_attention.in_proj_weight weight 8 2 2304 768 0.0018348842891061016
+79 encoder.layers.encoder_layer_6.self_attention.in_proj_bias bias 8 1 2304 0.0016937299565422765
+80 encoder.layers.encoder_layer_6.self_attention.out_proj.weight weight 8 2 768 768 0.0017076876562275472
+81 encoder.layers.encoder_layer_6.self_attention.out_proj.bias bias 8 1 768 0.000630541888876239
+82 encoder.layers.encoder_layer_6.ln_2.weight weight 8 1 768 0.5527401705153643
+83 encoder.layers.encoder_layer_6.ln_2.bias bias 8 1 768 0.0020570128727276406
+84 encoder.layers.encoder_layer_6.mlp.0.weight weight 8 2 3072 768 0.0014535674836510634
+85 encoder.layers.encoder_layer_6.mlp.0.bias bias 8 1 3072 0.0006627148955869291
+86 encoder.layers.encoder_layer_6.mlp.3.weight weight 8 2 768 3072 0.0012227684751030502
+87 encoder.layers.encoder_layer_6.mlp.3.bias bias 8 1 768 0.0005878356981448074
+88 encoder.layers.encoder_layer_7.ln_1.weight weight 8 1 768 0.004774380044737625
+89 encoder.layers.encoder_layer_7.ln_1.bias bias 8 1 768 0.002000361810817352
+90 encoder.layers.encoder_layer_7.self_attention.in_proj_weight weight 8 2 2304 768 0.0018021197730159052
+91 encoder.layers.encoder_layer_7.self_attention.in_proj_bias bias 8 1 2304 0.0016640713534659024
+92 encoder.layers.encoder_layer_7.self_attention.out_proj.weight weight 8 2 768 768 0.0009301323343909476
+93 encoder.layers.encoder_layer_7.self_attention.out_proj.bias bias 8 1 768 0.0006016398399897719
+94 encoder.layers.encoder_layer_7.ln_2.weight weight 8 1 768 0.005686143151919707
+95 encoder.layers.encoder_layer_7.ln_2.bias bias 8 1 768 0.0021766505903837406
+96 encoder.layers.encoder_layer_7.mlp.0.weight weight 8 2 3072 768 0.0012767996324413492
+97 encoder.layers.encoder_layer_7.mlp.0.bias bias 8 1 3072 0.0006247201506417402
+98 encoder.layers.encoder_layer_7.mlp.3.weight weight 8 2 768 3072 0.0013557989437405786
+99 encoder.layers.encoder_layer_7.mlp.3.bias bias 8 1 768 0.0010645454126551386
+100 encoder.layers.encoder_layer_8.ln_1.weight weight 8 1 768 0.004852769574729892
+101 encoder.layers.encoder_layer_8.ln_1.bias bias 8 1 768 0.0016775842525020132
+102 encoder.layers.encoder_layer_8.self_attention.in_proj_weight weight 8 2 2304 768 0.0019268109264032394
+103 encoder.layers.encoder_layer_8.self_attention.in_proj_bias bias 8 1 2304 0.0016344513542388816
+104 encoder.layers.encoder_layer_8.self_attention.out_proj.weight weight 8 2 768 768 0.001533207559622704
+105 encoder.layers.encoder_layer_8.self_attention.out_proj.bias bias 8 1 768 0.0023026246778990265
+106 encoder.layers.encoder_layer_8.ln_2.weight weight 8 1 768 0.00558392994629024
+107 encoder.layers.encoder_layer_8.ln_2.bias bias 8 1 768 0.0024343685172901236
+108 encoder.layers.encoder_layer_8.mlp.0.weight weight 8 2 3072 768 0.0012642330381932563
+109 encoder.layers.encoder_layer_8.mlp.0.bias bias 8 1 3072 0.0006376570458719105
+110 encoder.layers.encoder_layer_8.mlp.3.weight weight 8 2 768 3072 0.0013132067726321177
+111 encoder.layers.encoder_layer_8.mlp.3.bias bias 8 1 768 0.0007264186829472214
+112 encoder.layers.encoder_layer_9.ln_1.weight weight 8 1 768 0.004348543646446085
+113 encoder.layers.encoder_layer_9.ln_1.bias bias 8 1 768 0.001999184737339841
+114 encoder.layers.encoder_layer_9.self_attention.in_proj_weight weight 8 2 2304 768 0.0019485850370504162
+115 encoder.layers.encoder_layer_9.self_attention.in_proj_bias bias 8 1 2304 0.0021504582403111126
+116 encoder.layers.encoder_layer_9.self_attention.out_proj.weight weight 8 2 768 768 0.0011701758331609646
+117 encoder.layers.encoder_layer_9.self_attention.out_proj.bias bias 8 1 768 0.0019018447772242348
+118 encoder.layers.encoder_layer_9.ln_2.weight weight 8 1 768 0.005528211334930328
+119 encoder.layers.encoder_layer_9.ln_2.bias bias 8 1 768 0.0030206551205613705
+120 encoder.layers.encoder_layer_9.mlp.0.weight weight 8 2 3072 768 0.0012878620166850352
+121 encoder.layers.encoder_layer_9.mlp.0.bias bias 8 1 3072 0.0004861597190600125
+122 encoder.layers.encoder_layer_9.mlp.3.weight weight 8 2 768 3072 0.001123057563241812
+123 encoder.layers.encoder_layer_9.mlp.3.bias bias 8 1 768 0.0006241909035817324
+124 encoder.layers.encoder_layer_10.ln_1.weight weight 8 1 768 0.004293085753204427
+125 encoder.layers.encoder_layer_10.ln_1.bias bias 8 1 768 0.0019049533845578227
+126 encoder.layers.encoder_layer_10.self_attention.in_proj_weight weight 8 2 2304 768 0.0019135858960234826
+127 encoder.layers.encoder_layer_10.self_attention.in_proj_bias bias 8 1 2304 0.001782898305965756
+128 encoder.layers.encoder_layer_10.self_attention.out_proj.weight weight 8 2 768 768 0.0008805397225382645
+129 encoder.layers.encoder_layer_10.self_attention.out_proj.bias bias 8 1 768 0.0017042441220513752
+130 encoder.layers.encoder_layer_10.ln_2.weight weight 8 1 768 0.005317258913229609
+131 encoder.layers.encoder_layer_10.ln_2.bias bias 8 1 768 0.0027088634236163527
+132 encoder.layers.encoder_layer_10.mlp.0.weight weight 8 2 3072 768 0.001273061169591254
+133 encoder.layers.encoder_layer_10.mlp.0.bias bias 8 1 3072 0.0005127882463343751
+134 encoder.layers.encoder_layer_10.mlp.3.weight weight 8 2 768 3072 0.002280991320920763
+135 encoder.layers.encoder_layer_10.mlp.3.bias bias 8 1 768 0.0007932886638602242
+136 encoder.layers.encoder_layer_11.ln_1.weight weight 8 1 768 0.0031241934457742577
+137 encoder.layers.encoder_layer_11.ln_1.bias bias 8 1 768 0.0012870046542607328
+138 encoder.layers.encoder_layer_11.self_attention.in_proj_weight weight 8 2 2304 768 0.0014666537925757965
+139 encoder.layers.encoder_layer_11.self_attention.in_proj_bias bias 8 1 2304 0.0011710614806069437
+140 encoder.layers.encoder_layer_11.self_attention.out_proj.weight weight 8 2 768 768 0.001134771687948882
+141 encoder.layers.encoder_layer_11.self_attention.out_proj.bias bias 8 1 768 0.0019994043772689632
+142 encoder.layers.encoder_layer_11.ln_2.weight weight 8 1 768 0.005952797391557524
+143 encoder.layers.encoder_layer_11.ln_2.bias bias 8 1 768 0.001560363963366211
+144 encoder.layers.encoder_layer_11.mlp.0.weight weight 8 2 3072 768 0.001706603474027388
+145 encoder.layers.encoder_layer_11.mlp.0.bias bias 8 1 3072 0.0007120091788256823
+146 encoder.layers.encoder_layer_11.mlp.3.weight weight 8 2 768 3072 0.0022781304352875453
+147 encoder.layers.encoder_layer_11.mlp.3.bias bias 8 1 768 0.0005231001159022931
+148 encoder.ln.weight weight 8 1 768 0.008009395652756126
+149 encoder.ln.bias bias 8 1 768 0.0017604593899381651
+150 heads.head.weight weight 8 2 1000 768 0.0008996433403526418
+151 heads.head.bias bias 8 1 1000 0.0005712217493374504

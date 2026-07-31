@@ -63,13 +63,18 @@ def read_decoded_meta(path):
 
         parts = line.split()
 
-        if len(parts) < 6:
+        if len(parts) < 5:
             continue
 
         idx = int(parts[0])
         filename = parts[1]
         bw_enum = int(parts[3])
         dims = int(parts[4])
+
+        if len(parts) != 5 + dims:
+            raise RuntimeError(
+                f"Malformed line:\n{line}\nExpected {5+dims} fields, got {len(parts)}"
+            )
 
         shape = tuple(map(int, parts[5:5+dims]))
 
@@ -152,17 +157,17 @@ def normalize_b_key(k):
 # ------------------------------------------------------------
 def main():
 
-    #model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
-    model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
+    model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
+    #model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
     #model = models.vit_b_16(weights= models.ViT_B_16_Weights.IMAGENET1K_V1)
 
 
     # paths
-    folder_param = "efficientnet_tensors_decoded"
     #folder_param = "efficientnet_tensors_decoded"
-    #folder_buffer = "resnet_buffers_decoded"
+    #folder_param = "efficientnet_tensors_decoded"
+    folder_param = "resnet50_lambda015_decoded"
 
-    encoder_meta_param = "models/efficientnet_tensors.meta"
+    encoder_meta_param = "models_entropy/resnet50_lambda015/tensor.meta"
     #encoder_meta_buffer = "models/resnet_buffers.meta"
 
     qstep_param, id_to_name = read_encoder_meta(encoder_meta_param)
@@ -201,7 +206,7 @@ def main():
     all_data.update(param_data)
     all_data.update(buffer_data)
 
-    out_path = "efficientnet_reconstructed.npz"
+    out_path = "resnet50_lambda015_reconstructed.npz"
     np.savez(out_path, **all_data)
 
     print(f"\nSaved NPZ → {out_path}")

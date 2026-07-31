@@ -1,40 +1,40 @@
 numTensors 38
 
 0 tensor_0.bin 1 1 4 64 3 3 3 
-1 tensor_1.bin 1 2 1 64 
+1 tensor_1.bin 1 1 1 64 
 2 tensor_2.bin 1 1 4 64 64 3 3 
-3 tensor_3.bin 1 2 1 64 
+3 tensor_3.bin 1 1 1 64 
 4 tensor_4.bin 1 1 4 128 64 3 3 
-5 tensor_5.bin 1 2 1 128 
+5 tensor_5.bin 1 1 1 128 
 6 tensor_6.bin 1 1 4 128 128 3 3 
-7 tensor_7.bin 1 2 1 128 
+7 tensor_7.bin 1 1 1 128 
 8 tensor_8.bin 1 1 4 256 128 3 3 
-9 tensor_9.bin 1 2 1 256 
+9 tensor_9.bin 1 1 1 256 
 10 tensor_10.bin 1 1 4 256 256 3 3 
-11 tensor_11.bin 1 2 1 256 
+11 tensor_11.bin 1 1 1 256 
 12 tensor_12.bin 1 1 4 256 256 3 3 
-13 tensor_13.bin 1 2 1 256 
+13 tensor_13.bin 1 1 1 256 
 14 tensor_14.bin 1 1 4 256 256 3 3 
-15 tensor_15.bin 1 2 1 256 
+15 tensor_15.bin 1 1 1 256 
 16 tensor_16.bin 1 1 4 512 256 3 3 
-17 tensor_17.bin 1 2 1 512 
+17 tensor_17.bin 1 1 1 512 
 18 tensor_18.bin 1 1 4 512 512 3 3 
-19 tensor_19.bin 1 2 1 512 
+19 tensor_19.bin 1 1 1 512 
 20 tensor_20.bin 1 1 4 512 512 3 3 
-21 tensor_21.bin 1 2 1 512 
+21 tensor_21.bin 1 1 1 512 
 22 tensor_22.bin 1 1 4 512 512 3 3 
-23 tensor_23.bin 1 2 1 512 
+23 tensor_23.bin 1 1 1 512 
 24 tensor_24.bin 1 1 4 512 512 3 3 
-25 tensor_25.bin 1 2 1 512 
+25 tensor_25.bin 1 1 1 512 
 26 tensor_26.bin 1 1 4 512 512 3 3 
-27 tensor_27.bin 1 2 1 512 
+27 tensor_27.bin 1 1 1 512 
 28 tensor_28.bin 1 1 4 512 512 3 3 
-29 tensor_29.bin 1 2 1 512 
+29 tensor_29.bin 1 1 1 512 
 30 tensor_30.bin 1 1 4 512 512 3 3 
-31 tensor_31.bin 1 2 1 512 
+31 tensor_31.bin 1 1 1 512 
 32 tensor_32.bin 1 1 2 4096 25088 
-33 tensor_33.bin 1 2 1 4096 
+33 tensor_33.bin 1 1 1 4096 
 34 tensor_34.bin 1 1 2 4096 4096 
-35 tensor_35.bin 1 2 1 4096 
+35 tensor_35.bin 1 1 1 4096 
 36 tensor_36.bin 1 1 2 1000 4096 
-37 tensor_37.bin 1 2 1 1000 
+37 tensor_37.bin 1 1 1 1000 
