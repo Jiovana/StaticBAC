@@ -1,0 +1,314 @@
+numTensors 312
+
+0 features.0.0.weight weight 8 4 16 3 3 3 0.4225434901554975
+1 features.0.1.weight weight 8 1 16 1.0118402358130554
+2 features.0.1.bias bias 8 1 16 1.2477747978996538
+3 features.1.block.0.0.weight weight 8 4 16 1 3 3 0.3993632782891976
+4 features.1.block.0.1.weight weight 8 1 16 0.1793187511453312
+5 features.1.block.0.1.bias bias 8 1 16 0.13846508889456965
+6 features.1.block.1.0.weight weight 8 4 16 16 1 1 0.16378931023144816
+7 features.1.block.1.1.weight weight 8 1 16 1.1718796633892963
+8 features.1.block.1.1.bias bias 8 1 16 6.862544379060526e-07
+9 features.2.block.0.0.weight weight 8 4 64 16 1 1 0.16581875661324552
+10 features.2.block.0.1.weight weight 8 1 64 0.24044714991086613
+11 features.2.block.0.1.bias bias 8 1 64 0.20526012361477936
+12 features.2.block.1.0.weight weight 8 4 64 1 3 3 0.15625834722284973
+13 features.2.block.1.1.weight weight 8 1 64 0.2179981257169944
+14 features.2.block.1.1.bias bias 8 1 64 0.2124834492870258
+15 features.2.block.2.0.weight weight 8 4 24 64 1 1 0.15800148079940007
+16 features.2.block.2.1.weight weight 8 1 24 0.3716649861529954
+17 features.2.block.2.1.bias bias 8 1 24 7.077088541081391e-07
+18 features.3.block.0.0.weight weight 8 4 72 24 1 1 0.11350808910437316
+19 features.3.block.0.1.weight weight 8 1 72 0.1232340875078997
+20 features.3.block.0.1.bias bias 8 1 72 0.14879716515757954
+21 features.3.block.1.0.weight weight 8 4 72 1 3 3 0.17549972511351408
+22 features.3.block.1.1.weight weight 8 1 72 0.16410303295728884
+23 features.3.block.1.1.bias bias 8 1 72 0.23812794400128556
+24 features.3.block.2.0.weight weight 8 4 24 72 1 1 0.10420369176880462
+25 features.3.block.2.1.weight weight 8 1 24 0.32240221883312353
+26 features.3.block.2.1.bias bias 8 1 24 4.5053261397605375e-07
+27 features.4.block.0.0.weight weight 8 4 72 24 1 1 0.17883959746980352
+28 features.4.block.0.1.weight weight 8 1 72 0.31832247003582054
+29 features.4.block.0.1.bias bias 8 1 72 0.14293121443226087
+30 features.4.block.1.0.weight weight 8 4 72 1 5 5 0.10036375957814489
+31 features.4.block.1.1.weight weight 8 1 72 0.42164932817732004
+32 features.4.block.1.1.bias bias 8 1 72 0.37093324893908075
+33 features.4.block.2.fc1.weight weight 8 4 24 72 1 1 0.016272273343799357
+34 features.4.block.2.fc1.bias bias 8 1 24 0.009625904948452172
+35 features.4.block.2.fc2.weight weight 8 4 72 24 1 1 0.01630167951899997
+36 features.4.block.2.fc2.bias bias 8 1 72 0.015249485703451509
+37 features.4.block.3.0.weight weight 8 4 40 72 1 1 0.12838859555278762
+38 features.4.block.3.1.weight weight 8 1 40 0.32929203949460284
+39 features.4.block.3.1.bias bias 8 1 40 3.5258559002680505e-07
+40 features.5.block.0.0.weight weight 8 4 120 40 1 1 0.07918879491043224
+41 features.5.block.0.1.weight weight 8 1 120 0.1269394649629726
+42 features.5.block.0.1.bias bias 8 1 120 0.11781577770746188
+43 features.5.block.1.0.weight weight 8 4 120 1 5 5 0.09261023234518975
+44 features.5.block.1.1.weight weight 8 1 120 0.31050012284635625
+45 features.5.block.1.1.bias bias 8 1 120 0.129814736203818
+46 features.5.block.2.fc1.weight weight 8 4 32 120 1 1 0.07268822720510229
+47 features.5.block.2.fc1.bias bias 8 1 32 0.02529603550654269
+48 features.5.block.2.fc2.weight weight 8 4 120 32 1 1 0.07330217020420621
+49 features.5.block.2.fc2.bias bias 8 1 120 0.06387843286693966
+50 features.5.block.3.0.weight weight 8 4 40 120 1 1 0.07589870126070178
+51 features.5.block.3.1.weight weight 8 1 40 0.180779591470988
+52 features.5.block.3.1.bias bias 8 1 40 4.5739412221636516e-07
+53 features.6.block.0.0.weight weight 8 4 120 40 1 1 0.07336020598034566
+54 features.6.block.0.1.weight weight 8 1 120 0.07436414653884736
+55 features.6.block.0.1.bias bias 8 1 120 0.09170008406379379
+56 features.6.block.1.0.weight weight 8 4 120 1 5 5 0.0991467533621749
+57 features.6.block.1.1.weight weight 8 1 120 0.23969010281968012
+58 features.6.block.1.1.bias bias 8 1 120 0.18726672122380567
+59 features.6.block.2.fc1.weight weight 8 4 32 120 1 1 0.05105279283433716
+60 features.6.block.2.fc1.bias bias 8 1 32 0.010158839023801849
+61 features.6.block.2.fc2.weight weight 8 4 120 32 1 1 0.053543755661440304
+62 features.6.block.2.fc2.bias bias 8 1 120 0.04350410107403348
+63 features.6.block.3.0.weight weight 8 4 40 120 1 1 0.07394353417524521
+64 features.6.block.3.1.weight weight 8 1 40 0.43064722219034857
+65 features.6.block.3.1.bias bias 8 1 40 3.7799395644463514e-07
+66 features.7.block.0.0.weight weight 8 4 240 40 1 1 0.08728588739176242
+67 features.7.block.0.1.weight weight 8 1 240 0.30025670644984426
+68 features.7.block.0.1.bias bias 8 1 240 0.3266736727360944
+69 features.7.block.1.0.weight weight 8 4 240 1 3 3 0.07501825759738481
+70 features.7.block.1.1.weight weight 8 1 240 0.23994085867588102
+71 features.7.block.1.1.bias bias 8 1 240 0.458712266759779
+72 features.7.block.2.0.weight weight 8 4 80 240 1 1 0.06475701727943427
+73 features.7.block.2.1.weight weight 8 1 80 0.3632045980784784
+74 features.7.block.2.1.bias bias 8 1 80 5.400877407094602e-07
+75 features.8.block.0.0.weight weight 8 4 200 80 1 1 0.04062810262330266
+76 features.8.block.0.1.weight weight 8 1 200 0.08981628571422443
+77 features.8.block.0.1.bias bias 8 1 200 0.17864646251884372
+78 features.8.block.1.0.weight weight 8 4 200 1 3 3 0.09018269235153548
+79 features.8.block.1.1.weight weight 8 1 200 0.20710643321242866
+80 features.8.block.1.1.bias bias 8 1 200 0.45061070703391154
+81 features.8.block.2.0.weight weight 8 4 80 200 1 1 0.03942887157336805
+82 features.8.block.2.1.weight weight 8 1 80 0.25089481363203703
+83 features.8.block.2.1.bias bias 8 1 80 5.746896383621184e-07
+84 features.9.block.0.0.weight weight 8 4 184 80 1 1 0.04105637757246647
+85 features.9.block.0.1.weight weight 8 1 184 0.18318965213474245
+86 features.9.block.0.1.bias bias 8 1 184 0.11700442698884707
+87 features.9.block.1.0.weight weight 8 4 184 1 3 3 0.09983155178304694
+88 features.9.block.1.1.weight weight 8 1 184 0.27968986049339256
+89 features.9.block.1.1.bias bias 8 1 184 1.3059633859742363
+90 features.9.block.2.0.weight weight 8 4 80 184 1 1 0.037942323394451194
+91 features.9.block.2.1.weight weight 8 1 80 0.13334632339562114
+92 features.9.block.2.1.bias bias 8 1 80 5.127166690258364e-07
+93 features.10.block.0.0.weight weight 8 4 184 80 1 1 0.04247218426223092
+94 features.10.block.0.1.weight weight 8 1 184 0.20532153400437153
+95 features.10.block.0.1.bias bias 8 1 184 0.20197337873953464
+96 features.10.block.1.0.weight weight 8 4 184 1 3 3 0.08998647838305668
+97 features.10.block.1.1.weight weight 8 1 184 0.2324702227671647
+98 features.10.block.1.1.bias bias 8 1 184 0.3136243859788677
+99 features.10.block.2.0.weight weight 8 4 80 184 1 1 0.04080200696571337
+100 features.10.block.2.1.weight weight 8 1 80 0.13333630470356603
+101 features.10.block.2.1.bias bias 8 1 80 4.4192813724519016e-07
+102 features.11.block.0.0.weight weight 8 4 480 80 1 1 0.058522821508719104
+103 features.11.block.0.1.weight weight 8 1 480 0.20282272685145897
+104 features.11.block.0.1.bias bias 8 1 480 0.18520342410316754
+105 features.11.block.1.0.weight weight 8 4 480 1 3 3 0.09141517844152522
+106 features.11.block.1.1.weight weight 8 1 480 0.4013020047590752
+107 features.11.block.1.1.bias bias 8 1 480 0.16657582481561298
+108 features.11.block.2.fc1.weight weight 8 4 120 480 1 1 0.030895602968545537
+109 features.11.block.2.fc1.bias bias 8 1 120 0.029279234980903984
+110 features.11.block.2.fc2.weight weight 8 4 480 120 1 1 0.03490839266454941
+111 features.11.block.2.fc2.bias bias 8 1 480 0.042375830966306066
+112 features.11.block.3.0.weight weight 8 4 112 480 1 1 0.05074824697416662
+113 features.11.block.3.1.weight weight 8 1 112 0.18898201067529014
+114 features.11.block.3.1.bias bias 8 1 112 3.548077080209435e-07
+115 features.12.block.0.0.weight weight 8 4 672 112 1 1 0.04001478674032857
+116 features.12.block.0.1.weight weight 8 1 672 0.22743436219339092
+117 features.12.block.0.1.bias bias 8 1 672 0.188806372460539
+118 features.12.block.1.0.weight weight 8 4 672 1 3 3 0.07943952960494474
+119 features.12.block.1.1.weight weight 8 1 672 0.3507323945088225
+120 features.12.block.1.1.bias bias 8 1 672 0.14076829060512014
+121 features.12.block.2.fc1.weight weight 8 4 168 672 1 1 0.029604663355821834
+122 features.12.block.2.fc1.bias bias 8 1 168 0.053300351190014444
+123 features.12.block.2.fc2.weight weight 8 4 672 168 1 1 0.03276260254136732
+124 features.12.block.2.fc2.bias bias 8 1 672 0.0501190046278709
+125 features.12.block.3.0.weight weight 8 4 112 672 1 1 0.036877210999399584
+126 features.12.block.3.1.weight weight 8 1 112 0.20842421160743707
+127 features.12.block.3.1.bias bias 8 1 112 4.5537456182504954e-07
+128 features.13.block.0.0.weight weight 8 4 672 112 1 1 0.04612011069777443
+129 features.13.block.0.1.weight weight 8 1 672 0.27421329863907723
+130 features.13.block.0.1.bias bias 8 1 672 0.42691520610678596
+131 features.13.block.1.0.weight weight 8 4 672 1 5 5 0.04977246921959287
+132 features.13.block.1.1.weight weight 8 1 672 0.35862646372285467
+133 features.13.block.1.1.bias bias 8 1 672 0.16481281861928326
+134 features.13.block.2.fc1.weight weight 8 4 168 672 1 1 0.028177154511445382
+135 features.13.block.2.fc1.bias bias 8 1 168 0.021272368296490145
+136 features.13.block.2.fc2.weight weight 8 4 672 168 1 1 0.03016608682887599
+137 features.13.block.2.fc2.bias bias 8 1 672 0.06552775481502399
+138 features.13.block.3.0.weight weight 8 4 160 672 1 1 0.0442378391749237
+139 features.13.block.3.1.weight weight 8 1 160 0.21553065832878088
+140 features.13.block.3.1.bias bias 8 1 160 4.4711723964324454e-07
+141 features.14.block.0.0.weight weight 8 4 960 160 1 1 0.03410970472864008
+142 features.14.block.0.1.weight weight 8 1 960 0.21595719044651857
+143 features.14.block.0.1.bias bias 8 1 960 0.13819135881299083
+144 features.14.block.1.0.weight weight 8 4 960 1 5 5 0.04557431718090255
+145 features.14.block.1.1.weight weight 8 1 960 0.46040511105436094
+146 features.14.block.1.1.bias bias 8 1 960 0.16148664130742552
+147 features.14.block.2.fc1.weight weight 8 4 240 960 1 1 0.026011870670124684
+148 features.14.block.2.fc1.bias bias 8 1 240 0.03501487722456716
+149 features.14.block.2.fc2.weight weight 8 4 960 240 1 1 0.028973108735607246
+150 features.14.block.2.fc2.bias bias 8 1 960 0.06078881055841037
+151 features.14.block.3.0.weight weight 8 4 160 960 1 1 0.03337633652965234
+152 features.14.block.3.1.weight weight 8 1 160 0.20006466114761773
+153 features.14.block.3.1.bias bias 8 1 160 3.68393899283562e-07
+154 features.15.block.0.0.weight weight 8 4 960 160 1 1 0.038459477554648513
+155 features.15.block.0.1.weight weight 8 1 960 0.244423748075267
+156 features.15.block.0.1.bias bias 8 1 960 0.2901892165562997
+157 features.15.block.1.0.weight weight 8 4 960 1 5 5 0.03430728905634728
+158 features.15.block.1.1.weight weight 8 1 960 0.4575958253934325
+159 features.15.block.1.1.bias bias 8 1 960 0.08915682825128653
+160 features.15.block.2.fc1.weight weight 8 4 240 960 1 1 0.02943118447122636
+161 features.15.block.2.fc1.bias bias 8 1 240 0.046391333237024365
+162 features.15.block.2.fc2.weight weight 8 4 960 240 1 1 0.03199718348334965
+163 features.15.block.2.fc2.bias bias 8 1 960 0.054382831095633126
+164 features.15.block.3.0.weight weight 8 4 160 960 1 1 0.03693021636575343
+165 features.15.block.3.1.weight weight 8 1 160 0.2851561996881242
+166 features.15.block.3.1.bias bias 8 1 160 3.7150152909844534e-07
+167 features.16.0.weight weight 8 4 960 160 1 1 0.04100900661668438
+168 features.16.1.weight weight 8 1 960 0.7892520392482201
+169 features.16.1.bias bias 8 1 960 0.4408734402950519
+170 classifier.0.weight weight 8 2 1280 960 0.03516086044406075
+171 classifier.0.bias bias 8 1 1280 0.05701472174307794
+172 classifier.3.weight weight 8 2 1000 1280 0.03175773428458274
+173 classifier.3.bias bias 8 1 1000 0.10137118633622924
+174 features.0.1.running_mean buffer 32 1 16 1.0
+175 features.0.1.running_var buffer 32 1 16 1.0
+176 features.0.1.num_batches_tracked buffer 32 0  1.0
+177 features.1.block.0.1.running_mean buffer 32 1 16 1.0
+178 features.1.block.0.1.running_var buffer 32 1 16 1.0
+179 features.1.block.0.1.num_batches_tracked buffer 32 0  1.0
+180 features.1.block.1.1.running_mean buffer 32 1 16 1.0
+181 features.1.block.1.1.running_var buffer 32 1 16 1.0
+182 features.1.block.1.1.num_batches_tracked buffer 32 0  1.0
+183 features.2.block.0.1.running_mean buffer 32 1 64 1.0
+184 features.2.block.0.1.running_var buffer 32 1 64 1.0
+185 features.2.block.0.1.num_batches_tracked buffer 32 0  1.0
+186 features.2.block.1.1.running_mean buffer 32 1 64 1.0
+187 features.2.block.1.1.running_var buffer 32 1 64 1.0
+188 features.2.block.1.1.num_batches_tracked buffer 32 0  1.0
+189 features.2.block.2.1.running_mean buffer 32 1 24 1.0
+190 features.2.block.2.1.running_var buffer 32 1 24 1.0
+191 features.2.block.2.1.num_batches_tracked buffer 32 0  1.0
+192 features.3.block.0.1.running_mean buffer 32 1 72 1.0
+193 features.3.block.0.1.running_var buffer 32 1 72 1.0
+194 features.3.block.0.1.num_batches_tracked buffer 32 0  1.0
+195 features.3.block.1.1.running_mean buffer 32 1 72 1.0
+196 features.3.block.1.1.running_var buffer 32 1 72 1.0
+197 features.3.block.1.1.num_batches_tracked buffer 32 0  1.0
+198 features.3.block.2.1.running_mean buffer 32 1 24 1.0
+199 features.3.block.2.1.running_var buffer 32 1 24 1.0
+200 features.3.block.2.1.num_batches_tracked buffer 32 0  1.0
+201 features.4.block.0.1.running_mean buffer 32 1 72 1.0
+202 features.4.block.0.1.running_var buffer 32 1 72 1.0
+203 features.4.block.0.1.num_batches_tracked buffer 32 0  1.0
+204 features.4.block.1.1.running_mean buffer 32 1 72 1.0
+205 features.4.block.1.1.running_var buffer 32 1 72 1.0
+206 features.4.block.1.1.num_batches_tracked buffer 32 0  1.0
+207 features.4.block.3.1.running_mean buffer 32 1 40 1.0
+208 features.4.block.3.1.running_var buffer 32 1 40 1.0
+209 features.4.block.3.1.num_batches_tracked buffer 32 0  1.0
+210 features.5.block.0.1.running_mean buffer 32 1 120 1.0
+211 features.5.block.0.1.running_var buffer 32 1 120 1.0
+212 features.5.block.0.1.num_batches_tracked buffer 32 0  1.0
+213 features.5.block.1.1.running_mean buffer 32 1 120 1.0
+214 features.5.block.1.1.running_var buffer 32 1 120 1.0
+215 features.5.block.1.1.num_batches_tracked buffer 32 0  1.0
+216 features.5.block.3.1.running_mean buffer 32 1 40 1.0
+217 features.5.block.3.1.running_var buffer 32 1 40 1.0
+218 features.5.block.3.1.num_batches_tracked buffer 32 0  1.0
+219 features.6.block.0.1.running_mean buffer 32 1 120 1.0
+220 features.6.block.0.1.running_var buffer 32 1 120 1.0
+221 features.6.block.0.1.num_batches_tracked buffer 32 0  1.0
+222 features.6.block.1.1.running_mean buffer 32 1 120 1.0
+223 features.6.block.1.1.running_var buffer 32 1 120 1.0
+224 features.6.block.1.1.num_batches_tracked buffer 32 0  1.0
+225 features.6.block.3.1.running_mean buffer 32 1 40 1.0
+226 features.6.block.3.1.running_var buffer 32 1 40 1.0
+227 features.6.block.3.1.num_batches_tracked buffer 32 0  1.0
+228 features.7.block.0.1.running_mean buffer 32 1 240 1.0
+229 features.7.block.0.1.running_var buffer 32 1 240 1.0
+230 features.7.block.0.1.num_batches_tracked buffer 32 0  1.0
+231 features.7.block.1.1.running_mean buffer 32 1 240 1.0
+232 features.7.block.1.1.running_var buffer 32 1 240 1.0
+233 features.7.block.1.1.num_batches_tracked buffer 32 0  1.0
+234 features.7.block.2.1.running_mean buffer 32 1 80 1.0
+235 features.7.block.2.1.running_var buffer 32 1 80 1.0
+236 features.7.block.2.1.num_batches_tracked buffer 32 0  1.0
+237 features.8.block.0.1.running_mean buffer 32 1 200 1.0
+238 features.8.block.0.1.running_var buffer 32 1 200 1.0
+239 features.8.block.0.1.num_batches_tracked buffer 32 0  1.0
+240 features.8.block.1.1.running_mean buffer 32 1 200 1.0
+241 features.8.block.1.1.running_var buffer 32 1 200 1.0
+242 features.8.block.1.1.num_batches_tracked buffer 32 0  1.0
+243 features.8.block.2.1.running_mean buffer 32 1 80 1.0
+244 features.8.block.2.1.running_var buffer 32 1 80 1.0
+245 features.8.block.2.1.num_batches_tracked buffer 32 0  1.0
+246 features.9.block.0.1.running_mean buffer 32 1 184 1.0
+247 features.9.block.0.1.running_var buffer 32 1 184 1.0
+248 features.9.block.0.1.num_batches_tracked buffer 32 0  1.0
+249 features.9.block.1.1.running_mean buffer 32 1 184 1.0
+250 features.9.block.1.1.running_var buffer 32 1 184 1.0
+251 features.9.block.1.1.num_batches_tracked buffer 32 0  1.0
+252 features.9.block.2.1.running_mean buffer 32 1 80 1.0
+253 features.9.block.2.1.running_var buffer 32 1 80 1.0
+254 features.9.block.2.1.num_batches_tracked buffer 32 0  1.0
+255 features.10.block.0.1.running_mean buffer 32 1 184 1.0
+256 features.10.block.0.1.running_var buffer 32 1 184 1.0
+257 features.10.block.0.1.num_batches_tracked buffer 32 0  1.0
+258 features.10.block.1.1.running_mean buffer 32 1 184 1.0
+259 features.10.block.1.1.running_var buffer 32 1 184 1.0
+260 features.10.block.1.1.num_batches_tracked buffer 32 0  1.0
+261 features.10.block.2.1.running_mean buffer 32 1 80 1.0
+262 features.10.block.2.1.running_var buffer 32 1 80 1.0
+263 features.10.block.2.1.num_batches_tracked buffer 32 0  1.0
+264 features.11.block.0.1.running_mean buffer 32 1 480 1.0
+265 features.11.block.0.1.running_var buffer 32 1 480 1.0
+266 features.11.block.0.1.num_batches_tracked buffer 32 0  1.0
+267 features.11.block.1.1.running_mean buffer 32 1 480 1.0
+268 features.11.block.1.1.running_var buffer 32 1 480 1.0
+269 features.11.block.1.1.num_batches_tracked buffer 32 0  1.0
+270 features.11.block.3.1.running_mean buffer 32 1 112 1.0
+271 features.11.block.3.1.running_var buffer 32 1 112 1.0
+272 features.11.block.3.1.num_batches_tracked buffer 32 0  1.0
+273 features.12.block.0.1.running_mean buffer 32 1 672 1.0
+274 features.12.block.0.1.running_var buffer 32 1 672 1.0
+275 features.12.block.0.1.num_batches_tracked buffer 32 0  1.0
+276 features.12.block.1.1.running_mean buffer 32 1 672 1.0
+277 features.12.block.1.1.running_var buffer 32 1 672 1.0
+278 features.12.block.1.1.num_batches_tracked buffer 32 0  1.0
+279 features.12.block.3.1.running_mean buffer 32 1 112 1.0
+280 features.12.block.3.1.running_var buffer 32 1 112 1.0
+281 features.12.block.3.1.num_batches_tracked buffer 32 0  1.0
+282 features.13.block.0.1.running_mean buffer 32 1 672 1.0
+283 features.13.block.0.1.running_var buffer 32 1 672 1.0
+284 features.13.block.0.1.num_batches_tracked buffer 32 0  1.0
+285 features.13.block.1.1.running_mean buffer 32 1 672 1.0
+286 features.13.block.1.1.running_var buffer 32 1 672 1.0
+287 features.13.block.1.1.num_batches_tracked buffer 32 0  1.0
+288 features.13.block.3.1.running_mean buffer 32 1 160 1.0
+289 features.13.block.3.1.running_var buffer 32 1 160 1.0
+290 features.13.block.3.1.num_batches_tracked buffer 32 0  1.0
+291 features.14.block.0.1.running_mean buffer 32 1 960 1.0
+292 features.14.block.0.1.running_var buffer 32 1 960 1.0
+293 features.14.block.0.1.num_batches_tracked buffer 32 0  1.0
+294 features.14.block.1.1.running_mean buffer 32 1 960 1.0
+295 features.14.block.1.1.running_var buffer 32 1 960 1.0
+296 features.14.block.1.1.num_batches_tracked buffer 32 0  1.0
+297 features.14.block.3.1.running_mean buffer 32 1 160 1.0
+298 features.14.block.3.1.running_var buffer 32 1 160 1.0
+299 features.14.block.3.1.num_batches_tracked buffer 32 0  1.0
+300 features.15.block.0.1.running_mean buffer 32 1 960 1.0
+301 features.15.block.0.1.running_var buffer 32 1 960 1.0
+302 features.15.block.0.1.num_batches_tracked buffer 32 0  1.0
+303 features.15.block.1.1.running_mean buffer 32 1 960 1.0
+304 features.15.block.1.1.running_var buffer 32 1 960 1.0
+305 features.15.block.1.1.num_batches_tracked buffer 32 0  1.0
+306 features.15.block.3.1.running_mean buffer 32 1 160 1.0
+307 features.15.block.3.1.running_var buffer 32 1 160 1.0
+308 features.15.block.3.1.num_batches_tracked buffer 32 0  1.0
+309 features.16.1.running_mean buffer 32 1 960 1.0
+310 features.16.1.running_var buffer 32 1 960 1.0
+311 features.16.1.num_batches_tracked buffer 32 0  1.0

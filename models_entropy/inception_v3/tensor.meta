@@ -1,0 +1,582 @@
+numTensors 580
+
+0 Conv2d_1a_3x3.conv.weight weight 8 4 32 3 3 3 0.03945050408876738
+1 Conv2d_1a_3x3.bn.weight weight 8 1 32 1.0
+2 Conv2d_1a_3x3.bn.bias bias 8 1 32 0.42004055683170927
+3 Conv2d_2a_3x3.conv.weight weight 8 4 32 32 3 3 0.05210144427212908
+4 Conv2d_2a_3x3.bn.weight weight 8 1 32 1.0
+5 Conv2d_2a_3x3.bn.bias bias 8 1 32 0.35442029594495716
+6 Conv2d_2b_3x3.conv.weight weight 8 4 64 32 3 3 0.03935804137196025
+7 Conv2d_2b_3x3.bn.weight weight 8 1 64 1.0
+8 Conv2d_2b_3x3.bn.bias bias 8 1 64 0.35924161803653926
+9 Conv2d_3b_1x1.conv.weight weight 8 4 80 64 1 1 0.05873252064244573
+10 Conv2d_3b_1x1.bn.weight weight 8 1 80 1.0
+11 Conv2d_3b_1x1.bn.bias bias 8 1 80 0.30087511871285577
+12 Conv2d_4a_3x3.conv.weight weight 8 4 192 80 3 3 0.018787207501047558
+13 Conv2d_4a_3x3.bn.weight weight 8 1 192 1.0
+14 Conv2d_4a_3x3.bn.bias bias 8 1 192 0.4098202422863514
+15 Mixed_5b.branch1x1.conv.weight weight 8 4 64 192 1 1 0.03221363571441714
+16 Mixed_5b.branch1x1.bn.weight weight 8 1 64 1.0
+17 Mixed_5b.branch1x1.bn.bias bias 8 1 64 0.5221836952534314
+18 Mixed_5b.branch5x5_1.conv.weight weight 8 4 48 192 1 1 0.022929613914939417
+19 Mixed_5b.branch5x5_1.bn.weight weight 8 1 48 1.0
+20 Mixed_5b.branch5x5_1.bn.bias bias 8 1 48 0.2422011165986268
+21 Mixed_5b.branch5x5_2.conv.weight weight 8 4 64 48 5 5 0.01286661775601149
+22 Mixed_5b.branch5x5_2.bn.weight weight 8 1 64 1.0
+23 Mixed_5b.branch5x5_2.bn.bias bias 8 1 64 0.3532500074558605
+24 Mixed_5b.branch3x3dbl_1.conv.weight weight 8 4 64 192 1 1 0.024763132117347167
+25 Mixed_5b.branch3x3dbl_1.bn.weight weight 8 1 64 1.0
+26 Mixed_5b.branch3x3dbl_1.bn.bias bias 8 1 64 0.32641706551089544
+27 Mixed_5b.branch3x3dbl_2.conv.weight weight 8 4 96 64 3 3 0.014309880864293564
+28 Mixed_5b.branch3x3dbl_2.bn.weight weight 8 1 96 1.0
+29 Mixed_5b.branch3x3dbl_2.bn.bias bias 8 1 96 0.2545638090595227
+30 Mixed_5b.branch3x3dbl_3.conv.weight weight 8 4 96 96 3 3 0.01154939849029498
+31 Mixed_5b.branch3x3dbl_3.bn.weight weight 8 1 96 1.0
+32 Mixed_5b.branch3x3dbl_3.bn.bias bias 8 1 96 0.29792237080442824
+33 Mixed_5b.branch_pool.conv.weight weight 8 4 32 192 1 1 0.02556257427049511
+34 Mixed_5b.branch_pool.bn.weight weight 8 1 32 1.0
+35 Mixed_5b.branch_pool.bn.bias bias 8 1 32 0.18937964633730142
+36 Mixed_5c.branch1x1.conv.weight weight 8 4 64 256 1 1 0.027933387626869498
+37 Mixed_5c.branch1x1.bn.weight weight 8 1 64 1.0
+38 Mixed_5c.branch1x1.bn.bias bias 8 1 64 0.8811713855740588
+39 Mixed_5c.branch5x5_1.conv.weight weight 8 4 48 256 1 1 0.020928949187975124
+40 Mixed_5c.branch5x5_1.bn.weight weight 8 1 48 1.0
+41 Mixed_5c.branch5x5_1.bn.bias bias 8 1 48 0.22444700869047218
+42 Mixed_5c.branch5x5_2.conv.weight weight 8 4 64 48 5 5 0.010635145878624068
+43 Mixed_5c.branch5x5_2.bn.weight weight 8 1 64 1.0
+44 Mixed_5c.branch5x5_2.bn.bias bias 8 1 64 0.2626317791372995
+45 Mixed_5c.branch3x3dbl_1.conv.weight weight 8 4 64 256 1 1 0.018634812723347993
+46 Mixed_5c.branch3x3dbl_1.bn.weight weight 8 1 64 1.0
+47 Mixed_5c.branch3x3dbl_1.bn.bias bias 8 1 64 0.21857925487901153
+48 Mixed_5c.branch3x3dbl_2.conv.weight weight 8 4 96 64 3 3 0.0131352643179188
+49 Mixed_5c.branch3x3dbl_2.bn.weight weight 8 1 96 1.0
+50 Mixed_5c.branch3x3dbl_2.bn.bias bias 8 1 96 0.3026459686732752
+51 Mixed_5c.branch3x3dbl_3.conv.weight weight 8 4 96 96 3 3 0.01091979042640296
+52 Mixed_5c.branch3x3dbl_3.bn.weight weight 8 1 96 1.0
+53 Mixed_5c.branch3x3dbl_3.bn.bias bias 8 1 96 0.27030728636902124
+54 Mixed_5c.branch_pool.conv.weight weight 8 4 64 256 1 1 0.01822438467984347
+55 Mixed_5c.branch_pool.bn.weight weight 8 1 64 1.0
+56 Mixed_5c.branch_pool.bn.bias bias 8 1 64 0.2947992543693009
+57 Mixed_5d.branch1x1.conv.weight weight 8 4 64 288 1 1 0.026580687640631352
+58 Mixed_5d.branch1x1.bn.weight weight 8 1 64 1.0
+59 Mixed_5d.branch1x1.bn.bias bias 8 1 64 0.30524837977670877
+60 Mixed_5d.branch5x5_1.conv.weight weight 8 4 48 288 1 1 0.023044000871935616
+61 Mixed_5d.branch5x5_1.bn.weight weight 8 1 48 1.0
+62 Mixed_5d.branch5x5_1.bn.bias bias 8 1 48 0.16104080614695354
+63 Mixed_5d.branch5x5_2.conv.weight weight 8 4 64 48 5 5 0.01340998303524174
+64 Mixed_5d.branch5x5_2.bn.weight weight 8 1 64 1.0
+65 Mixed_5d.branch5x5_2.bn.bias bias 8 1 64 0.28130943048762785
+66 Mixed_5d.branch3x3dbl_1.conv.weight weight 8 4 64 288 1 1 0.01992451252048772
+67 Mixed_5d.branch3x3dbl_1.bn.weight weight 8 1 64 1.0
+68 Mixed_5d.branch3x3dbl_1.bn.bias bias 8 1 64 0.20393995617622485
+69 Mixed_5d.branch3x3dbl_2.conv.weight weight 8 4 96 64 3 3 0.014968924981015572
+70 Mixed_5d.branch3x3dbl_2.bn.weight weight 8 1 96 1.0
+71 Mixed_5d.branch3x3dbl_2.bn.bias bias 8 1 96 0.29238926010240096
+72 Mixed_5d.branch3x3dbl_3.conv.weight weight 8 4 96 96 3 3 0.013008181968863448
+73 Mixed_5d.branch3x3dbl_3.bn.weight weight 8 1 96 1.0
+74 Mixed_5d.branch3x3dbl_3.bn.bias bias 8 1 96 0.21857886484846772
+75 Mixed_5d.branch_pool.conv.weight weight 8 4 64 288 1 1 0.021589297515251446
+76 Mixed_5d.branch_pool.bn.weight weight 8 1 64 1.0
+77 Mixed_5d.branch_pool.bn.bias bias 8 1 64 0.30241629138511195
+78 Mixed_6a.branch3x3.conv.weight weight 8 4 384 288 3 3 0.0057414658165282975
+79 Mixed_6a.branch3x3.bn.weight weight 8 1 384 1.0
+80 Mixed_6a.branch3x3.bn.bias bias 8 1 384 0.20455870383198574
+81 Mixed_6a.branch3x3dbl_1.conv.weight weight 8 4 64 288 1 1 0.019063726464897297
+82 Mixed_6a.branch3x3dbl_1.bn.weight weight 8 1 64 1.0
+83 Mixed_6a.branch3x3dbl_1.bn.bias bias 8 1 64 0.16197252113312227
+84 Mixed_6a.branch3x3dbl_2.conv.weight weight 8 4 96 64 3 3 0.012410256717413746
+85 Mixed_6a.branch3x3dbl_2.bn.weight weight 8 1 96 1.0
+86 Mixed_6a.branch3x3dbl_2.bn.bias bias 8 1 96 0.3929515889988655
+87 Mixed_6a.branch3x3dbl_3.conv.weight weight 8 4 96 96 3 3 0.00958979629366118
+88 Mixed_6a.branch3x3dbl_3.bn.weight weight 8 1 96 1.0
+89 Mixed_6a.branch3x3dbl_3.bn.bias bias 8 1 96 0.1583522864191148
+90 Mixed_6b.branch1x1.conv.weight weight 8 4 192 768 1 1 0.015095613898977116
+91 Mixed_6b.branch1x1.bn.weight weight 8 1 192 1.0
+92 Mixed_6b.branch1x1.bn.bias bias 8 1 192 0.16648659024541884
+93 Mixed_6b.branch7x7_1.conv.weight weight 8 4 128 768 1 1 0.012067506349111315
+94 Mixed_6b.branch7x7_1.bn.weight weight 8 1 128 1.0
+95 Mixed_6b.branch7x7_1.bn.bias bias 8 1 128 0.21324009586452647
+96 Mixed_6b.branch7x7_2.conv.weight weight 8 4 128 128 1 7 0.011833792347387288
+97 Mixed_6b.branch7x7_2.bn.weight weight 8 1 128 1.0
+98 Mixed_6b.branch7x7_2.bn.bias bias 8 1 128 0.12131680386382598
+99 Mixed_6b.branch7x7_3.conv.weight weight 8 4 192 128 7 1 0.011261934506590986
+100 Mixed_6b.branch7x7_3.bn.weight weight 8 1 192 1.0
+101 Mixed_6b.branch7x7_3.bn.bias bias 8 1 192 0.2995935452247027
+102 Mixed_6b.branch7x7dbl_1.conv.weight weight 8 4 128 768 1 1 0.00982775980449945
+103 Mixed_6b.branch7x7dbl_1.bn.weight weight 8 1 128 1.0
+104 Mixed_6b.branch7x7dbl_1.bn.bias bias 8 1 128 0.2063684490329831
+105 Mixed_6b.branch7x7dbl_2.conv.weight weight 8 4 128 128 7 1 0.009237330996118669
+106 Mixed_6b.branch7x7dbl_2.bn.weight weight 8 1 128 1.0
+107 Mixed_6b.branch7x7dbl_2.bn.bias bias 8 1 128 0.21085512619865776
+108 Mixed_6b.branch7x7dbl_3.conv.weight weight 8 4 128 128 1 7 0.009320508285080078
+109 Mixed_6b.branch7x7dbl_3.bn.weight weight 8 1 128 1.0
+110 Mixed_6b.branch7x7dbl_3.bn.bias bias 8 1 128 0.22477957197672466
+111 Mixed_6b.branch7x7dbl_4.conv.weight weight 8 4 128 128 7 1 0.009508706753311773
+112 Mixed_6b.branch7x7dbl_4.bn.weight weight 8 1 128 1.0
+113 Mixed_6b.branch7x7dbl_4.bn.bias bias 8 1 128 0.18873776112985693
+114 Mixed_6b.branch7x7dbl_5.conv.weight weight 8 4 192 128 1 7 0.008479604209912308
+115 Mixed_6b.branch7x7dbl_5.bn.weight weight 8 1 192 1.0
+116 Mixed_6b.branch7x7dbl_5.bn.bias bias 8 1 192 0.3635226120172246
+117 Mixed_6b.branch_pool.conv.weight weight 8 4 192 768 1 1 0.012391036138623128
+118 Mixed_6b.branch_pool.bn.weight weight 8 1 192 1.0
+119 Mixed_6b.branch_pool.bn.bias bias 8 1 192 0.3131885875529831
+120 Mixed_6c.branch1x1.conv.weight weight 8 4 192 768 1 1 0.01584062435174069
+121 Mixed_6c.branch1x1.bn.weight weight 8 1 192 1.0
+122 Mixed_6c.branch1x1.bn.bias bias 8 1 192 0.15595596193627542
+123 Mixed_6c.branch7x7_1.conv.weight weight 8 4 160 768 1 1 0.012576581652182698
+124 Mixed_6c.branch7x7_1.bn.weight weight 8 1 160 1.0
+125 Mixed_6c.branch7x7_1.bn.bias bias 8 1 160 0.32238606934535335
+126 Mixed_6c.branch7x7_2.conv.weight weight 8 4 160 160 1 7 0.010257135661215213
+127 Mixed_6c.branch7x7_2.bn.weight weight 8 1 160 1.0
+128 Mixed_6c.branch7x7_2.bn.bias bias 8 1 160 0.18250109429810246
+129 Mixed_6c.branch7x7_3.conv.weight weight 8 4 192 160 7 1 0.01038066859378253
+130 Mixed_6c.branch7x7_3.bn.weight weight 8 1 192 1.0
+131 Mixed_6c.branch7x7_3.bn.bias bias 8 1 192 0.24271689293618443
+132 Mixed_6c.branch7x7dbl_1.conv.weight weight 8 4 160 768 1 1 0.010686939297008684
+133 Mixed_6c.branch7x7dbl_1.bn.weight weight 8 1 160 1.0
+134 Mixed_6c.branch7x7dbl_1.bn.bias bias 8 1 160 0.2770865654117197
+135 Mixed_6c.branch7x7dbl_2.conv.weight weight 8 4 160 160 7 1 0.008076400857710064
+136 Mixed_6c.branch7x7dbl_2.bn.weight weight 8 1 160 1.0
+137 Mixed_6c.branch7x7dbl_2.bn.bias bias 8 1 160 0.22967383698985816
+138 Mixed_6c.branch7x7dbl_3.conv.weight weight 8 4 160 160 1 7 0.007742931766174249
+139 Mixed_6c.branch7x7dbl_3.bn.weight weight 8 1 160 1.0
+140 Mixed_6c.branch7x7dbl_3.bn.bias bias 8 1 160 0.22145575291859362
+141 Mixed_6c.branch7x7dbl_4.conv.weight weight 8 4 160 160 7 1 0.007678928159766449
+142 Mixed_6c.branch7x7dbl_4.bn.weight weight 8 1 160 1.0
+143 Mixed_6c.branch7x7dbl_4.bn.bias bias 8 1 160 0.19653759107271768
+144 Mixed_6c.branch7x7dbl_5.conv.weight weight 8 4 192 160 1 7 0.007327609349549442
+145 Mixed_6c.branch7x7dbl_5.bn.weight weight 8 1 192 1.0
+146 Mixed_6c.branch7x7dbl_5.bn.bias bias 8 1 192 0.3470413281187822
+147 Mixed_6c.branch_pool.conv.weight weight 8 4 192 768 1 1 0.013602103526818404
+148 Mixed_6c.branch_pool.bn.weight weight 8 1 192 1.0
+149 Mixed_6c.branch_pool.bn.bias bias 8 1 192 0.2989177032049848
+150 Mixed_6d.branch1x1.conv.weight weight 8 4 192 768 1 1 0.015379779957392831
+151 Mixed_6d.branch1x1.bn.weight weight 8 1 192 1.0
+152 Mixed_6d.branch1x1.bn.bias bias 8 1 192 0.2067457438736986
+153 Mixed_6d.branch7x7_1.conv.weight weight 8 4 160 768 1 1 0.012214151775293166
+154 Mixed_6d.branch7x7_1.bn.weight weight 8 1 160 1.0
+155 Mixed_6d.branch7x7_1.bn.bias bias 8 1 160 0.2938677058503187
+156 Mixed_6d.branch7x7_2.conv.weight weight 8 4 160 160 1 7 0.009783751601531682
+157 Mixed_6d.branch7x7_2.bn.weight weight 8 1 160 1.0
+158 Mixed_6d.branch7x7_2.bn.bias bias 8 1 160 0.201883961461917
+159 Mixed_6d.branch7x7_3.conv.weight weight 8 4 192 160 7 1 0.010029072113363886
+160 Mixed_6d.branch7x7_3.bn.weight weight 8 1 192 1.0
+161 Mixed_6d.branch7x7_3.bn.bias bias 8 1 192 0.34824681278030295
+162 Mixed_6d.branch7x7dbl_1.conv.weight weight 8 4 160 768 1 1 0.01403412739233818
+163 Mixed_6d.branch7x7dbl_1.bn.weight weight 8 1 160 1.0
+164 Mixed_6d.branch7x7dbl_1.bn.bias bias 8 1 160 0.26713986056899747
+165 Mixed_6d.branch7x7dbl_2.conv.weight weight 8 4 160 160 7 1 0.010766709848696336
+166 Mixed_6d.branch7x7dbl_2.bn.weight weight 8 1 160 1.0
+167 Mixed_6d.branch7x7dbl_2.bn.bias bias 8 1 160 0.18938722775244332
+168 Mixed_6d.branch7x7dbl_3.conv.weight weight 8 4 160 160 1 7 0.010227980884432409
+169 Mixed_6d.branch7x7dbl_3.bn.weight weight 8 1 160 1.0
+170 Mixed_6d.branch7x7dbl_3.bn.bias bias 8 1 160 0.29600123192953154
+171 Mixed_6d.branch7x7dbl_4.conv.weight weight 8 4 160 160 7 1 0.010523964682036585
+172 Mixed_6d.branch7x7dbl_4.bn.weight weight 8 1 160 1.0
+173 Mixed_6d.branch7x7dbl_4.bn.bias bias 8 1 160 0.1822310566485476
+174 Mixed_6d.branch7x7dbl_5.conv.weight weight 8 4 192 160 1 7 0.010117224229337786
+175 Mixed_6d.branch7x7dbl_5.bn.weight weight 8 1 192 1.0
+176 Mixed_6d.branch7x7dbl_5.bn.bias bias 8 1 192 0.336720561629012
+177 Mixed_6d.branch_pool.conv.weight weight 8 4 192 768 1 1 0.013690595140256414
+178 Mixed_6d.branch_pool.bn.weight weight 8 1 192 1.0
+179 Mixed_6d.branch_pool.bn.bias bias 8 1 192 0.25081239496927843
+180 Mixed_6e.branch1x1.conv.weight weight 8 4 192 768 1 1 0.014579051669791053
+181 Mixed_6e.branch1x1.bn.weight weight 8 1 192 1.0
+182 Mixed_6e.branch1x1.bn.bias bias 8 1 192 0.3341231023424267
+183 Mixed_6e.branch7x7_1.conv.weight weight 8 4 192 768 1 1 0.014123520714669067
+184 Mixed_6e.branch7x7_1.bn.weight weight 8 1 192 1.0
+185 Mixed_6e.branch7x7_1.bn.bias bias 8 1 192 0.4147267977331318
+186 Mixed_6e.branch7x7_2.conv.weight weight 8 4 192 192 1 7 0.009691309571137115
+187 Mixed_6e.branch7x7_2.bn.weight weight 8 1 192 1.0
+188 Mixed_6e.branch7x7_2.bn.bias bias 8 1 192 0.20490236056083436
+189 Mixed_6e.branch7x7_3.conv.weight weight 8 4 192 192 7 1 0.00973811974234664
+190 Mixed_6e.branch7x7_3.bn.weight weight 8 1 192 1.0
+191 Mixed_6e.branch7x7_3.bn.bias bias 8 1 192 0.45573425456602606
+192 Mixed_6e.branch7x7dbl_1.conv.weight weight 8 4 192 768 1 1 0.013067062569146092
+193 Mixed_6e.branch7x7dbl_1.bn.weight weight 8 1 192 1.0
+194 Mixed_6e.branch7x7dbl_1.bn.bias bias 8 1 192 0.27024339026517774
+195 Mixed_6e.branch7x7dbl_2.conv.weight weight 8 4 192 192 7 1 0.010152601860111056
+196 Mixed_6e.branch7x7dbl_2.bn.weight weight 8 1 192 1.0
+197 Mixed_6e.branch7x7dbl_2.bn.bias bias 8 1 192 0.269536280905972
+198 Mixed_6e.branch7x7dbl_3.conv.weight weight 8 4 192 192 1 7 0.00897748594178675
+199 Mixed_6e.branch7x7dbl_3.bn.weight weight 8 1 192 1.0
+200 Mixed_6e.branch7x7dbl_3.bn.bias bias 8 1 192 0.4588327421862989
+201 Mixed_6e.branch7x7dbl_4.conv.weight weight 8 4 192 192 7 1 0.009535755372461907
+202 Mixed_6e.branch7x7dbl_4.bn.weight weight 8 1 192 1.0
+203 Mixed_6e.branch7x7dbl_4.bn.bias bias 8 1 192 0.250081797192944
+204 Mixed_6e.branch7x7dbl_5.conv.weight weight 8 4 192 192 1 7 0.00905294209866965
+205 Mixed_6e.branch7x7dbl_5.bn.weight weight 8 1 192 1.0
+206 Mixed_6e.branch7x7dbl_5.bn.bias bias 8 1 192 0.446250405855932
+207 Mixed_6e.branch_pool.conv.weight weight 8 4 192 768 1 1 0.015706706209684677
+208 Mixed_6e.branch_pool.bn.weight weight 8 1 192 1.0
+209 Mixed_6e.branch_pool.bn.bias bias 8 1 192 0.41914910767948943
+210 AuxLogits.conv0.conv.weight weight 8 4 128 768 1 1 0.015740761840965047
+211 AuxLogits.conv0.bn.weight weight 8 1 128 1.0
+212 AuxLogits.conv0.bn.bias bias 8 1 128 0.042480879163876314
+213 AuxLogits.conv1.conv.weight weight 8 4 768 128 5 5 0.004460512125881024
+214 AuxLogits.conv1.bn.weight weight 8 1 768 1.0
+215 AuxLogits.conv1.bn.bias bias 8 1 768 0.15232228045675422
+216 AuxLogits.fc.weight weight 8 2 1000 768 0.018509203970284716
+217 AuxLogits.fc.bias bias 8 1 1000 0.144201314781484
+218 Mixed_7a.branch3x3_1.conv.weight weight 8 4 192 768 1 1 0.010074404214975775
+219 Mixed_7a.branch3x3_1.bn.weight weight 8 1 192 1.0
+220 Mixed_7a.branch3x3_1.bn.bias bias 8 1 192 0.29986388371627326
+221 Mixed_7a.branch3x3_2.conv.weight weight 8 4 320 192 3 3 0.00510684925974487
+222 Mixed_7a.branch3x3_2.bn.weight weight 8 1 320 1.0
+223 Mixed_7a.branch3x3_2.bn.bias bias 8 1 320 0.2655510404782072
+224 Mixed_7a.branch7x7x3_1.conv.weight weight 8 4 192 768 1 1 0.009547634237397958
+225 Mixed_7a.branch7x7x3_1.bn.weight weight 8 1 192 1.0
+226 Mixed_7a.branch7x7x3_1.bn.bias bias 8 1 192 0.24164499749719265
+227 Mixed_7a.branch7x7x3_2.conv.weight weight 8 4 192 192 1 7 0.006502737951146142
+228 Mixed_7a.branch7x7x3_2.bn.weight weight 8 1 192 1.0
+229 Mixed_7a.branch7x7x3_2.bn.bias bias 8 1 192 0.17930313637646667
+230 Mixed_7a.branch7x7x3_3.conv.weight weight 8 4 192 192 7 1 0.006580474348664184
+231 Mixed_7a.branch7x7x3_3.bn.weight weight 8 1 192 1.0
+232 Mixed_7a.branch7x7x3_3.bn.bias bias 8 1 192 0.301008887489178
+233 Mixed_7a.branch7x7x3_4.conv.weight weight 8 4 192 192 3 3 0.006050013844465822
+234 Mixed_7a.branch7x7x3_4.bn.weight weight 8 1 192 1.0
+235 Mixed_7a.branch7x7x3_4.bn.bias bias 8 1 192 0.26444582606579836
+236 Mixed_7b.branch1x1.conv.weight weight 8 4 320 1280 1 1 0.008630189074235644
+237 Mixed_7b.branch1x1.bn.weight weight 8 1 320 1.0
+238 Mixed_7b.branch1x1.bn.bias bias 8 1 320 0.3058475435571735
+239 Mixed_7b.branch3x3_1.conv.weight weight 8 4 384 1280 1 1 0.009539137298083552
+240 Mixed_7b.branch3x3_1.bn.weight weight 8 1 384 1.0
+241 Mixed_7b.branch3x3_1.bn.bias bias 8 1 384 0.31431431880486527
+242 Mixed_7b.branch3x3_2a.conv.weight weight 8 4 384 384 1 3 0.006917395515906959
+243 Mixed_7b.branch3x3_2a.bn.weight weight 8 1 384 1.0
+244 Mixed_7b.branch3x3_2a.bn.bias bias 8 1 384 0.41558626767120527
+245 Mixed_7b.branch3x3_2b.conv.weight weight 8 4 384 384 3 1 0.007622095784533239
+246 Mixed_7b.branch3x3_2b.bn.weight weight 8 1 384 1.0
+247 Mixed_7b.branch3x3_2b.bn.bias bias 8 1 384 0.38141813907678823
+248 Mixed_7b.branch3x3dbl_1.conv.weight weight 8 4 448 1280 1 1 0.009342739121445003
+249 Mixed_7b.branch3x3dbl_1.bn.weight weight 8 1 448 1.0
+250 Mixed_7b.branch3x3dbl_1.bn.bias bias 8 1 448 0.30021238481952217
+251 Mixed_7b.branch3x3dbl_2.conv.weight weight 8 4 384 448 3 3 0.00551566419497036
+252 Mixed_7b.branch3x3dbl_2.bn.weight weight 8 1 384 1.0
+253 Mixed_7b.branch3x3dbl_2.bn.bias bias 8 1 384 0.18222969068282763
+254 Mixed_7b.branch3x3dbl_3a.conv.weight weight 8 4 384 384 1 3 0.007617489355482155
+255 Mixed_7b.branch3x3dbl_3a.bn.weight weight 8 1 384 1.0
+256 Mixed_7b.branch3x3dbl_3a.bn.bias bias 8 1 384 0.6394720569306414
+257 Mixed_7b.branch3x3dbl_3b.conv.weight weight 8 4 384 384 3 1 0.008010041009678386
+258 Mixed_7b.branch3x3dbl_3b.bn.weight weight 8 1 384 1.0
+259 Mixed_7b.branch3x3dbl_3b.bn.bias bias 8 1 384 0.3854384080149377
+260 Mixed_7b.branch_pool.conv.weight weight 8 4 192 1280 1 1 0.010308965264212037
+261 Mixed_7b.branch_pool.bn.weight weight 8 1 192 1.0
+262 Mixed_7b.branch_pool.bn.bias bias 8 1 192 0.28888134895292195
+263 Mixed_7c.branch1x1.conv.weight weight 8 4 320 2048 1 1 0.0046768029596070786
+264 Mixed_7c.branch1x1.bn.weight weight 8 1 320 1.0
+265 Mixed_7c.branch1x1.bn.bias bias 8 1 320 0.05944094501694961
+266 Mixed_7c.branch3x3_1.conv.weight weight 8 4 384 2048 1 1 0.008457849637326657
+267 Mixed_7c.branch3x3_1.bn.weight weight 8 1 384 1.0
+268 Mixed_7c.branch3x3_1.bn.bias bias 8 1 384 0.4416261063313163
+269 Mixed_7c.branch3x3_2a.conv.weight weight 8 4 384 384 1 3 0.004700820469311246
+270 Mixed_7c.branch3x3_2a.bn.weight weight 8 1 384 1.0
+271 Mixed_7c.branch3x3_2a.bn.bias bias 8 1 384 0.050343867934803804
+272 Mixed_7c.branch3x3_2b.conv.weight weight 8 4 384 384 3 1 0.004944248751794112
+273 Mixed_7c.branch3x3_2b.bn.weight weight 8 1 384 1.0
+274 Mixed_7c.branch3x3_2b.bn.bias bias 8 1 384 0.04280688483128067
+275 Mixed_7c.branch3x3dbl_1.conv.weight weight 8 4 448 2048 1 1 0.008984560656676657
+276 Mixed_7c.branch3x3dbl_1.bn.weight weight 8 1 448 1.0
+277 Mixed_7c.branch3x3dbl_1.bn.bias bias 8 1 448 0.3267391073839972
+278 Mixed_7c.branch3x3dbl_2.conv.weight weight 8 4 384 448 3 3 0.004697755784045455
+279 Mixed_7c.branch3x3dbl_2.bn.weight weight 8 1 384 1.0
+280 Mixed_7c.branch3x3dbl_2.bn.bias bias 8 1 384 0.24423081730951052
+281 Mixed_7c.branch3x3dbl_3a.conv.weight weight 8 4 384 384 1 3 0.005039970324724405
+282 Mixed_7c.branch3x3dbl_3a.bn.weight weight 8 1 384 1.0
+283 Mixed_7c.branch3x3dbl_3a.bn.bias bias 8 1 384 0.07657044546752698
+284 Mixed_7c.branch3x3dbl_3b.conv.weight weight 8 4 384 384 3 1 0.005141955283694194
+285 Mixed_7c.branch3x3dbl_3b.bn.weight weight 8 1 384 1.0
+286 Mixed_7c.branch3x3dbl_3b.bn.bias bias 8 1 384 0.05614161938585657
+287 Mixed_7c.branch_pool.conv.weight weight 8 4 192 2048 1 1 0.006566712907760208
+288 Mixed_7c.branch_pool.bn.weight weight 8 1 192 1.0
+289 Mixed_7c.branch_pool.bn.bias bias 8 1 192 0.022253459092989692
+290 fc.weight weight 8 2 1000 2048 0.013865662237258883
+291 fc.bias bias 8 1 1000 0.11060374108455044
+292 Conv2d_1a_3x3.bn.running_mean buffer 32 1 32 1.0
+293 Conv2d_1a_3x3.bn.running_var buffer 32 1 32 1.0
+294 Conv2d_1a_3x3.bn.num_batches_tracked buffer 32 0  1.0
+295 Conv2d_2a_3x3.bn.running_mean buffer 32 1 32 1.0
+296 Conv2d_2a_3x3.bn.running_var buffer 32 1 32 1.0
+297 Conv2d_2a_3x3.bn.num_batches_tracked buffer 32 0  1.0
+298 Conv2d_2b_3x3.bn.running_mean buffer 32 1 64 1.0
+299 Conv2d_2b_3x3.bn.running_var buffer 32 1 64 1.0
+300 Conv2d_2b_3x3.bn.num_batches_tracked buffer 32 0  1.0
+301 Conv2d_3b_1x1.bn.running_mean buffer 32 1 80 1.0
+302 Conv2d_3b_1x1.bn.running_var buffer 32 1 80 1.0
+303 Conv2d_3b_1x1.bn.num_batches_tracked buffer 32 0  1.0
+304 Conv2d_4a_3x3.bn.running_mean buffer 32 1 192 1.0
+305 Conv2d_4a_3x3.bn.running_var buffer 32 1 192 1.0
+306 Conv2d_4a_3x3.bn.num_batches_tracked buffer 32 0  1.0
+307 Mixed_5b.branch1x1.bn.running_mean buffer 32 1 64 1.0
+308 Mixed_5b.branch1x1.bn.running_var buffer 32 1 64 1.0
+309 Mixed_5b.branch1x1.bn.num_batches_tracked buffer 32 0  1.0
+310 Mixed_5b.branch5x5_1.bn.running_mean buffer 32 1 48 1.0
+311 Mixed_5b.branch5x5_1.bn.running_var buffer 32 1 48 1.0
+312 Mixed_5b.branch5x5_1.bn.num_batches_tracked buffer 32 0  1.0
+313 Mixed_5b.branch5x5_2.bn.running_mean buffer 32 1 64 1.0
+314 Mixed_5b.branch5x5_2.bn.running_var buffer 32 1 64 1.0
+315 Mixed_5b.branch5x5_2.bn.num_batches_tracked buffer 32 0  1.0
+316 Mixed_5b.branch3x3dbl_1.bn.running_mean buffer 32 1 64 1.0
+317 Mixed_5b.branch3x3dbl_1.bn.running_var buffer 32 1 64 1.0
+318 Mixed_5b.branch3x3dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+319 Mixed_5b.branch3x3dbl_2.bn.running_mean buffer 32 1 96 1.0
+320 Mixed_5b.branch3x3dbl_2.bn.running_var buffer 32 1 96 1.0
+321 Mixed_5b.branch3x3dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+322 Mixed_5b.branch3x3dbl_3.bn.running_mean buffer 32 1 96 1.0
+323 Mixed_5b.branch3x3dbl_3.bn.running_var buffer 32 1 96 1.0
+324 Mixed_5b.branch3x3dbl_3.bn.num_batches_tracked buffer 32 0  1.0
+325 Mixed_5b.branch_pool.bn.running_mean buffer 32 1 32 1.0
+326 Mixed_5b.branch_pool.bn.running_var buffer 32 1 32 1.0
+327 Mixed_5b.branch_pool.bn.num_batches_tracked buffer 32 0  1.0
+328 Mixed_5c.branch1x1.bn.running_mean buffer 32 1 64 1.0
+329 Mixed_5c.branch1x1.bn.running_var buffer 32 1 64 1.0
+330 Mixed_5c.branch1x1.bn.num_batches_tracked buffer 32 0  1.0
+331 Mixed_5c.branch5x5_1.bn.running_mean buffer 32 1 48 1.0
+332 Mixed_5c.branch5x5_1.bn.running_var buffer 32 1 48 1.0
+333 Mixed_5c.branch5x5_1.bn.num_batches_tracked buffer 32 0  1.0
+334 Mixed_5c.branch5x5_2.bn.running_mean buffer 32 1 64 1.0
+335 Mixed_5c.branch5x5_2.bn.running_var buffer 32 1 64 1.0
+336 Mixed_5c.branch5x5_2.bn.num_batches_tracked buffer 32 0  1.0
+337 Mixed_5c.branch3x3dbl_1.bn.running_mean buffer 32 1 64 1.0
+338 Mixed_5c.branch3x3dbl_1.bn.running_var buffer 32 1 64 1.0
+339 Mixed_5c.branch3x3dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+340 Mixed_5c.branch3x3dbl_2.bn.running_mean buffer 32 1 96 1.0
+341 Mixed_5c.branch3x3dbl_2.bn.running_var buffer 32 1 96 1.0
+342 Mixed_5c.branch3x3dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+343 Mixed_5c.branch3x3dbl_3.bn.running_mean buffer 32 1 96 1.0
+344 Mixed_5c.branch3x3dbl_3.bn.running_var buffer 32 1 96 1.0
+345 Mixed_5c.branch3x3dbl_3.bn.num_batches_tracked buffer 32 0  1.0
+346 Mixed_5c.branch_pool.bn.running_mean buffer 32 1 64 1.0
+347 Mixed_5c.branch_pool.bn.running_var buffer 32 1 64 1.0
+348 Mixed_5c.branch_pool.bn.num_batches_tracked buffer 32 0  1.0
+349 Mixed_5d.branch1x1.bn.running_mean buffer 32 1 64 1.0
+350 Mixed_5d.branch1x1.bn.running_var buffer 32 1 64 1.0
+351 Mixed_5d.branch1x1.bn.num_batches_tracked buffer 32 0  1.0
+352 Mixed_5d.branch5x5_1.bn.running_mean buffer 32 1 48 1.0
+353 Mixed_5d.branch5x5_1.bn.running_var buffer 32 1 48 1.0
+354 Mixed_5d.branch5x5_1.bn.num_batches_tracked buffer 32 0  1.0
+355 Mixed_5d.branch5x5_2.bn.running_mean buffer 32 1 64 1.0
+356 Mixed_5d.branch5x5_2.bn.running_var buffer 32 1 64 1.0
+357 Mixed_5d.branch5x5_2.bn.num_batches_tracked buffer 32 0  1.0
+358 Mixed_5d.branch3x3dbl_1.bn.running_mean buffer 32 1 64 1.0
+359 Mixed_5d.branch3x3dbl_1.bn.running_var buffer 32 1 64 1.0
+360 Mixed_5d.branch3x3dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+361 Mixed_5d.branch3x3dbl_2.bn.running_mean buffer 32 1 96 1.0
+362 Mixed_5d.branch3x3dbl_2.bn.running_var buffer 32 1 96 1.0
+363 Mixed_5d.branch3x3dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+364 Mixed_5d.branch3x3dbl_3.bn.running_mean buffer 32 1 96 1.0
+365 Mixed_5d.branch3x3dbl_3.bn.running_var buffer 32 1 96 1.0
+366 Mixed_5d.branch3x3dbl_3.bn.num_batches_tracked buffer 32 0  1.0
+367 Mixed_5d.branch_pool.bn.running_mean buffer 32 1 64 1.0
+368 Mixed_5d.branch_pool.bn.running_var buffer 32 1 64 1.0
+369 Mixed_5d.branch_pool.bn.num_batches_tracked buffer 32 0  1.0
+370 Mixed_6a.branch3x3.bn.running_mean buffer 32 1 384 1.0
+371 Mixed_6a.branch3x3.bn.running_var buffer 32 1 384 1.0
+372 Mixed_6a.branch3x3.bn.num_batches_tracked buffer 32 0  1.0
+373 Mixed_6a.branch3x3dbl_1.bn.running_mean buffer 32 1 64 1.0
+374 Mixed_6a.branch3x3dbl_1.bn.running_var buffer 32 1 64 1.0
+375 Mixed_6a.branch3x3dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+376 Mixed_6a.branch3x3dbl_2.bn.running_mean buffer 32 1 96 1.0
+377 Mixed_6a.branch3x3dbl_2.bn.running_var buffer 32 1 96 1.0
+378 Mixed_6a.branch3x3dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+379 Mixed_6a.branch3x3dbl_3.bn.running_mean buffer 32 1 96 1.0
+380 Mixed_6a.branch3x3dbl_3.bn.running_var buffer 32 1 96 1.0
+381 Mixed_6a.branch3x3dbl_3.bn.num_batches_tracked buffer 32 0  1.0
+382 Mixed_6b.branch1x1.bn.running_mean buffer 32 1 192 1.0
+383 Mixed_6b.branch1x1.bn.running_var buffer 32 1 192 1.0
+384 Mixed_6b.branch1x1.bn.num_batches_tracked buffer 32 0  1.0
+385 Mixed_6b.branch7x7_1.bn.running_mean buffer 32 1 128 1.0
+386 Mixed_6b.branch7x7_1.bn.running_var buffer 32 1 128 1.0
+387 Mixed_6b.branch7x7_1.bn.num_batches_tracked buffer 32 0  1.0
+388 Mixed_6b.branch7x7_2.bn.running_mean buffer 32 1 128 1.0
+389 Mixed_6b.branch7x7_2.bn.running_var buffer 32 1 128 1.0
+390 Mixed_6b.branch7x7_2.bn.num_batches_tracked buffer 32 0  1.0
+391 Mixed_6b.branch7x7_3.bn.running_mean buffer 32 1 192 1.0
+392 Mixed_6b.branch7x7_3.bn.running_var buffer 32 1 192 1.0
+393 Mixed_6b.branch7x7_3.bn.num_batches_tracked buffer 32 0  1.0
+394 Mixed_6b.branch7x7dbl_1.bn.running_mean buffer 32 1 128 1.0
+395 Mixed_6b.branch7x7dbl_1.bn.running_var buffer 32 1 128 1.0
+396 Mixed_6b.branch7x7dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+397 Mixed_6b.branch7x7dbl_2.bn.running_mean buffer 32 1 128 1.0
+398 Mixed_6b.branch7x7dbl_2.bn.running_var buffer 32 1 128 1.0
+399 Mixed_6b.branch7x7dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+400 Mixed_6b.branch7x7dbl_3.bn.running_mean buffer 32 1 128 1.0
+401 Mixed_6b.branch7x7dbl_3.bn.running_var buffer 32 1 128 1.0
+402 Mixed_6b.branch7x7dbl_3.bn.num_batches_tracked buffer 32 0  1.0
+403 Mixed_6b.branch7x7dbl_4.bn.running_mean buffer 32 1 128 1.0
+404 Mixed_6b.branch7x7dbl_4.bn.running_var buffer 32 1 128 1.0
+405 Mixed_6b.branch7x7dbl_4.bn.num_batches_tracked buffer 32 0  1.0
+406 Mixed_6b.branch7x7dbl_5.bn.running_mean buffer 32 1 192 1.0
+407 Mixed_6b.branch7x7dbl_5.bn.running_var buffer 32 1 192 1.0
+408 Mixed_6b.branch7x7dbl_5.bn.num_batches_tracked buffer 32 0  1.0
+409 Mixed_6b.branch_pool.bn.running_mean buffer 32 1 192 1.0
+410 Mixed_6b.branch_pool.bn.running_var buffer 32 1 192 1.0
+411 Mixed_6b.branch_pool.bn.num_batches_tracked buffer 32 0  1.0
+412 Mixed_6c.branch1x1.bn.running_mean buffer 32 1 192 1.0
+413 Mixed_6c.branch1x1.bn.running_var buffer 32 1 192 1.0
+414 Mixed_6c.branch1x1.bn.num_batches_tracked buffer 32 0  1.0
+415 Mixed_6c.branch7x7_1.bn.running_mean buffer 32 1 160 1.0
+416 Mixed_6c.branch7x7_1.bn.running_var buffer 32 1 160 1.0
+417 Mixed_6c.branch7x7_1.bn.num_batches_tracked buffer 32 0  1.0
+418 Mixed_6c.branch7x7_2.bn.running_mean buffer 32 1 160 1.0
+419 Mixed_6c.branch7x7_2.bn.running_var buffer 32 1 160 1.0
+420 Mixed_6c.branch7x7_2.bn.num_batches_tracked buffer 32 0  1.0
+421 Mixed_6c.branch7x7_3.bn.running_mean buffer 32 1 192 1.0
+422 Mixed_6c.branch7x7_3.bn.running_var buffer 32 1 192 1.0
+423 Mixed_6c.branch7x7_3.bn.num_batches_tracked buffer 32 0  1.0
+424 Mixed_6c.branch7x7dbl_1.bn.running_mean buffer 32 1 160 1.0
+425 Mixed_6c.branch7x7dbl_1.bn.running_var buffer 32 1 160 1.0
+426 Mixed_6c.branch7x7dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+427 Mixed_6c.branch7x7dbl_2.bn.running_mean buffer 32 1 160 1.0
+428 Mixed_6c.branch7x7dbl_2.bn.running_var buffer 32 1 160 1.0
+429 Mixed_6c.branch7x7dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+430 Mixed_6c.branch7x7dbl_3.bn.running_mean buffer 32 1 160 1.0
+431 Mixed_6c.branch7x7dbl_3.bn.running_var buffer 32 1 160 1.0
+432 Mixed_6c.branch7x7dbl_3.bn.num_batches_tracked buffer 32 0  1.0
+433 Mixed_6c.branch7x7dbl_4.bn.running_mean buffer 32 1 160 1.0
+434 Mixed_6c.branch7x7dbl_4.bn.running_var buffer 32 1 160 1.0
+435 Mixed_6c.branch7x7dbl_4.bn.num_batches_tracked buffer 32 0  1.0
+436 Mixed_6c.branch7x7dbl_5.bn.running_mean buffer 32 1 192 1.0
+437 Mixed_6c.branch7x7dbl_5.bn.running_var buffer 32 1 192 1.0
+438 Mixed_6c.branch7x7dbl_5.bn.num_batches_tracked buffer 32 0  1.0
+439 Mixed_6c.branch_pool.bn.running_mean buffer 32 1 192 1.0
+440 Mixed_6c.branch_pool.bn.running_var buffer 32 1 192 1.0
+441 Mixed_6c.branch_pool.bn.num_batches_tracked buffer 32 0  1.0
+442 Mixed_6d.branch1x1.bn.running_mean buffer 32 1 192 1.0
+443 Mixed_6d.branch1x1.bn.running_var buffer 32 1 192 1.0
+444 Mixed_6d.branch1x1.bn.num_batches_tracked buffer 32 0  1.0
+445 Mixed_6d.branch7x7_1.bn.running_mean buffer 32 1 160 1.0
+446 Mixed_6d.branch7x7_1.bn.running_var buffer 32 1 160 1.0
+447 Mixed_6d.branch7x7_1.bn.num_batches_tracked buffer 32 0  1.0
+448 Mixed_6d.branch7x7_2.bn.running_mean buffer 32 1 160 1.0
+449 Mixed_6d.branch7x7_2.bn.running_var buffer 32 1 160 1.0
+450 Mixed_6d.branch7x7_2.bn.num_batches_tracked buffer 32 0  1.0
+451 Mixed_6d.branch7x7_3.bn.running_mean buffer 32 1 192 1.0
+452 Mixed_6d.branch7x7_3.bn.running_var buffer 32 1 192 1.0
+453 Mixed_6d.branch7x7_3.bn.num_batches_tracked buffer 32 0  1.0
+454 Mixed_6d.branch7x7dbl_1.bn.running_mean buffer 32 1 160 1.0
+455 Mixed_6d.branch7x7dbl_1.bn.running_var buffer 32 1 160 1.0
+456 Mixed_6d.branch7x7dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+457 Mixed_6d.branch7x7dbl_2.bn.running_mean buffer 32 1 160 1.0
+458 Mixed_6d.branch7x7dbl_2.bn.running_var buffer 32 1 160 1.0
+459 Mixed_6d.branch7x7dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+460 Mixed_6d.branch7x7dbl_3.bn.running_mean buffer 32 1 160 1.0
+461 Mixed_6d.branch7x7dbl_3.bn.running_var buffer 32 1 160 1.0
+462 Mixed_6d.branch7x7dbl_3.bn.num_batches_tracked buffer 32 0  1.0
+463 Mixed_6d.branch7x7dbl_4.bn.running_mean buffer 32 1 160 1.0
+464 Mixed_6d.branch7x7dbl_4.bn.running_var buffer 32 1 160 1.0
+465 Mixed_6d.branch7x7dbl_4.bn.num_batches_tracked buffer 32 0  1.0
+466 Mixed_6d.branch7x7dbl_5.bn.running_mean buffer 32 1 192 1.0
+467 Mixed_6d.branch7x7dbl_5.bn.running_var buffer 32 1 192 1.0
+468 Mixed_6d.branch7x7dbl_5.bn.num_batches_tracked buffer 32 0  1.0
+469 Mixed_6d.branch_pool.bn.running_mean buffer 32 1 192 1.0
+470 Mixed_6d.branch_pool.bn.running_var buffer 32 1 192 1.0
+471 Mixed_6d.branch_pool.bn.num_batches_tracked buffer 32 0  1.0
+472 Mixed_6e.branch1x1.bn.running_mean buffer 32 1 192 1.0
+473 Mixed_6e.branch1x1.bn.running_var buffer 32 1 192 1.0
+474 Mixed_6e.branch1x1.bn.num_batches_tracked buffer 32 0  1.0
+475 Mixed_6e.branch7x7_1.bn.running_mean buffer 32 1 192 1.0
+476 Mixed_6e.branch7x7_1.bn.running_var buffer 32 1 192 1.0
+477 Mixed_6e.branch7x7_1.bn.num_batches_tracked buffer 32 0  1.0
+478 Mixed_6e.branch7x7_2.bn.running_mean buffer 32 1 192 1.0
+479 Mixed_6e.branch7x7_2.bn.running_var buffer 32 1 192 1.0
+480 Mixed_6e.branch7x7_2.bn.num_batches_tracked buffer 32 0  1.0
+481 Mixed_6e.branch7x7_3.bn.running_mean buffer 32 1 192 1.0
+482 Mixed_6e.branch7x7_3.bn.running_var buffer 32 1 192 1.0
+483 Mixed_6e.branch7x7_3.bn.num_batches_tracked buffer 32 0  1.0
+484 Mixed_6e.branch7x7dbl_1.bn.running_mean buffer 32 1 192 1.0
+485 Mixed_6e.branch7x7dbl_1.bn.running_var buffer 32 1 192 1.0
+486 Mixed_6e.branch7x7dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+487 Mixed_6e.branch7x7dbl_2.bn.running_mean buffer 32 1 192 1.0
+488 Mixed_6e.branch7x7dbl_2.bn.running_var buffer 32 1 192 1.0
+489 Mixed_6e.branch7x7dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+490 Mixed_6e.branch7x7dbl_3.bn.running_mean buffer 32 1 192 1.0
+491 Mixed_6e.branch7x7dbl_3.bn.running_var buffer 32 1 192 1.0
+492 Mixed_6e.branch7x7dbl_3.bn.num_batches_tracked buffer 32 0  1.0
+493 Mixed_6e.branch7x7dbl_4.bn.running_mean buffer 32 1 192 1.0
+494 Mixed_6e.branch7x7dbl_4.bn.running_var buffer 32 1 192 1.0
+495 Mixed_6e.branch7x7dbl_4.bn.num_batches_tracked buffer 32 0  1.0
+496 Mixed_6e.branch7x7dbl_5.bn.running_mean buffer 32 1 192 1.0
+497 Mixed_6e.branch7x7dbl_5.bn.running_var buffer 32 1 192 1.0
+498 Mixed_6e.branch7x7dbl_5.bn.num_batches_tracked buffer 32 0  1.0
+499 Mixed_6e.branch_pool.bn.running_mean buffer 32 1 192 1.0
+500 Mixed_6e.branch_pool.bn.running_var buffer 32 1 192 1.0
+501 Mixed_6e.branch_pool.bn.num_batches_tracked buffer 32 0  1.0
+502 AuxLogits.conv0.bn.running_mean buffer 32 1 128 1.0
+503 AuxLogits.conv0.bn.running_var buffer 32 1 128 1.0
+504 AuxLogits.conv0.bn.num_batches_tracked buffer 32 0  1.0
+505 AuxLogits.conv1.bn.running_mean buffer 32 1 768 1.0
+506 AuxLogits.conv1.bn.running_var buffer 32 1 768 1.0
+507 AuxLogits.conv1.bn.num_batches_tracked buffer 32 0  1.0
+508 Mixed_7a.branch3x3_1.bn.running_mean buffer 32 1 192 1.0
+509 Mixed_7a.branch3x3_1.bn.running_var buffer 32 1 192 1.0
+510 Mixed_7a.branch3x3_1.bn.num_batches_tracked buffer 32 0  1.0
+511 Mixed_7a.branch3x3_2.bn.running_mean buffer 32 1 320 1.0
+512 Mixed_7a.branch3x3_2.bn.running_var buffer 32 1 320 1.0
+513 Mixed_7a.branch3x3_2.bn.num_batches_tracked buffer 32 0  1.0
+514 Mixed_7a.branch7x7x3_1.bn.running_mean buffer 32 1 192 1.0
+515 Mixed_7a.branch7x7x3_1.bn.running_var buffer 32 1 192 1.0
+516 Mixed_7a.branch7x7x3_1.bn.num_batches_tracked buffer 32 0  1.0
+517 Mixed_7a.branch7x7x3_2.bn.running_mean buffer 32 1 192 1.0
+518 Mixed_7a.branch7x7x3_2.bn.running_var buffer 32 1 192 1.0
+519 Mixed_7a.branch7x7x3_2.bn.num_batches_tracked buffer 32 0  1.0
+520 Mixed_7a.branch7x7x3_3.bn.running_mean buffer 32 1 192 1.0
+521 Mixed_7a.branch7x7x3_3.bn.running_var buffer 32 1 192 1.0
+522 Mixed_7a.branch7x7x3_3.bn.num_batches_tracked buffer 32 0  1.0
+523 Mixed_7a.branch7x7x3_4.bn.running_mean buffer 32 1 192 1.0
+524 Mixed_7a.branch7x7x3_4.bn.running_var buffer 32 1 192 1.0
+525 Mixed_7a.branch7x7x3_4.bn.num_batches_tracked buffer 32 0  1.0
+526 Mixed_7b.branch1x1.bn.running_mean buffer 32 1 320 1.0
+527 Mixed_7b.branch1x1.bn.running_var buffer 32 1 320 1.0
+528 Mixed_7b.branch1x1.bn.num_batches_tracked buffer 32 0  1.0
+529 Mixed_7b.branch3x3_1.bn.running_mean buffer 32 1 384 1.0
+530 Mixed_7b.branch3x3_1.bn.running_var buffer 32 1 384 1.0
+531 Mixed_7b.branch3x3_1.bn.num_batches_tracked buffer 32 0  1.0
+532 Mixed_7b.branch3x3_2a.bn.running_mean buffer 32 1 384 1.0
+533 Mixed_7b.branch3x3_2a.bn.running_var buffer 32 1 384 1.0
+534 Mixed_7b.branch3x3_2a.bn.num_batches_tracked buffer 32 0  1.0
+535 Mixed_7b.branch3x3_2b.bn.running_mean buffer 32 1 384 1.0
+536 Mixed_7b.branch3x3_2b.bn.running_var buffer 32 1 384 1.0
+537 Mixed_7b.branch3x3_2b.bn.num_batches_tracked buffer 32 0  1.0
+538 Mixed_7b.branch3x3dbl_1.bn.running_mean buffer 32 1 448 1.0
+539 Mixed_7b.branch3x3dbl_1.bn.running_var buffer 32 1 448 1.0
+540 Mixed_7b.branch3x3dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+541 Mixed_7b.branch3x3dbl_2.bn.running_mean buffer 32 1 384 1.0
+542 Mixed_7b.branch3x3dbl_2.bn.running_var buffer 32 1 384 1.0
+543 Mixed_7b.branch3x3dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+544 Mixed_7b.branch3x3dbl_3a.bn.running_mean buffer 32 1 384 1.0
+545 Mixed_7b.branch3x3dbl_3a.bn.running_var buffer 32 1 384 1.0
+546 Mixed_7b.branch3x3dbl_3a.bn.num_batches_tracked buffer 32 0  1.0
+547 Mixed_7b.branch3x3dbl_3b.bn.running_mean buffer 32 1 384 1.0
+548 Mixed_7b.branch3x3dbl_3b.bn.running_var buffer 32 1 384 1.0
+549 Mixed_7b.branch3x3dbl_3b.bn.num_batches_tracked buffer 32 0  1.0
+550 Mixed_7b.branch_pool.bn.running_mean buffer 32 1 192 1.0
+551 Mixed_7b.branch_pool.bn.running_var buffer 32 1 192 1.0
+552 Mixed_7b.branch_pool.bn.num_batches_tracked buffer 32 0  1.0
+553 Mixed_7c.branch1x1.bn.running_mean buffer 32 1 320 1.0
+554 Mixed_7c.branch1x1.bn.running_var buffer 32 1 320 1.0
+555 Mixed_7c.branch1x1.bn.num_batches_tracked buffer 32 0  1.0
+556 Mixed_7c.branch3x3_1.bn.running_mean buffer 32 1 384 1.0
+557 Mixed_7c.branch3x3_1.bn.running_var buffer 32 1 384 1.0
+558 Mixed_7c.branch3x3_1.bn.num_batches_tracked buffer 32 0  1.0
+559 Mixed_7c.branch3x3_2a.bn.running_mean buffer 32 1 384 1.0
+560 Mixed_7c.branch3x3_2a.bn.running_var buffer 32 1 384 1.0
+561 Mixed_7c.branch3x3_2a.bn.num_batches_tracked buffer 32 0  1.0
+562 Mixed_7c.branch3x3_2b.bn.running_mean buffer 32 1 384 1.0
+563 Mixed_7c.branch3x3_2b.bn.running_var buffer 32 1 384 1.0
+564 Mixed_7c.branch3x3_2b.bn.num_batches_tracked buffer 32 0  1.0
+565 Mixed_7c.branch3x3dbl_1.bn.running_mean buffer 32 1 448 1.0
+566 Mixed_7c.branch3x3dbl_1.bn.running_var buffer 32 1 448 1.0
+567 Mixed_7c.branch3x3dbl_1.bn.num_batches_tracked buffer 32 0  1.0
+568 Mixed_7c.branch3x3dbl_2.bn.running_mean buffer 32 1 384 1.0
+569 Mixed_7c.branch3x3dbl_2.bn.running_var buffer 32 1 384 1.0
+570 Mixed_7c.branch3x3dbl_2.bn.num_batches_tracked buffer 32 0  1.0
+571 Mixed_7c.branch3x3dbl_3a.bn.running_mean buffer 32 1 384 1.0
+572 Mixed_7c.branch3x3dbl_3a.bn.running_var buffer 32 1 384 1.0
+573 Mixed_7c.branch3x3dbl_3a.bn.num_batches_tracked buffer 32 0  1.0
+574 Mixed_7c.branch3x3dbl_3b.bn.running_mean buffer 32 1 384 1.0
+575 Mixed_7c.branch3x3dbl_3b.bn.running_var buffer 32 1 384 1.0
+576 Mixed_7c.branch3x3dbl_3b.bn.num_batches_tracked buffer 32 0  1.0
+577 Mixed_7c.branch_pool.bn.running_mean buffer 32 1 192 1.0
+578 Mixed_7c.branch_pool.bn.running_var buffer 32 1 192 1.0
+579 Mixed_7c.branch_pool.bn.num_batches_tracked buffer 32 0  1.0
