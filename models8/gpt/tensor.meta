@@ -1,0 +1,161 @@
+numTensors 159
+
+0 transformer.tokens_embed.weight weight 8 2 40478 768 0.006648217402748583
+1 transformer.positions_embed.weight weight 8 2 512 768 0.005301701145274543
+2 transformer.h.0.attn.c_attn.weight weight 8 2 768 2304 0.010384278766710657
+3 transformer.h.0.attn.c_attn.bias bias 8 1 2304 0.011413717096109596
+4 transformer.h.0.attn.c_proj.weight weight 8 2 768 768 0.0048163502869478445
+5 transformer.h.0.attn.c_proj.bias bias 8 1 768 0.0009931471273733495
+6 transformer.h.0.ln_1.weight weight 8 1 768 0.01413759072979575
+7 transformer.h.0.ln_1.bias bias 8 1 768 0.02005140276348142
+8 transformer.h.0.mlp.c_fc.weight weight 8 2 768 3072 0.0033220221909803518
+9 transformer.h.0.mlp.c_fc.bias bias 8 1 3072 0.011384643838106629
+10 transformer.h.0.mlp.c_proj.weight weight 8 2 3072 768 0.017267170955558117
+11 transformer.h.0.mlp.c_proj.bias bias 8 1 768 0.012815497806114804
+12 transformer.h.0.ln_2.weight weight 8 1 768 0.005298329329786651
+13 transformer.h.0.ln_2.bias bias 8 1 768 0.004493648671867288
+14 transformer.h.1.attn.c_attn.weight weight 8 2 768 2304 0.004920576321994944
+15 transformer.h.1.attn.c_attn.bias bias 8 1 2304 0.015250091003592703
+16 transformer.h.1.attn.c_proj.weight weight 8 2 768 768 0.0029050077294620518
+17 transformer.h.1.attn.c_proj.bias bias 8 1 768 0.0023633357830818
+18 transformer.h.1.ln_1.weight weight 8 1 768 0.042236580004142904
+19 transformer.h.1.ln_1.bias bias 8 1 768 0.01974291100297112
+20 transformer.h.1.mlp.c_fc.weight weight 8 2 768 3072 0.004495222051101358
+21 transformer.h.1.mlp.c_fc.bias bias 8 1 3072 0.011432417931636343
+22 transformer.h.1.mlp.c_proj.weight weight 8 2 3072 768 0.03518346240199074
+23 transformer.h.1.mlp.c_proj.bias bias 8 1 768 0.0038593537902027212
+24 transformer.h.1.ln_2.weight weight 8 1 768 0.008947230305366073
+25 transformer.h.1.ln_2.bias bias 8 1 768 0.005751477158560978
+26 transformer.h.2.attn.c_attn.weight weight 8 2 768 2304 0.005092729930015612
+27 transformer.h.2.attn.c_attn.bias bias 8 1 2304 0.018322751289245223
+28 transformer.h.2.attn.c_proj.weight weight 8 2 768 768 0.0019655534832333536
+29 transformer.h.2.attn.c_proj.bias bias 8 1 768 0.002294354325320943
+30 transformer.h.2.ln_1.weight weight 8 1 768 0.04297474282017858
+31 transformer.h.2.ln_1.bias bias 8 1 768 0.01141022889529594
+32 transformer.h.2.mlp.c_fc.weight weight 8 2 768 3072 0.00553606571467022
+33 transformer.h.2.mlp.c_fc.bias bias 8 1 3072 0.008269078574838653
+34 transformer.h.2.mlp.c_proj.weight weight 8 2 3072 768 0.017467383667561343
+35 transformer.h.2.mlp.c_proj.bias bias 8 1 768 0.006480531422316722
+36 transformer.h.2.ln_2.weight weight 8 1 768 0.010056918584316673
+37 transformer.h.2.ln_2.bias bias 8 1 768 0.003404461399175475
+38 transformer.h.3.attn.c_attn.weight weight 8 2 768 2304 0.004693422289552907
+39 transformer.h.3.attn.c_attn.bias bias 8 1 2304 0.01606050126990825
+40 transformer.h.3.attn.c_proj.weight weight 8 2 768 768 0.002871021239762094
+41 transformer.h.3.attn.c_proj.bias bias 8 1 768 0.0025795057126545063
+42 transformer.h.3.ln_1.weight weight 8 1 768 0.03869332978879994
+43 transformer.h.3.ln_1.bias bias 8 1 768 0.014158456970447937
+44 transformer.h.3.mlp.c_fc.weight weight 8 2 768 3072 0.003525231905581303
+45 transformer.h.3.mlp.c_fc.bias bias 8 1 3072 0.0071101003440067895
+46 transformer.h.3.mlp.c_proj.weight weight 8 2 3072 768 0.026023876855052926
+47 transformer.h.3.mlp.c_proj.bias bias 8 1 768 0.0023901231691795524
+48 transformer.h.3.ln_2.weight weight 8 1 768 0.01033898570252956
+49 transformer.h.3.ln_2.bias bias 8 1 768 0.002872793762998184
+50 transformer.h.4.attn.c_attn.weight weight 8 2 768 2304 0.004767621039784683
+51 transformer.h.4.attn.c_attn.bias bias 8 1 2304 0.01800107451402696
+52 transformer.h.4.attn.c_proj.weight weight 8 2 768 768 0.0015039708410621222
+53 transformer.h.4.attn.c_proj.bias bias 8 1 768 0.002418900560107874
+54 transformer.h.4.ln_1.weight weight 8 1 768 0.034219518502206
+55 transformer.h.4.ln_1.bias bias 8 1 768 0.018611431284871815
+56 transformer.h.4.mlp.c_fc.weight weight 8 2 768 3072 0.0030592611793258187
+57 transformer.h.4.mlp.c_fc.bias bias 8 1 3072 0.008486963956468986
+58 transformer.h.4.mlp.c_proj.weight weight 8 2 3072 768 0.010281464599456381
+59 transformer.h.4.mlp.c_proj.bias bias 8 1 768 0.0017436098569900546
+60 transformer.h.4.ln_2.weight weight 8 1 768 0.007752165158910652
+61 transformer.h.4.ln_2.bias bias 8 1 768 0.0036063435806634927
+62 transformer.h.5.attn.c_attn.weight weight 8 2 768 2304 0.005788960344340564
+63 transformer.h.5.attn.c_attn.bias bias 8 1 2304 0.011499227689644845
+64 transformer.h.5.attn.c_proj.weight weight 8 2 768 768 0.0015386338669170362
+65 transformer.h.5.attn.c_proj.bias bias 8 1 768 0.002172237568955327
+66 transformer.h.5.ln_1.weight weight 8 1 768 0.03331089392395602
+67 transformer.h.5.ln_1.bias bias 8 1 768 0.025696965312905398
+68 transformer.h.5.mlp.c_fc.weight weight 8 2 768 3072 0.005938801167002633
+69 transformer.h.5.mlp.c_fc.bias bias 8 1 3072 0.0058842534641275175
+70 transformer.h.5.mlp.c_proj.weight weight 8 2 3072 768 0.012681181564491306
+71 transformer.h.5.mlp.c_proj.bias bias 8 1 768 0.010043173701091155
+72 transformer.h.5.ln_2.weight weight 8 1 768 0.007782743494698355
+73 transformer.h.5.ln_2.bias bias 8 1 768 0.0023939049669426393
+74 transformer.h.6.attn.c_attn.weight weight 8 2 768 2304 0.005940906932248552
+75 transformer.h.6.attn.c_attn.bias bias 8 1 2304 0.0070573518331706634
+76 transformer.h.6.attn.c_proj.weight weight 8 2 768 768 0.001618408685468896
+77 transformer.h.6.attn.c_proj.bias bias 8 1 768 0.001063960318362985
+78 transformer.h.6.ln_1.weight weight 8 1 768 0.0309190766399387
+79 transformer.h.6.ln_1.bias bias 8 1 768 0.03489731119615354
+80 transformer.h.6.mlp.c_fc.weight weight 8 2 768 3072 0.006700279674221966
+81 transformer.h.6.mlp.c_fc.bias bias 8 1 3072 0.011093541727532175
+82 transformer.h.6.mlp.c_proj.weight weight 8 2 3072 768 0.010887939920643816
+83 transformer.h.6.mlp.c_proj.bias bias 8 1 768 0.007030174272747609
+84 transformer.h.6.ln_2.weight weight 8 1 768 0.0944880757828696
+85 transformer.h.6.ln_2.bias bias 8 1 768 0.00626213517210345
+86 transformer.h.7.attn.c_attn.weight weight 8 2 768 2304 0.005616029627530975
+87 transformer.h.7.attn.c_attn.bias bias 8 1 2304 0.013878062088114793
+88 transformer.h.7.attn.c_proj.weight weight 8 2 768 768 0.0018455415258944363
+89 transformer.h.7.attn.c_proj.bias bias 8 1 768 0.004628390943886403
+90 transformer.h.7.ln_1.weight weight 8 1 768 0.04830238371443733
+91 transformer.h.7.ln_1.bias bias 8 1 768 0.022576964601633068
+92 transformer.h.7.mlp.c_fc.weight weight 8 2 768 3072 0.002975481173517326
+93 transformer.h.7.mlp.c_fc.bias bias 8 1 3072 0.00885585256096171
+94 transformer.h.7.mlp.c_proj.weight weight 8 2 3072 768 0.02240977325062319
+95 transformer.h.7.mlp.c_proj.bias bias 8 1 768 0.009355973302145739
+96 transformer.h.7.ln_2.weight weight 8 1 768 0.007848150341922936
+97 transformer.h.7.ln_2.bias bias 8 1 768 0.002155699967754846
+98 transformer.h.8.attn.c_attn.weight weight 8 2 768 2304 0.005525766030175618
+99 transformer.h.8.attn.c_attn.bias bias 8 1 2304 0.011637740857236211
+100 transformer.h.8.attn.c_proj.weight weight 8 2 768 768 0.0017188276089117782
+101 transformer.h.8.attn.c_proj.bias bias 8 1 768 0.003926461950695733
+102 transformer.h.8.ln_1.weight weight 8 1 768 0.050015350492784244
+103 transformer.h.8.ln_1.bias bias 8 1 768 0.021093079110621617
+104 transformer.h.8.mlp.c_fc.weight weight 8 2 768 3072 0.0034030108487494437
+105 transformer.h.8.mlp.c_fc.bias bias 8 1 3072 0.0092174651358964
+106 transformer.h.8.mlp.c_proj.weight weight 8 2 3072 768 0.025781985987807836
+107 transformer.h.8.mlp.c_proj.bias bias 8 1 768 0.007586741049749421
+108 transformer.h.8.ln_2.weight weight 8 1 768 0.00797879249301603
+109 transformer.h.8.ln_2.bias bias 8 1 768 0.002576162035986768
+110 transformer.h.9.attn.c_attn.weight weight 8 2 768 2304 0.005309127339081052
+111 transformer.h.9.attn.c_attn.bias bias 8 1 2304 0.01344380491304472
+112 transformer.h.9.attn.c_proj.weight weight 8 2 768 768 0.0015804340978473846
+113 transformer.h.9.attn.c_proj.bias bias 8 1 768 0.0028845819521648606
+114 transformer.h.9.ln_1.weight weight 8 1 768 0.04432767620899916
+115 transformer.h.9.ln_1.bias bias 8 1 768 0.01574319450140308
+116 transformer.h.9.mlp.c_fc.weight weight 8 2 768 3072 0.0035001498856212657
+117 transformer.h.9.mlp.c_fc.bias bias 8 1 3072 0.010179504988055851
+118 transformer.h.9.mlp.c_proj.weight weight 8 2 3072 768 0.008678220613838786
+119 transformer.h.9.mlp.c_proj.bias bias 8 1 768 0.007850409199957234
+120 transformer.h.9.ln_2.weight weight 8 1 768 0.009102627724611248
+121 transformer.h.9.ln_2.bias bias 8 1 768 0.002956849977854459
+122 transformer.h.10.attn.c_attn.weight weight 8 2 768 2304 0.00535250065683766
+123 transformer.h.10.attn.c_attn.bias bias 8 1 2304 0.013228491633869919
+124 transformer.h.10.attn.c_proj.weight weight 8 2 768 768 0.0021937047514046723
+125 transformer.h.10.attn.c_proj.bias bias 8 1 768 0.0019724055964215224
+126 transformer.h.10.ln_1.weight weight 8 1 768 0.3040563762347912
+127 transformer.h.10.ln_1.bias bias 8 1 768 0.020666990670921096
+128 transformer.h.10.mlp.c_fc.weight weight 8 2 768 3072 0.0019562132073667683
+129 transformer.h.10.mlp.c_fc.bias bias 8 1 3072 0.005086418633980979
+130 transformer.h.10.mlp.c_proj.weight weight 8 2 3072 768 0.011666553961959716
+131 transformer.h.10.mlp.c_proj.bias bias 8 1 768 0.0139353205533502
+132 transformer.h.10.ln_2.weight weight 8 1 768 0.009184861076440332
+133 transformer.h.10.ln_2.bias bias 8 1 768 0.02525848850084881
+134 transformer.h.11.attn.c_attn.weight weight 8 2 768 2304 0.008170286057669361
+135 transformer.h.11.attn.c_attn.bias bias 8 1 2304 0.014072981572511918
+136 transformer.h.11.attn.c_proj.weight weight 8 2 768 768 0.0071304972474088785
+137 transformer.h.11.attn.c_proj.bias bias 8 1 768 0.0012869256502328025
+138 transformer.h.11.ln_1.weight weight 8 1 768 0.009954785860118944
+139 transformer.h.11.ln_1.bias bias 8 1 768 0.023310092597844494
+140 transformer.h.11.mlp.c_fc.weight weight 8 2 768 3072 0.005534508091063272
+141 transformer.h.11.mlp.c_fc.bias bias 8 1 3072 0.006761802804795075
+142 transformer.h.11.mlp.c_proj.weight weight 8 2 3072 768 0.01077774253207636
+143 transformer.h.11.mlp.c_proj.bias bias 8 1 768 0.010612985268010466
+144 transformer.h.11.ln_2.weight weight 8 1 768 0.014387553715044011
+145 transformer.h.11.ln_2.bias bias 8 1 768 0.011115614047167852
+146 transformer.position_ids buffer 32 1 512 1.0
+147 transformer.h.0.attn.bias buffer 32 4 1 1 512 512 1.0
+148 transformer.h.1.attn.bias buffer 32 4 1 1 512 512 1.0
+149 transformer.h.2.attn.bias buffer 32 4 1 1 512 512 1.0
+150 transformer.h.3.attn.bias buffer 32 4 1 1 512 512 1.0
+151 transformer.h.4.attn.bias buffer 32 4 1 1 512 512 1.0
+152 transformer.h.5.attn.bias buffer 32 4 1 1 512 512 1.0
+153 transformer.h.6.attn.bias buffer 32 4 1 1 512 512 1.0
+154 transformer.h.7.attn.bias buffer 32 4 1 1 512 512 1.0
+155 transformer.h.8.attn.bias buffer 32 4 1 1 512 512 1.0
+156 transformer.h.9.attn.bias buffer 32 4 1 1 512 512 1.0
+157 transformer.h.10.attn.bias buffer 32 4 1 1 512 512 1.0
+158 transformer.h.11.attn.bias buffer 32 4 1 1 512 512 1.0

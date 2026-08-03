@@ -1,0 +1,322 @@
+numTensors 320
+
+0 conv1.weight weight 8 4 64 3 7 7 0.04147645898452372
+1 bn1.weight weight 8 1 64 0.10666253617931726
+2 bn1.bias bias 8 1 64 0.11308383981907567
+3 layer1.0.conv1.weight weight 8 4 64 64 1 1 0.02431313231527651
+4 layer1.0.bn1.weight weight 8 1 64 0.06476059888361413
+5 layer1.0.bn1.bias bias 8 1 64 0.05342243728524009
+6 layer1.0.conv2.weight weight 8 4 64 64 3 3 0.009717807388715067
+7 layer1.0.bn2.weight weight 8 1 64 0.060602608199918584
+8 layer1.0.bn2.bias bias 8 1 64 0.04661587228432588
+9 layer1.0.conv3.weight weight 8 4 256 64 1 1 0.012544463035391813
+10 layer1.0.bn3.weight weight 8 1 256 0.06672548249017071
+11 layer1.0.bn3.bias bias 8 1 256 0.02776253276042888
+12 layer1.0.downsample.0.weight weight 8 4 256 64 1 1 0.020076521569989174
+13 layer1.0.downsample.1.weight weight 8 1 256 0.10576215809117975
+14 layer1.0.downsample.1.bias bias 8 1 256 0.02776253276042888
+15 layer1.1.conv1.weight weight 8 4 64 256 1 1 0.010662473047808436
+16 layer1.1.bn1.weight weight 8 1 64 0.15321753908717636
+17 layer1.1.bn1.bias bias 8 1 64 0.05761113750694431
+18 layer1.1.conv2.weight weight 8 4 64 64 3 3 0.009621971393860196
+19 layer1.1.bn2.weight weight 8 1 64 0.06095511163640525
+20 layer1.1.bn2.bias bias 8 1 64 0.04324726553632033
+21 layer1.1.conv3.weight weight 8 4 256 64 1 1 0.010954783701175294
+22 layer1.1.bn3.weight weight 8 1 256 0.03677072832556671
+23 layer1.1.bn3.bias bias 8 1 256 0.018906398088446925
+24 layer1.2.conv1.weight weight 8 4 64 256 1 1 0.009940993589026066
+25 layer1.2.bn1.weight weight 8 1 64 0.05434703495036601
+26 layer1.2.bn1.bias bias 8 1 64 0.026476183442010203
+27 layer1.2.conv2.weight weight 8 4 64 64 3 3 0.010319123446986444
+28 layer1.2.bn2.weight weight 8 1 64 0.035815245989417155
+29 layer1.2.bn2.bias bias 8 1 64 0.0256896975678956
+30 layer1.2.conv3.weight weight 8 4 256 64 1 1 0.010372459408051742
+31 layer1.2.bn3.weight weight 8 1 256 0.04606555882108
+32 layer1.2.bn3.bias bias 8 1 256 0.022468806633057642
+33 layer2.0.conv1.weight weight 8 4 128 256 1 1 0.011718499379961955
+34 layer2.0.bn1.weight weight 8 1 128 0.06944067625793816
+35 layer2.0.bn1.bias bias 8 1 128 0.034370323395867694
+36 layer2.0.conv2.weight weight 8 4 128 128 3 3 0.007415169648988702
+37 layer2.0.bn2.weight weight 8 1 128 0.05565568496677756
+38 layer2.0.bn2.bias bias 8 1 128 0.028247457831030942
+39 layer2.0.conv3.weight weight 8 4 512 128 1 1 0.009869021951808974
+40 layer2.0.bn3.weight weight 8 1 512 0.04920309511262763
+41 layer2.0.bn3.bias bias 8 1 512 0.017813031753711524
+42 layer2.0.downsample.0.weight weight 8 4 512 256 1 1 0.008109598028253139
+43 layer2.0.downsample.1.weight weight 8 1 512 0.046173654052041435
+44 layer2.0.downsample.1.bias bias 8 1 512 0.017813031753711524
+45 layer2.1.conv1.weight weight 8 4 128 512 1 1 0.005640328991066335
+46 layer2.1.bn1.weight weight 8 1 128 0.04683843434898511
+47 layer2.1.bn1.bias bias 8 1 128 0.030829120083992217
+48 layer2.1.conv2.weight weight 8 4 128 128 3 3 0.006416485284544108
+49 layer2.1.bn2.weight weight 8 1 128 0.04908416122750303
+50 layer2.1.bn2.bias bias 8 1 128 0.03508961513597947
+51 layer2.1.conv3.weight weight 8 4 512 128 1 1 0.00750149039883303
+52 layer2.1.bn3.weight weight 8 1 512 0.04762671878845444
+53 layer2.1.bn3.bias bias 8 1 512 0.02085572349243231
+54 layer2.2.conv1.weight weight 8 4 128 512 1 1 0.007536264870000432
+55 layer2.2.bn1.weight weight 8 1 128 0.0669956888737758
+56 layer2.2.bn1.bias bias 8 1 128 0.023359709517369487
+57 layer2.2.conv2.weight weight 8 4 128 128 3 3 0.006994883315915397
+58 layer2.2.bn2.weight weight 8 1 128 0.042021968161125536
+59 layer2.2.bn2.bias bias 8 1 128 0.024942572475503667
+60 layer2.2.conv3.weight weight 8 4 512 128 1 1 0.00865810503618032
+61 layer2.2.bn3.weight weight 8 1 512 0.04267433710097487
+62 layer2.2.bn3.bias bias 8 1 512 0.02576753815051667
+63 layer2.3.conv1.weight weight 8 4 128 512 1 1 0.007772640774653337
+64 layer2.3.bn1.weight weight 8 1 128 0.05951708142608905
+65 layer2.3.bn1.bias bias 8 1 128 0.020398332309191157
+66 layer2.3.conv2.weight weight 8 4 128 128 3 3 0.007281113859492613
+67 layer2.3.bn2.weight weight 8 1 128 0.07113335831165168
+68 layer2.3.bn2.bias bias 8 1 128 0.029838690399640277
+69 layer2.3.conv3.weight weight 8 4 512 128 1 1 0.008169284493902416
+70 layer2.3.bn3.weight weight 8 1 512 0.03688490863490018
+71 layer2.3.bn3.bias bias 8 1 512 0.029555961363806692
+72 layer3.0.conv1.weight weight 8 4 256 512 1 1 0.009845949371199725
+73 layer3.0.bn1.weight weight 8 1 256 0.07183064733606362
+74 layer3.0.bn1.bias bias 8 1 256 0.05058484625851538
+75 layer3.0.conv2.weight weight 8 4 256 256 3 3 0.005738152253419232
+76 layer3.0.bn2.weight weight 8 1 256 0.04754711184894741
+77 layer3.0.bn2.bias bias 8 1 256 0.025932431745067534
+78 layer3.0.conv3.weight weight 8 4 1024 256 1 1 0.007855749898792598
+79 layer3.0.bn3.weight weight 8 1 1024 0.05342853063058388
+80 layer3.0.bn3.bias bias 8 1 1024 0.012310607992961721
+81 layer3.0.downsample.0.weight weight 8 4 1024 512 1 1 0.005368410018153944
+82 layer3.0.downsample.1.weight weight 8 1 1024 0.0413724218411765
+83 layer3.0.downsample.1.bias bias 8 1 1024 0.012310607992961721
+84 layer3.1.conv1.weight weight 8 4 256 1024 1 1 0.005098653474302734
+85 layer3.1.bn1.weight weight 8 1 256 0.037945740902585685
+86 layer3.1.bn1.bias bias 8 1 256 0.020977732058351566
+87 layer3.1.conv2.weight weight 8 4 256 256 3 3 0.004982252786822178
+88 layer3.1.bn2.weight weight 8 1 256 0.05084607997002043
+89 layer3.1.bn2.bias bias 8 1 256 0.032190891573789265
+90 layer3.1.conv3.weight weight 8 4 1024 256 1 1 0.006621471815400309
+91 layer3.1.bn3.weight weight 8 1 1024 0.0338310473279735
+92 layer3.1.bn3.bias bias 8 1 1024 0.027228079103928528
+93 layer3.2.conv1.weight weight 8 4 256 1024 1 1 0.005209217574893394
+94 layer3.2.bn1.weight weight 8 1 256 0.044732411103308986
+95 layer3.2.bn1.bias bias 8 1 256 0.023796905364931092
+96 layer3.2.conv2.weight weight 8 4 256 256 3 3 0.004891652692133032
+97 layer3.2.bn2.weight weight 8 1 256 0.04812295565995883
+98 layer3.2.bn2.bias bias 8 1 256 0.03182965322926823
+99 layer3.2.conv3.weight weight 8 4 1024 256 1 1 0.006192618590286513
+100 layer3.2.bn3.weight weight 8 1 1024 0.029239293751678337
+101 layer3.2.bn3.bias bias 8 1 1024 0.02465349704933643
+102 layer3.3.conv1.weight weight 8 4 256 1024 1 1 0.0057201389479198655
+103 layer3.3.bn1.weight weight 8 1 256 0.04472791834745486
+104 layer3.3.bn1.bias bias 8 1 256 0.040687830355423865
+105 layer3.3.conv2.weight weight 8 4 256 256 3 3 0.004907031500610732
+106 layer3.3.bn2.weight weight 8 1 256 0.044117659458694586
+107 layer3.3.bn2.bias bias 8 1 256 0.03569113809535428
+108 layer3.3.conv3.weight weight 8 4 1024 256 1 1 0.006080598141860729
+109 layer3.3.bn3.weight weight 8 1 1024 0.03517453382149867
+110 layer3.3.bn3.bias bias 8 1 1024 0.024463971399168165
+111 layer3.4.conv1.weight weight 8 4 256 1024 1 1 0.005906529295117032
+112 layer3.4.bn1.weight weight 8 1 256 0.04719045764823631
+113 layer3.4.bn1.bias bias 8 1 256 0.031318939670153645
+114 layer3.4.conv2.weight weight 8 4 256 256 3 3 0.004833375025832764
+115 layer3.4.bn2.weight weight 8 1 256 0.04742855577395975
+116 layer3.4.bn2.bias bias 8 1 256 0.03294605029033852
+117 layer3.4.conv3.weight weight 8 4 1024 256 1 1 0.005962462640939059
+118 layer3.4.bn3.weight weight 8 1 1024 0.03769607196358723
+119 layer3.4.bn3.bias bias 8 1 1024 0.03531007793348788
+120 layer3.5.conv1.weight weight 8 4 256 1024 1 1 0.006528269459814115
+121 layer3.5.bn1.weight weight 8 1 256 0.048188398373436414
+122 layer3.5.bn1.bias bias 8 1 256 0.04223092108407535
+123 layer3.5.conv2.weight weight 8 4 256 256 3 3 0.004964005901531022
+124 layer3.5.bn2.weight weight 8 1 256 0.09223884558192535
+125 layer3.5.bn2.bias bias 8 1 256 0.031503066331704126
+126 layer3.5.conv3.weight weight 8 4 1024 256 1 1 0.006274045212273359
+127 layer3.5.bn3.weight weight 8 1 1024 0.03455092221314693
+128 layer3.5.bn3.bias bias 8 1 1024 0.051444449827649924
+129 layer4.0.conv1.weight weight 8 4 512 1024 1 1 0.007757083243893263
+130 layer4.0.bn1.weight weight 8 1 512 0.07390418224070541
+131 layer4.0.bn1.bias bias 8 1 512 0.05778190184988692
+132 layer4.0.conv2.weight weight 8 4 512 512 3 3 0.004126853032148523
+133 layer4.0.bn2.weight weight 8 1 512 0.06272550581040794
+134 layer4.0.bn2.bias bias 8 1 512 0.02519119208255697
+135 layer4.0.conv3.weight weight 8 4 2048 512 1 1 0.005023299711586781
+136 layer4.0.bn3.weight weight 8 1 2048 0.11705443716022451
+137 layer4.0.bn3.bias bias 8 1 2048 0.019076218335433624
+138 layer4.0.downsample.0.weight weight 8 4 2048 1024 1 1 0.0033670249439536368
+139 layer4.0.downsample.1.weight weight 8 1 2048 0.11641638272300395
+140 layer4.0.downsample.1.bias bias 8 1 2048 0.019076218335433624
+141 layer4.1.conv1.weight weight 8 4 512 2048 1 1 0.004896351900337475
+142 layer4.1.bn1.weight weight 8 1 512 0.06630025599159481
+143 layer4.1.bn1.bias bias 8 1 512 0.04207773356488803
+144 layer4.1.conv2.weight weight 8 4 512 512 3 3 0.0040493740508393515
+145 layer4.1.bn2.weight weight 8 1 512 0.04234315870955806
+146 layer4.1.bn2.bias bias 8 1 512 0.036598406284813395
+147 layer4.1.conv3.weight weight 8 4 2048 512 1 1 0.004894226342747065
+148 layer4.1.bn3.weight weight 8 1 2048 0.09615059051556336
+149 layer4.1.bn3.bias bias 8 1 2048 0.02222245930708
+150 layer4.2.conv1.weight weight 8 4 512 2048 1 1 0.005946383567214129
+151 layer4.2.bn1.weight weight 8 1 512 0.07473463693372837
+152 layer4.2.bn1.bias bias 8 1 512 0.06409659182719461
+153 layer4.2.conv2.weight weight 8 4 512 512 3 3 0.003589604817801161
+154 layer4.2.bn2.weight weight 8 1 512 0.06853213500211824
+155 layer4.2.bn2.bias bias 8 1 512 0.03173384763227998
+156 layer4.2.conv3.weight weight 8 4 2048 512 1 1 0.004598264829179039
+157 layer4.2.bn3.weight weight 8 1 2048 0.20910459011652316
+158 layer4.2.bn3.bias bias 8 1 2048 0.010920696176572542
+159 fc.weight weight 8 2 1000 2048 0.010966313533052295
+160 fc.bias bias 8 1 1000 0.003655462861176376
+161 bn1.running_mean buffer 32 1 64 1.0
+162 bn1.running_var buffer 32 1 64 1.0
+163 bn1.num_batches_tracked buffer 32 0  1.0
+164 layer1.0.bn1.running_mean buffer 32 1 64 1.0
+165 layer1.0.bn1.running_var buffer 32 1 64 1.0
+166 layer1.0.bn1.num_batches_tracked buffer 32 0  1.0
+167 layer1.0.bn2.running_mean buffer 32 1 64 1.0
+168 layer1.0.bn2.running_var buffer 32 1 64 1.0
+169 layer1.0.bn2.num_batches_tracked buffer 32 0  1.0
+170 layer1.0.bn3.running_mean buffer 32 1 256 1.0
+171 layer1.0.bn3.running_var buffer 32 1 256 1.0
+172 layer1.0.bn3.num_batches_tracked buffer 32 0  1.0
+173 layer1.0.downsample.1.running_mean buffer 32 1 256 1.0
+174 layer1.0.downsample.1.running_var buffer 32 1 256 1.0
+175 layer1.0.downsample.1.num_batches_tracked buffer 32 0  1.0
+176 layer1.1.bn1.running_mean buffer 32 1 64 1.0
+177 layer1.1.bn1.running_var buffer 32 1 64 1.0
+178 layer1.1.bn1.num_batches_tracked buffer 32 0  1.0
+179 layer1.1.bn2.running_mean buffer 32 1 64 1.0
+180 layer1.1.bn2.running_var buffer 32 1 64 1.0
+181 layer1.1.bn2.num_batches_tracked buffer 32 0  1.0
+182 layer1.1.bn3.running_mean buffer 32 1 256 1.0
+183 layer1.1.bn3.running_var buffer 32 1 256 1.0
+184 layer1.1.bn3.num_batches_tracked buffer 32 0  1.0
+185 layer1.2.bn1.running_mean buffer 32 1 64 1.0
+186 layer1.2.bn1.running_var buffer 32 1 64 1.0
+187 layer1.2.bn1.num_batches_tracked buffer 32 0  1.0
+188 layer1.2.bn2.running_mean buffer 32 1 64 1.0
+189 layer1.2.bn2.running_var buffer 32 1 64 1.0
+190 layer1.2.bn2.num_batches_tracked buffer 32 0  1.0
+191 layer1.2.bn3.running_mean buffer 32 1 256 1.0
+192 layer1.2.bn3.running_var buffer 32 1 256 1.0
+193 layer1.2.bn3.num_batches_tracked buffer 32 0  1.0
+194 layer2.0.bn1.running_mean buffer 32 1 128 1.0
+195 layer2.0.bn1.running_var buffer 32 1 128 1.0
+196 layer2.0.bn1.num_batches_tracked buffer 32 0  1.0
+197 layer2.0.bn2.running_mean buffer 32 1 128 1.0
+198 layer2.0.bn2.running_var buffer 32 1 128 1.0
+199 layer2.0.bn2.num_batches_tracked buffer 32 0  1.0
+200 layer2.0.bn3.running_mean buffer 32 1 512 1.0
+201 layer2.0.bn3.running_var buffer 32 1 512 1.0
+202 layer2.0.bn3.num_batches_tracked buffer 32 0  1.0
+203 layer2.0.downsample.1.running_mean buffer 32 1 512 1.0
+204 layer2.0.downsample.1.running_var buffer 32 1 512 1.0
+205 layer2.0.downsample.1.num_batches_tracked buffer 32 0  1.0
+206 layer2.1.bn1.running_mean buffer 32 1 128 1.0
+207 layer2.1.bn1.running_var buffer 32 1 128 1.0
+208 layer2.1.bn1.num_batches_tracked buffer 32 0  1.0
+209 layer2.1.bn2.running_mean buffer 32 1 128 1.0
+210 layer2.1.bn2.running_var buffer 32 1 128 1.0
+211 layer2.1.bn2.num_batches_tracked buffer 32 0  1.0
+212 layer2.1.bn3.running_mean buffer 32 1 512 1.0
+213 layer2.1.bn3.running_var buffer 32 1 512 1.0
+214 layer2.1.bn3.num_batches_tracked buffer 32 0  1.0
+215 layer2.2.bn1.running_mean buffer 32 1 128 1.0
+216 layer2.2.bn1.running_var buffer 32 1 128 1.0
+217 layer2.2.bn1.num_batches_tracked buffer 32 0  1.0
+218 layer2.2.bn2.running_mean buffer 32 1 128 1.0
+219 layer2.2.bn2.running_var buffer 32 1 128 1.0
+220 layer2.2.bn2.num_batches_tracked buffer 32 0  1.0
+221 layer2.2.bn3.running_mean buffer 32 1 512 1.0
+222 layer2.2.bn3.running_var buffer 32 1 512 1.0
+223 layer2.2.bn3.num_batches_tracked buffer 32 0  1.0
+224 layer2.3.bn1.running_mean buffer 32 1 128 1.0
+225 layer2.3.bn1.running_var buffer 32 1 128 1.0
+226 layer2.3.bn1.num_batches_tracked buffer 32 0  1.0
+227 layer2.3.bn2.running_mean buffer 32 1 128 1.0
+228 layer2.3.bn2.running_var buffer 32 1 128 1.0
+229 layer2.3.bn2.num_batches_tracked buffer 32 0  1.0
+230 layer2.3.bn3.running_mean buffer 32 1 512 1.0
+231 layer2.3.bn3.running_var buffer 32 1 512 1.0
+232 layer2.3.bn3.num_batches_tracked buffer 32 0  1.0
+233 layer3.0.bn1.running_mean buffer 32 1 256 1.0
+234 layer3.0.bn1.running_var buffer 32 1 256 1.0
+235 layer3.0.bn1.num_batches_tracked buffer 32 0  1.0
+236 layer3.0.bn2.running_mean buffer 32 1 256 1.0
+237 layer3.0.bn2.running_var buffer 32 1 256 1.0
+238 layer3.0.bn2.num_batches_tracked buffer 32 0  1.0
+239 layer3.0.bn3.running_mean buffer 32 1 1024 1.0
+240 layer3.0.bn3.running_var buffer 32 1 1024 1.0
+241 layer3.0.bn3.num_batches_tracked buffer 32 0  1.0
+242 layer3.0.downsample.1.running_mean buffer 32 1 1024 1.0
+243 layer3.0.downsample.1.running_var buffer 32 1 1024 1.0
+244 layer3.0.downsample.1.num_batches_tracked buffer 32 0  1.0
+245 layer3.1.bn1.running_mean buffer 32 1 256 1.0
+246 layer3.1.bn1.running_var buffer 32 1 256 1.0
+247 layer3.1.bn1.num_batches_tracked buffer 32 0  1.0
+248 layer3.1.bn2.running_mean buffer 32 1 256 1.0
+249 layer3.1.bn2.running_var buffer 32 1 256 1.0
+250 layer3.1.bn2.num_batches_tracked buffer 32 0  1.0
+251 layer3.1.bn3.running_mean buffer 32 1 1024 1.0
+252 layer3.1.bn3.running_var buffer 32 1 1024 1.0
+253 layer3.1.bn3.num_batches_tracked buffer 32 0  1.0
+254 layer3.2.bn1.running_mean buffer 32 1 256 1.0
+255 layer3.2.bn1.running_var buffer 32 1 256 1.0
+256 layer3.2.bn1.num_batches_tracked buffer 32 0  1.0
+257 layer3.2.bn2.running_mean buffer 32 1 256 1.0
+258 layer3.2.bn2.running_var buffer 32 1 256 1.0
+259 layer3.2.bn2.num_batches_tracked buffer 32 0  1.0
+260 layer3.2.bn3.running_mean buffer 32 1 1024 1.0
+261 layer3.2.bn3.running_var buffer 32 1 1024 1.0
+262 layer3.2.bn3.num_batches_tracked buffer 32 0  1.0
+263 layer3.3.bn1.running_mean buffer 32 1 256 1.0
+264 layer3.3.bn1.running_var buffer 32 1 256 1.0
+265 layer3.3.bn1.num_batches_tracked buffer 32 0  1.0
+266 layer3.3.bn2.running_mean buffer 32 1 256 1.0
+267 layer3.3.bn2.running_var buffer 32 1 256 1.0
+268 layer3.3.bn2.num_batches_tracked buffer 32 0  1.0
+269 layer3.3.bn3.running_mean buffer 32 1 1024 1.0
+270 layer3.3.bn3.running_var buffer 32 1 1024 1.0
+271 layer3.3.bn3.num_batches_tracked buffer 32 0  1.0
+272 layer3.4.bn1.running_mean buffer 32 1 256 1.0
+273 layer3.4.bn1.running_var buffer 32 1 256 1.0
+274 layer3.4.bn1.num_batches_tracked buffer 32 0  1.0
+275 layer3.4.bn2.running_mean buffer 32 1 256 1.0
+276 layer3.4.bn2.running_var buffer 32 1 256 1.0
+277 layer3.4.bn2.num_batches_tracked buffer 32 0  1.0
+278 layer3.4.bn3.running_mean buffer 32 1 1024 1.0
+279 layer3.4.bn3.running_var buffer 32 1 1024 1.0
+280 layer3.4.bn3.num_batches_tracked buffer 32 0  1.0
+281 layer3.5.bn1.running_mean buffer 32 1 256 1.0
+282 layer3.5.bn1.running_var buffer 32 1 256 1.0
+283 layer3.5.bn1.num_batches_tracked buffer 32 0  1.0
+284 layer3.5.bn2.running_mean buffer 32 1 256 1.0
+285 layer3.5.bn2.running_var buffer 32 1 256 1.0
+286 layer3.5.bn2.num_batches_tracked buffer 32 0  1.0
+287 layer3.5.bn3.running_mean buffer 32 1 1024 1.0
+288 layer3.5.bn3.running_var buffer 32 1 1024 1.0
+289 layer3.5.bn3.num_batches_tracked buffer 32 0  1.0
+290 layer4.0.bn1.running_mean buffer 32 1 512 1.0
+291 layer4.0.bn1.running_var buffer 32 1 512 1.0
+292 layer4.0.bn1.num_batches_tracked buffer 32 0  1.0
+293 layer4.0.bn2.running_mean buffer 32 1 512 1.0
+294 layer4.0.bn2.running_var buffer 32 1 512 1.0
+295 layer4.0.bn2.num_batches_tracked buffer 32 0  1.0
+296 layer4.0.bn3.running_mean buffer 32 1 2048 1.0
+297 layer4.0.bn3.running_var buffer 32 1 2048 1.0
+298 layer4.0.bn3.num_batches_tracked buffer 32 0  1.0
+299 layer4.0.downsample.1.running_mean buffer 32 1 2048 1.0
+300 layer4.0.downsample.1.running_var buffer 32 1 2048 1.0
+301 layer4.0.downsample.1.num_batches_tracked buffer 32 0  1.0
+302 layer4.1.bn1.running_mean buffer 32 1 512 1.0
+303 layer4.1.bn1.running_var buffer 32 1 512 1.0
+304 layer4.1.bn1.num_batches_tracked buffer 32 0  1.0
+305 layer4.1.bn2.running_mean buffer 32 1 512 1.0
+306 layer4.1.bn2.running_var buffer 32 1 512 1.0
+307 layer4.1.bn2.num_batches_tracked buffer 32 0  1.0
+308 layer4.1.bn3.running_mean buffer 32 1 2048 1.0
+309 layer4.1.bn3.running_var buffer 32 1 2048 1.0
+310 layer4.1.bn3.num_batches_tracked buffer 32 0  1.0
+311 layer4.2.bn1.running_mean buffer 32 1 512 1.0
+312 layer4.2.bn1.running_var buffer 32 1 512 1.0
+313 layer4.2.bn1.num_batches_tracked buffer 32 0  1.0
+314 layer4.2.bn2.running_mean buffer 32 1 512 1.0
+315 layer4.2.bn2.running_var buffer 32 1 512 1.0
+316 layer4.2.bn2.num_batches_tracked buffer 32 0  1.0
+317 layer4.2.bn3.running_mean buffer 32 1 2048 1.0
+318 layer4.2.bn3.running_var buffer 32 1 2048 1.0
+319 layer4.2.bn3.num_batches_tracked buffer 32 0  1.0

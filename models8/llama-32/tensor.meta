@@ -1,0 +1,150 @@
+numTensors 148
+
+0 model.embed_tokens.weight weight 8 2 128256 2048 0.0008662246142241363
+1 model.layers.0.self_attn.q_proj.weight weight 8 2 2048 2048 0.0030521408403125644
+2 model.layers.0.self_attn.k_proj.weight weight 8 2 512 2048 0.003517494811982904
+3 model.layers.0.self_attn.v_proj.weight weight 8 2 512 2048 0.0003898518516400797
+4 model.layers.0.self_attn.o_proj.weight weight 8 2 2048 2048 0.001165977912447474
+5 model.layers.0.mlp.gate_proj.weight weight 8 2 8192 2048 0.0012780068275900776
+6 model.layers.0.mlp.up_proj.weight weight 8 2 8192 2048 0.0006812666589332799
+7 model.layers.0.mlp.down_proj.weight weight 8 2 2048 8192 0.0011404098943393719
+8 model.layers.0.input_layernorm.weight weight 8 1 2048 0.008389410849763771
+9 model.layers.0.post_attention_layernorm.weight weight 8 1 2048 0.0032125970408217698
+10 model.layers.1.self_attn.q_proj.weight weight 8 2 2048 2048 0.0016094176111874977
+11 model.layers.1.self_attn.k_proj.weight weight 8 2 512 2048 0.001820130517967956
+12 model.layers.1.self_attn.v_proj.weight weight 8 2 512 2048 0.0004552190212563867
+13 model.layers.1.self_attn.o_proj.weight weight 8 2 2048 2048 0.0015767805960716418
+14 model.layers.1.mlp.gate_proj.weight weight 8 2 8192 2048 0.002122311919583518
+15 model.layers.1.mlp.up_proj.weight weight 8 2 8192 2048 0.0017463680959057476
+16 model.layers.1.mlp.down_proj.weight weight 8 2 2048 8192 0.0011840969477718323
+17 model.layers.1.input_layernorm.weight weight 8 1 2048 0.00703467867278173
+18 model.layers.1.post_attention_layernorm.weight weight 8 1 2048 0.006122949725318549
+19 model.layers.2.self_attn.q_proj.weight weight 8 2 2048 2048 0.0022990078607575317
+20 model.layers.2.self_attn.k_proj.weight weight 8 2 512 2048 0.002426033653341795
+21 model.layers.2.self_attn.v_proj.weight weight 8 2 512 2048 0.00042979263553431216
+22 model.layers.2.self_attn.o_proj.weight weight 8 2 2048 2048 0.0011711885446512944
+23 model.layers.2.mlp.gate_proj.weight weight 8 2 8192 2048 0.0010268609576451044
+24 model.layers.2.mlp.up_proj.weight weight 8 2 8192 2048 0.0007310774840557521
+25 model.layers.2.mlp.down_proj.weight weight 8 2 2048 8192 0.0010814992775697095
+26 model.layers.2.input_layernorm.weight weight 8 1 2048 0.00834089226902035
+27 model.layers.2.post_attention_layernorm.weight weight 8 1 2048 0.052127803961938786
+28 model.layers.3.self_attn.q_proj.weight weight 8 2 2048 2048 0.0013766547728215513
+29 model.layers.3.self_attn.k_proj.weight weight 8 2 512 2048 0.0015731000539263755
+30 model.layers.3.self_attn.v_proj.weight weight 8 2 512 2048 0.000754805231332841
+31 model.layers.3.self_attn.o_proj.weight weight 8 2 2048 2048 0.0010274001520698178
+32 model.layers.3.mlp.gate_proj.weight weight 8 2 8192 2048 0.001203332450076176
+33 model.layers.3.mlp.up_proj.weight weight 8 2 8192 2048 0.0008047249299586909
+34 model.layers.3.mlp.down_proj.weight weight 8 2 2048 8192 0.0009308032958726877
+35 model.layers.3.input_layernorm.weight weight 8 1 2048 0.007641284956964072
+36 model.layers.3.post_attention_layernorm.weight weight 8 1 2048 0.04647298682722892
+37 model.layers.4.self_attn.q_proj.weight weight 8 2 2048 2048 0.0019184512540765795
+38 model.layers.4.self_attn.k_proj.weight weight 8 2 512 2048 0.0023349779019624373
+39 model.layers.4.self_attn.v_proj.weight weight 8 2 512 2048 0.0005750027639527318
+40 model.layers.4.self_attn.o_proj.weight weight 8 2 2048 2048 0.0014690229136778098
+41 model.layers.4.mlp.gate_proj.weight weight 8 2 8192 2048 0.0012816308638854933
+42 model.layers.4.mlp.up_proj.weight weight 8 2 8192 2048 0.0007991872196858922
+43 model.layers.4.mlp.down_proj.weight weight 8 2 2048 8192 0.0010629061057748747
+44 model.layers.4.input_layernorm.weight weight 8 1 2048 0.007056178452508
+45 model.layers.4.post_attention_layernorm.weight weight 8 1 2048 0.04845371459469705
+46 model.layers.5.self_attn.q_proj.weight weight 8 2 2048 2048 0.002020754484594877
+47 model.layers.5.self_attn.k_proj.weight weight 8 2 512 2048 0.0036412491690315293
+48 model.layers.5.self_attn.v_proj.weight weight 8 2 512 2048 0.0004833847197953973
+49 model.layers.5.self_attn.o_proj.weight weight 8 2 2048 2048 0.0011494837409621204
+50 model.layers.5.mlp.gate_proj.weight weight 8 2 8192 2048 0.0012560950671336977
+51 model.layers.5.mlp.up_proj.weight weight 8 2 8192 2048 0.0008541368566926555
+52 model.layers.5.mlp.down_proj.weight weight 8 2 2048 8192 0.0013224737442783297
+53 model.layers.5.input_layernorm.weight weight 8 1 2048 0.008788986356248384
+54 model.layers.5.post_attention_layernorm.weight weight 8 1 2048 0.0035240422235839944
+55 model.layers.6.self_attn.q_proj.weight weight 8 2 2048 2048 0.001219699760982827
+56 model.layers.6.self_attn.k_proj.weight weight 8 2 512 2048 0.0022805715655659434
+57 model.layers.6.self_attn.v_proj.weight weight 8 2 512 2048 0.0005760133710943743
+58 model.layers.6.self_attn.o_proj.weight weight 8 2 2048 2048 0.0009157197053477887
+59 model.layers.6.mlp.gate_proj.weight weight 8 2 8192 2048 0.0013630453079928795
+60 model.layers.6.mlp.up_proj.weight weight 8 2 8192 2048 0.0007782577089835574
+61 model.layers.6.mlp.down_proj.weight weight 8 2 2048 8192 0.0013663381430199751
+62 model.layers.6.input_layernorm.weight weight 8 1 2048 0.007276433391091233
+63 model.layers.6.post_attention_layernorm.weight weight 8 1 2048 0.003895490220685569
+64 model.layers.7.self_attn.q_proj.weight weight 8 2 2048 2048 0.0014617818521020988
+65 model.layers.7.self_attn.k_proj.weight weight 8 2 512 2048 0.0017095283805897777
+66 model.layers.7.self_attn.v_proj.weight weight 8 2 512 2048 0.000530242242964872
+67 model.layers.7.self_attn.o_proj.weight weight 8 2 2048 2048 0.0010273917051019234
+68 model.layers.7.mlp.gate_proj.weight weight 8 2 8192 2048 0.0015655176156511227
+69 model.layers.7.mlp.up_proj.weight weight 8 2 8192 2048 0.0007732392757569634
+70 model.layers.7.mlp.down_proj.weight weight 8 2 2048 8192 0.001334940472070977
+71 model.layers.7.input_layernorm.weight weight 8 1 2048 0.00783345642975559
+72 model.layers.7.post_attention_layernorm.weight weight 8 1 2048 0.003787091533842146
+73 model.layers.8.self_attn.q_proj.weight weight 8 2 2048 2048 0.00238052368407881
+74 model.layers.8.self_attn.k_proj.weight weight 8 2 512 2048 0.0027261487627554867
+75 model.layers.8.self_attn.v_proj.weight weight 8 2 512 2048 0.0005010604265858215
+76 model.layers.8.self_attn.o_proj.weight weight 8 2 2048 2048 0.0010992435096916274
+77 model.layers.8.mlp.gate_proj.weight weight 8 2 8192 2048 0.001903789619656075
+78 model.layers.8.mlp.up_proj.weight weight 8 2 8192 2048 0.0007603623887254159
+79 model.layers.8.mlp.down_proj.weight weight 8 2 2048 8192 0.0011694934513662028
+80 model.layers.8.input_layernorm.weight weight 8 1 2048 0.008568076029591438
+81 model.layers.8.post_attention_layernorm.weight weight 8 1 2048 0.004030406973029128
+82 model.layers.9.self_attn.q_proj.weight weight 8 2 2048 2048 0.0018483558683133347
+83 model.layers.9.self_attn.k_proj.weight weight 8 2 512 2048 0.001794415438279298
+84 model.layers.9.self_attn.v_proj.weight weight 8 2 512 2048 0.000632877214269045
+85 model.layers.9.self_attn.o_proj.weight weight 8 2 2048 2048 0.0014909555607081075
+86 model.layers.9.mlp.gate_proj.weight weight 8 2 8192 2048 0.0017919287994269612
+87 model.layers.9.mlp.up_proj.weight weight 8 2 8192 2048 0.0007222195729208927
+88 model.layers.9.mlp.down_proj.weight weight 8 2 2048 8192 0.00120339076958771
+89 model.layers.9.input_layernorm.weight weight 8 1 2048 0.008029678715104831
+90 model.layers.9.post_attention_layernorm.weight weight 8 1 2048 0.05357055391004289
+91 model.layers.10.self_attn.q_proj.weight weight 8 2 2048 2048 0.0014878432922518746
+92 model.layers.10.self_attn.k_proj.weight weight 8 2 512 2048 0.0017191993957740084
+93 model.layers.10.self_attn.v_proj.weight weight 8 2 512 2048 0.000993852152613558
+94 model.layers.10.self_attn.o_proj.weight weight 8 2 2048 2048 0.001695538191434743
+95 model.layers.10.mlp.gate_proj.weight weight 8 2 8192 2048 0.001461184960111523
+96 model.layers.10.mlp.up_proj.weight weight 8 2 8192 2048 0.0007661378320893951
+97 model.layers.10.mlp.down_proj.weight weight 8 2 2048 8192 0.0011852948266804029
+98 model.layers.10.input_layernorm.weight weight 8 1 2048 0.008569923414709461
+99 model.layers.10.post_attention_layernorm.weight weight 8 1 2048 0.004165689477854659
+100 model.layers.11.self_attn.q_proj.weight weight 8 2 2048 2048 0.0012816555239663567
+101 model.layers.11.self_attn.k_proj.weight weight 8 2 512 2048 0.0022124557855022517
+102 model.layers.11.self_attn.v_proj.weight weight 8 2 512 2048 0.0006888579818995252
+103 model.layers.11.self_attn.o_proj.weight weight 8 2 2048 2048 0.0017354669510012215
+104 model.layers.11.mlp.gate_proj.weight weight 8 2 8192 2048 0.0014611428566895495
+105 model.layers.11.mlp.up_proj.weight weight 8 2 8192 2048 0.0007426305417263734
+106 model.layers.11.mlp.down_proj.weight weight 8 2 2048 8192 0.0009459674779779574
+107 model.layers.11.input_layernorm.weight weight 8 1 2048 0.00778923414638231
+108 model.layers.11.post_attention_layernorm.weight weight 8 1 2048 0.004105431746341932
+109 model.layers.12.self_attn.q_proj.weight weight 8 2 2048 2048 0.00165949087180725
+110 model.layers.12.self_attn.k_proj.weight weight 8 2 512 2048 0.0029220248636923885
+111 model.layers.12.self_attn.v_proj.weight weight 8 2 512 2048 0.0007338449094584584
+112 model.layers.12.self_attn.o_proj.weight weight 8 2 2048 2048 0.0016073664481280217
+113 model.layers.12.mlp.gate_proj.weight weight 8 2 8192 2048 0.0016333850726228155
+114 model.layers.12.mlp.up_proj.weight weight 8 2 8192 2048 0.0006958096152005736
+115 model.layers.12.mlp.down_proj.weight weight 8 2 2048 8192 0.0007375497633035652
+116 model.layers.12.input_layernorm.weight weight 8 1 2048 0.007791601945685568
+117 model.layers.12.post_attention_layernorm.weight weight 8 1 2048 0.004028651781524482
+118 model.layers.13.self_attn.q_proj.weight weight 8 2 2048 2048 0.0014208250637305067
+119 model.layers.13.self_attn.k_proj.weight weight 8 2 512 2048 0.0022990042744575404
+120 model.layers.13.self_attn.v_proj.weight weight 8 2 512 2048 0.0008972053496908918
+121 model.layers.13.self_attn.o_proj.weight weight 8 2 2048 2048 0.0015656657995332859
+122 model.layers.13.mlp.gate_proj.weight weight 8 2 8192 2048 0.001958638630986498
+123 model.layers.13.mlp.up_proj.weight weight 8 2 8192 2048 0.0007553167428062276
+124 model.layers.13.mlp.down_proj.weight weight 8 2 2048 8192 0.0007797058588785422
+125 model.layers.13.input_layernorm.weight weight 8 1 2048 0.009181879440084122
+126 model.layers.13.post_attention_layernorm.weight weight 8 1 2048 0.0040933442805570755
+127 model.layers.14.self_attn.q_proj.weight weight 8 2 2048 2048 0.0016626780519715665
+128 model.layers.14.self_attn.k_proj.weight weight 8 2 512 2048 0.002684340206597009
+129 model.layers.14.self_attn.v_proj.weight weight 8 2 512 2048 0.0016734890956296169
+130 model.layers.14.self_attn.o_proj.weight weight 8 2 2048 2048 0.0017759349473532578
+131 model.layers.14.mlp.gate_proj.weight weight 8 2 8192 2048 0.0017208545393129497
+132 model.layers.14.mlp.up_proj.weight weight 8 2 8192 2048 0.0011214726016464303
+133 model.layers.14.mlp.down_proj.weight weight 8 2 2048 8192 0.0008373669969770577
+134 model.layers.14.input_layernorm.weight weight 8 1 2048 0.010047670987361245
+135 model.layers.14.post_attention_layernorm.weight weight 8 1 2048 0.0048915858544548475
+136 model.layers.15.self_attn.q_proj.weight weight 8 2 2048 2048 0.0016733923347184419
+137 model.layers.15.self_attn.k_proj.weight weight 8 2 512 2048 0.0029217795795915442
+138 model.layers.15.self_attn.v_proj.weight weight 8 2 512 2048 0.001577877271975231
+139 model.layers.15.self_attn.o_proj.weight weight 8 2 2048 2048 0.002365191658576263
+140 model.layers.15.mlp.gate_proj.weight weight 8 2 8192 2048 0.002982262916995003
+141 model.layers.15.mlp.up_proj.weight weight 8 2 8192 2048 0.0033280878994206425
+142 model.layers.15.mlp.down_proj.weight weight 8 2 2048 8192 0.0012482723809223942
+143 model.layers.15.input_layernorm.weight weight 8 1 2048 0.00904368798224633
+144 model.layers.15.post_attention_layernorm.weight weight 8 1 2048 0.005006779330781768
+145 model.norm.weight weight 8 1 2048 0.022536126938631357
+146 model.rotary_emb.inv_freq buffer 32 1 32 1.0
+147 model.rotary_emb.original_inv_freq buffer 32 1 32 1.0

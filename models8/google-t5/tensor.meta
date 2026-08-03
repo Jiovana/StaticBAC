@@ -1,0 +1,263 @@
+numTensors 261
+
+0 transformer.shared.weight weight 8 2 32128 768 0.7607866959867899
+1 transformer.encoder.block.0.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0015565231031498738
+2 transformer.encoder.block.0.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.020954969589462337
+3 transformer.encoder.block.0.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.011288196984673485
+4 transformer.encoder.block.0.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.045124876610452926
+5 transformer.encoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight weight 8 2 32 12 0.23143840392514825
+6 transformer.encoder.block.0.layer.0.layer_norm.weight weight 8 1 768 0.0036697343034706583
+7 transformer.encoder.block.0.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.022463148442381273
+8 transformer.encoder.block.0.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.03068156317651902
+9 transformer.encoder.block.0.layer.1.layer_norm.weight weight 8 1 768 0.011540972123378155
+10 transformer.encoder.block.1.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0019336712045892029
+11 transformer.encoder.block.1.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.012876677842314213
+12 transformer.encoder.block.1.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.012368296523489223
+13 transformer.encoder.block.1.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.05047050216039499
+14 transformer.encoder.block.1.layer.0.layer_norm.weight weight 8 1 768 0.002759826141570978
+15 transformer.encoder.block.1.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.022686786022044533
+16 transformer.encoder.block.1.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.02783089995482041
+17 transformer.encoder.block.1.layer.1.layer_norm.weight weight 8 1 768 0.014281811188826113
+18 transformer.encoder.block.2.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0016005795245178328
+19 transformer.encoder.block.2.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.013859597307064965
+20 transformer.encoder.block.2.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.013129696207842805
+21 transformer.encoder.block.2.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.03743195322906373
+22 transformer.encoder.block.2.layer.0.layer_norm.weight weight 8 1 768 0.002545569157488676
+23 transformer.encoder.block.2.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.027170548902532992
+24 transformer.encoder.block.2.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.022830781577399442
+25 transformer.encoder.block.2.layer.1.layer_norm.weight weight 8 1 768 0.01887878116750255
+26 transformer.encoder.block.3.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0014121099525096843
+27 transformer.encoder.block.3.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.011299360562591454
+28 transformer.encoder.block.3.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.013238441636522966
+29 transformer.encoder.block.3.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.03513176343381906
+30 transformer.encoder.block.3.layer.0.layer_norm.weight weight 8 1 768 0.0025191632636075868
+31 transformer.encoder.block.3.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.03339970133664345
+32 transformer.encoder.block.3.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.025409861864999394
+33 transformer.encoder.block.3.layer.1.layer_norm.weight weight 8 1 768 0.02515871214087389
+34 transformer.encoder.block.4.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.001546522018753534
+35 transformer.encoder.block.4.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.014071199857917993
+36 transformer.encoder.block.4.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.014800132711678009
+37 transformer.encoder.block.4.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.03711291632346371
+38 transformer.encoder.block.4.layer.0.layer_norm.weight weight 8 1 768 0.0021783497456261776
+39 transformer.encoder.block.4.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.04052964283194095
+40 transformer.encoder.block.4.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.025404066005818425
+41 transformer.encoder.block.4.layer.1.layer_norm.weight weight 8 1 768 0.026908134371171143
+42 transformer.encoder.block.5.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.001629153926569513
+43 transformer.encoder.block.5.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.014562702203045473
+44 transformer.encoder.block.5.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.01558094129963378
+45 transformer.encoder.block.5.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.036427347374396825
+46 transformer.encoder.block.5.layer.0.layer_norm.weight weight 8 1 768 0.002150845592731915
+47 transformer.encoder.block.5.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.03418322025999164
+48 transformer.encoder.block.5.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.028482857539341194
+49 transformer.encoder.block.5.layer.1.layer_norm.weight weight 8 1 768 0.024142758095464775
+50 transformer.encoder.block.6.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0017464768825686185
+51 transformer.encoder.block.6.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.014910285757117722
+52 transformer.encoder.block.6.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.018218829267734358
+53 transformer.encoder.block.6.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.040771722981615244
+54 transformer.encoder.block.6.layer.0.layer_norm.weight weight 8 1 768 0.0020957773863533105
+55 transformer.encoder.block.6.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.03156478146994115
+56 transformer.encoder.block.6.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.03466520601077756
+57 transformer.encoder.block.6.layer.1.layer_norm.weight weight 8 1 768 0.024151955650092483
+58 transformer.encoder.block.7.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0018762494456402593
+59 transformer.encoder.block.7.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.014567013211343419
+60 transformer.encoder.block.7.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.019268487340530403
+61 transformer.encoder.block.7.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.0447056843754766
+62 transformer.encoder.block.7.layer.0.layer_norm.weight weight 8 1 768 0.0018257287384133717
+63 transformer.encoder.block.7.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.02930055762539125
+64 transformer.encoder.block.7.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.04466432791511611
+65 transformer.encoder.block.7.layer.1.layer_norm.weight weight 8 1 768 0.5686578273694045
+66 transformer.encoder.block.8.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0020207794301864285
+67 transformer.encoder.block.8.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.013387119100517297
+68 transformer.encoder.block.8.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.022092789956403174
+69 transformer.encoder.block.8.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.047307941900719186
+70 transformer.encoder.block.8.layer.0.layer_norm.weight weight 8 1 768 0.001680301850650647
+71 transformer.encoder.block.8.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.03823451637626476
+72 transformer.encoder.block.8.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.05419460094488375
+73 transformer.encoder.block.8.layer.1.layer_norm.weight weight 8 1 768 0.027628741631171426
+74 transformer.encoder.block.9.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0018314239622125089
+75 transformer.encoder.block.9.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.012393969611485787
+76 transformer.encoder.block.9.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.0218628020793347
+77 transformer.encoder.block.9.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.042979119613615197
+78 transformer.encoder.block.9.layer.0.layer_norm.weight weight 8 1 768 0.0017683570910815801
+79 transformer.encoder.block.9.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.04850510651620608
+80 transformer.encoder.block.9.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.05745487604630045
+81 transformer.encoder.block.9.layer.1.layer_norm.weight weight 8 1 768 0.6556813763339764
+82 transformer.encoder.block.10.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0017916573138128836
+83 transformer.encoder.block.10.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.0137535729716722
+84 transformer.encoder.block.10.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.023286786053750112
+85 transformer.encoder.block.10.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.05501986735952831
+86 transformer.encoder.block.10.layer.0.layer_norm.weight weight 8 1 768 0.001843476530201882
+87 transformer.encoder.block.10.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.06054107411215386
+88 transformer.encoder.block.10.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.05567153020989021
+89 transformer.encoder.block.10.layer.1.layer_norm.weight weight 8 1 768 0.6889661242832226
+90 transformer.encoder.block.11.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.001849922764876237
+91 transformer.encoder.block.11.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.014355990229148487
+92 transformer.encoder.block.11.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.027506628681308154
+93 transformer.encoder.block.11.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.10098753069477434
+94 transformer.encoder.block.11.layer.0.layer_norm.weight weight 8 1 768 0.001721535027759649
+95 transformer.encoder.block.11.layer.1.DenseReluDense.wi.weight weight 8 2 3072 768 0.12536046537134363
+96 transformer.encoder.block.11.layer.1.DenseReluDense.wo.weight weight 8 2 768 3072 0.05176673208472869
+97 transformer.encoder.block.11.layer.1.layer_norm.weight weight 8 1 768 0.024914288814006272
+98 transformer.encoder.final_layer_norm.weight weight 8 1 768 0.004105100555447166
+99 transformer.decoder.block.0.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.002181984773682648
+100 transformer.decoder.block.0.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.019811645675323963
+101 transformer.decoder.block.0.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.011230589445112866
+102 transformer.decoder.block.0.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.04300537277811076
+103 transformer.decoder.block.0.layer.0.SelfAttention.relative_attention_bias.weight weight 8 2 32 12 0.33351711290841146
+104 transformer.decoder.block.0.layer.0.layer_norm.weight weight 8 1 768 0.0033079197711553517
+105 transformer.decoder.block.0.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0012939995872567516
+106 transformer.decoder.block.0.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.012753219671625744
+107 transformer.decoder.block.0.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.008502703576591174
+108 transformer.decoder.block.0.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.04301611660767121
+109 transformer.decoder.block.0.layer.1.layer_norm.weight weight 8 1 768 0.0038442941182860774
+110 transformer.decoder.block.0.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.05151528257313536
+111 transformer.decoder.block.0.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.03092690583589989
+112 transformer.decoder.block.0.layer.2.layer_norm.weight weight 8 1 768 0.5716422423986589
+113 transformer.decoder.block.1.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0021417563950403323
+114 transformer.decoder.block.1.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.011638127753104542
+115 transformer.decoder.block.1.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.014355161911030909
+116 transformer.decoder.block.1.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.062315161121820804
+117 transformer.decoder.block.1.layer.0.layer_norm.weight weight 8 1 768 0.003416922718886343
+118 transformer.decoder.block.1.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0013621437184493596
+119 transformer.decoder.block.1.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.020097635459406057
+120 transformer.decoder.block.1.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.011230055562957593
+121 transformer.decoder.block.1.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.03116244749733246
+122 transformer.decoder.block.1.layer.1.layer_norm.weight weight 8 1 768 0.0013821271344802892
+123 transformer.decoder.block.1.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.07789005757225033
+124 transformer.decoder.block.1.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.03840335871231473
+125 transformer.decoder.block.1.layer.2.layer_norm.weight weight 8 1 768 0.017048576356770425
+126 transformer.decoder.block.2.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0017096233759184144
+127 transformer.decoder.block.2.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.012367823556802597
+128 transformer.decoder.block.2.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.01714360017498335
+129 transformer.decoder.block.2.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.04466185277601008
+130 transformer.decoder.block.2.layer.0.layer_norm.weight weight 8 1 768 0.0026601061222200637
+131 transformer.decoder.block.2.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0013426899393858766
+132 transformer.decoder.block.2.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.02337408866333411
+133 transformer.decoder.block.2.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.01323846134239625
+134 transformer.decoder.block.2.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.028321891858525954
+135 transformer.decoder.block.2.layer.1.layer_norm.weight weight 8 1 768 0.00127114771717252
+136 transformer.decoder.block.2.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.083992825577902
+137 transformer.decoder.block.2.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.03686837303185703
+138 transformer.decoder.block.2.layer.2.layer_norm.weight weight 8 1 768 0.02035839825928247
+139 transformer.decoder.block.3.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0016734584091410325
+140 transformer.decoder.block.3.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.012526011486959414
+141 transformer.decoder.block.3.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.01684592822668119
+142 transformer.decoder.block.3.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.050126251899852495
+143 transformer.decoder.block.3.layer.0.layer_norm.weight weight 8 1 768 0.002414572518847988
+144 transformer.decoder.block.3.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.001380832070778057
+145 transformer.decoder.block.3.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.021619000324095666
+146 transformer.decoder.block.3.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.015003640107111199
+147 transformer.decoder.block.3.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.0300118092306709
+148 transformer.decoder.block.3.layer.1.layer_norm.weight weight 8 1 768 0.0011515173790648701
+149 transformer.decoder.block.3.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.07733174303034329
+150 transformer.decoder.block.3.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.040773975095810724
+151 transformer.decoder.block.3.layer.2.layer_norm.weight weight 8 1 768 0.03117039546635448
+152 transformer.decoder.block.4.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0015313159476909462
+153 transformer.decoder.block.4.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.013966260996976437
+154 transformer.decoder.block.4.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.020449356073684657
+155 transformer.decoder.block.4.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.06464853483037108
+156 transformer.decoder.block.4.layer.0.layer_norm.weight weight 8 1 768 0.0024472948709887993
+157 transformer.decoder.block.4.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0014954341280614416
+158 transformer.decoder.block.4.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.0223309153353936
+159 transformer.decoder.block.4.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.015115226948801862
+160 transformer.decoder.block.4.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.032316745549412204
+161 transformer.decoder.block.4.layer.1.layer_norm.weight weight 8 1 768 0.0011671176048149291
+162 transformer.decoder.block.4.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.058259999975423395
+163 transformer.decoder.block.4.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.027146308959928356
+164 transformer.decoder.block.4.layer.2.layer_norm.weight weight 8 1 768 0.02960166451340162
+165 transformer.decoder.block.5.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0013428996972566169
+166 transformer.decoder.block.5.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.014561962527491661
+167 transformer.decoder.block.5.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.022265462117772163
+168 transformer.decoder.block.5.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.07741966247308615
+169 transformer.decoder.block.5.layer.0.layer_norm.weight weight 8 1 768 0.0030851950826208787
+170 transformer.decoder.block.5.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0014964978362434994
+171 transformer.decoder.block.5.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.025051454638186584
+172 transformer.decoder.block.5.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.018395995286612916
+173 transformer.decoder.block.5.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.028180449690787132
+174 transformer.decoder.block.5.layer.1.layer_norm.weight weight 8 1 768 0.0011693895310310827
+175 transformer.decoder.block.5.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.020813976365689955
+176 transformer.decoder.block.5.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.025882437615288245
+177 transformer.decoder.block.5.layer.2.layer_norm.weight weight 8 1 768 0.030207097717476393
+178 transformer.decoder.block.6.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0013008516113616868
+179 transformer.decoder.block.6.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.012070979972701009
+180 transformer.decoder.block.6.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.02452208514213259
+181 transformer.decoder.block.6.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.09282007979138576
+182 transformer.decoder.block.6.layer.0.layer_norm.weight weight 8 1 768 0.11534606199487954
+183 transformer.decoder.block.6.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0013807803762502413
+184 transformer.decoder.block.6.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.025396085555575855
+185 transformer.decoder.block.6.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.01926889271158411
+186 transformer.decoder.block.6.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.04199456147031244
+187 transformer.decoder.block.6.layer.1.layer_norm.weight weight 8 1 768 0.0012401815556111221
+188 transformer.decoder.block.6.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.02294851540673661
+189 transformer.decoder.block.6.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.024851966138781406
+190 transformer.decoder.block.6.layer.2.layer_norm.weight weight 8 1 768 0.032038886893294885
+191 transformer.decoder.block.7.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.001300830074160382
+192 transformer.decoder.block.7.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.009760478273405603
+193 transformer.decoder.block.7.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.02980405112981905
+194 transformer.decoder.block.7.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.11015884345510638
+195 transformer.decoder.block.7.layer.0.layer_norm.weight weight 8 1 768 0.0036151193018391743
+196 transformer.decoder.block.7.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0012773383557399764
+197 transformer.decoder.block.7.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.029543291087844363
+198 transformer.decoder.block.7.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.02415368717036243
+199 transformer.decoder.block.7.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.05273687435640731
+200 transformer.decoder.block.7.layer.1.layer_norm.weight weight 8 1 768 0.05802942493506895
+201 transformer.decoder.block.7.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.031162411923367373
+202 transformer.decoder.block.7.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.026369243823280566
+203 transformer.decoder.block.7.layer.2.layer_norm.weight weight 8 1 768 0.043174453252056585
+204 transformer.decoder.block.8.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.001577218794135519
+205 transformer.decoder.block.8.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.008941254015792526
+206 transformer.decoder.block.8.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.02914680002849135
+207 transformer.decoder.block.8.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.12107684886369624
+208 transformer.decoder.block.8.layer.0.layer_norm.weight weight 8 1 768 0.004677326659783974
+209 transformer.decoder.block.8.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0012381614758411098
+210 transformer.decoder.block.8.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.02675589540628106
+211 transformer.decoder.block.8.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.027185850242916428
+212 transformer.decoder.block.8.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.06777250383981584
+213 transformer.decoder.block.8.layer.1.layer_norm.weight weight 8 1 768 0.06934976809688109
+214 transformer.decoder.block.8.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.03466521472850432
+215 transformer.decoder.block.8.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.03092941033462306
+216 transformer.decoder.block.8.layer.2.layer_norm.weight weight 8 1 768 0.06710488446180268
+217 transformer.decoder.block.9.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.001293998921669223
+218 transformer.decoder.block.9.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.009200140340231859
+219 transformer.decoder.block.9.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.029133596394354068
+220 transformer.decoder.block.9.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.14259070442028043
+221 transformer.decoder.block.9.layer.0.layer_norm.weight weight 8 1 768 0.006670764683346827
+222 transformer.decoder.block.9.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0011949554803043784
+223 transformer.decoder.block.9.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.03339939553601595
+224 transformer.decoder.block.9.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.032315606124998994
+225 transformer.decoder.block.9.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.06982669615095102
+226 transformer.decoder.block.9.layer.1.layer_norm.weight weight 8 1 768 0.06440033779413587
+227 transformer.decoder.block.9.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.03206584025746434
+228 transformer.decoder.block.9.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.03540267376748706
+229 transformer.decoder.block.9.layer.2.layer_norm.weight weight 8 1 768 0.09314278742313661
+230 transformer.decoder.block.10.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.0017945831594701578
+231 transformer.decoder.block.10.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.009455521358977006
+232 transformer.decoder.block.10.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.031161509124583597
+233 transformer.decoder.block.10.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.12628231193786837
+234 transformer.decoder.block.10.layer.0.layer_norm.weight weight 8 1 768 0.15503671420070825
+235 transformer.decoder.block.10.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.0012940107877770504
+236 transformer.decoder.block.10.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.03133746931065295
+237 transformer.decoder.block.10.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.03648027353170096
+238 transformer.decoder.block.10.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.07941825101236873
+239 transformer.decoder.block.10.layer.1.layer_norm.weight weight 8 1 768 0.06769789533864422
+240 transformer.decoder.block.10.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.03493177616640069
+241 transformer.decoder.block.10.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.046743867997518534
+242 transformer.decoder.block.10.layer.2.layer_norm.weight weight 8 1 768 0.12956122644238052
+243 transformer.decoder.block.11.layer.0.SelfAttention.q.weight weight 8 2 768 768 0.001525916535332912
+244 transformer.decoder.block.11.layer.0.SelfAttention.k.weight weight 8 2 768 768 0.009439669714930786
+245 transformer.decoder.block.11.layer.0.SelfAttention.v.weight weight 8 2 768 768 0.026460715936165127
+246 transformer.decoder.block.11.layer.0.SelfAttention.o.weight weight 8 2 768 768 0.14091579908028767
+247 transformer.decoder.block.11.layer.0.layer_norm.weight weight 8 1 768 0.3595342541927164
+248 transformer.decoder.block.11.layer.1.EncDecAttention.q.weight weight 8 2 768 768 0.001183621472561847
+249 transformer.decoder.block.11.layer.1.EncDecAttention.k.weight weight 8 2 768 768 0.025949695327247058
+250 transformer.decoder.block.11.layer.1.EncDecAttention.v.weight weight 8 2 768 768 0.05192925730387884
+251 transformer.decoder.block.11.layer.1.EncDecAttention.o.weight weight 8 2 768 768 0.11566835043141765
+252 transformer.decoder.block.11.layer.1.layer_norm.weight weight 8 1 768 0.08735226377541866
+253 transformer.decoder.block.11.layer.2.DenseReluDense.wi.weight weight 8 2 3072 768 0.03822739111319463
+254 transformer.decoder.block.11.layer.2.DenseReluDense.wo.weight weight 8 2 768 3072 0.05176429095410249
+255 transformer.decoder.block.11.layer.2.layer_norm.weight weight 8 1 768 0.16500848950726454
+256 transformer.decoder.final_layer_norm.weight weight 8 1 768 0.18200638028301624
+257 classification_head.dense.weight weight 8 2 768 768 0.0011164595466785483
+258 classification_head.dense.bias bias 8 1 768 1.0
+259 classification_head.out_proj.weight weight 8 2 2 768 0.001070748800472707
+260 classification_head.out_proj.bias bias 8 1 2 1.0

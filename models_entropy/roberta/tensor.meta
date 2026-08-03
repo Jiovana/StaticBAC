@@ -1,0 +1,398 @@
+numTensors 396
+
+0 roberta.embeddings.word_embeddings.weight weight 8 2 50265 1024 0.0612792969599601
+1 roberta.embeddings.token_type_embeddings.weight weight 8 2 1 1024 1.0
+2 roberta.embeddings.LayerNorm.weight weight 8 1 1024 0.06610317903375537
+3 roberta.embeddings.LayerNorm.bias bias 8 1 1024 0.12597656263856227
+4 roberta.embeddings.position_embeddings.weight weight 8 2 514 1024 0.02269287139777596
+5 roberta.encoder.layer.0.attention.self.query.weight weight 8 2 1024 1024 0.015530056357595896
+6 roberta.encoder.layer.0.attention.self.query.bias bias 8 1 1024 0.061523437844768644
+7 roberta.encoder.layer.0.attention.self.key.weight weight 8 2 1024 1024 0.013333834334035267
+8 roberta.encoder.layer.0.attention.self.key.bias bias 8 1 1024 0.0011777877773655487
+9 roberta.encoder.layer.0.attention.self.value.weight weight 8 2 1024 1024 0.013061523453866762
+10 roberta.encoder.layer.0.attention.self.value.bias bias 8 1 1024 0.008789062642333652
+11 roberta.encoder.layer.0.attention.output.dense.weight weight 8 2 1024 1024 0.012173739556484781
+12 roberta.encoder.layer.0.attention.output.dense.bias bias 8 1 1024 0.029520671108693157
+13 roberta.encoder.layer.0.attention.output.LayerNorm.weight weight 8 1 1024 0.03637234663739475
+14 roberta.encoder.layer.0.attention.output.LayerNorm.bias bias 8 1 1024 0.09598214267689578
+15 roberta.encoder.layer.0.intermediate.dense.weight weight 8 2 4096 1024 0.020168728262248452
+16 roberta.encoder.layer.0.intermediate.dense.bias bias 8 1 4096 0.04230957064473327
+17 roberta.encoder.layer.0.output.dense.weight weight 8 2 1024 4096 0.021205357274035233
+18 roberta.encoder.layer.0.output.dense.bias bias 8 1 1024 0.026285807557842426
+19 roberta.encoder.layer.0.output.LayerNorm.weight weight 8 1 1024 0.06371228433128921
+20 roberta.encoder.layer.0.output.LayerNorm.bias bias 8 1 1024 0.08064778608620178
+21 roberta.encoder.layer.1.attention.self.query.weight weight 8 2 1024 1024 0.021606445455105667
+22 roberta.encoder.layer.1.attention.self.query.bias bias 8 1 1024 0.04878743494694055
+23 roberta.encoder.layer.1.attention.self.key.weight weight 8 2 1024 1024 0.02013221173440348
+24 roberta.encoder.layer.1.attention.self.key.bias bias 8 1 1024 0.002532959015774103
+25 roberta.encoder.layer.1.attention.self.value.weight weight 8 2 1024 1024 0.012830946201450165
+26 roberta.encoder.layer.1.attention.self.value.bias bias 8 1 1024 0.010290527499597649
+27 roberta.encoder.layer.1.attention.output.dense.weight weight 8 2 1024 1024 0.01163155695393777
+28 roberta.encoder.layer.1.attention.output.dense.bias bias 8 1 1024 0.04748535246118056
+29 roberta.encoder.layer.1.attention.output.LayerNorm.weight weight 8 1 1024 0.0572620738599975
+30 roberta.encoder.layer.1.attention.output.LayerNorm.bias bias 8 1 1024 0.08648003447178322
+31 roberta.encoder.layer.1.intermediate.dense.weight weight 8 2 4096 1024 0.022237142112706384
+32 roberta.encoder.layer.1.intermediate.dense.bias bias 8 1 4096 0.02868652348851236
+33 roberta.encoder.layer.1.output.dense.weight weight 8 2 1024 4096 0.01857212623126517
+34 roberta.encoder.layer.1.output.dense.bias bias 8 1 1024 0.018225097674053323
+35 roberta.encoder.layer.1.output.LayerNorm.weight weight 8 1 1024 0.06901041653623732
+36 roberta.encoder.layer.1.output.LayerNorm.bias bias 8 1 1024 0.06339518331430949
+37 roberta.encoder.layer.2.attention.self.query.weight weight 8 2 1024 1024 0.020996094052943726
+38 roberta.encoder.layer.2.attention.self.query.bias bias 8 1 1024 0.031215123428386973
+39 roberta.encoder.layer.2.attention.self.key.weight weight 8 2 1024 1024 0.020403181205494485
+40 roberta.encoder.layer.2.attention.self.key.bias bias 8 1 1024 0.0020256042683898623
+41 roberta.encoder.layer.2.attention.self.value.weight weight 8 2 1024 1024 0.010961914214711571
+42 roberta.encoder.layer.2.attention.self.value.bias bias 8 1 1024 0.010131836094260232
+43 roberta.encoder.layer.2.attention.output.dense.weight weight 8 2 1024 1024 0.009162055140545865
+44 roberta.encoder.layer.2.attention.output.dense.bias bias 8 1 1024 0.03165690148237475
+45 roberta.encoder.layer.2.attention.output.LayerNorm.weight weight 8 1 1024 0.08033288047721318
+46 roberta.encoder.layer.2.attention.output.LayerNorm.bias bias 8 1 1024 0.06567382944759671
+47 roberta.encoder.layer.2.intermediate.dense.weight weight 8 2 4096 1024 0.021960449504426285
+48 roberta.encoder.layer.2.intermediate.dense.bias bias 8 1 4096 0.028184679106660854
+49 roberta.encoder.layer.2.output.dense.weight weight 8 2 1024 4096 0.017325265015866287
+50 roberta.encoder.layer.2.output.dense.bias bias 8 1 1024 0.020538330257015007
+51 roberta.encoder.layer.2.output.LayerNorm.weight weight 8 1 1024 0.05407366056488548
+52 roberta.encoder.layer.2.output.LayerNorm.bias bias 8 1 1024 0.052246093853745665
+53 roberta.encoder.layer.3.attention.self.query.weight weight 8 2 1024 1024 0.018676758031387776
+54 roberta.encoder.layer.3.attention.self.query.bias bias 8 1 1024 0.04124098631662716
+55 roberta.encoder.layer.3.attention.self.key.weight weight 8 2 1024 1024 0.017293294568456664
+56 roberta.encoder.layer.3.attention.self.key.bias bias 8 1 1024 0.0014925003262463415
+57 roberta.encoder.layer.3.attention.self.value.weight weight 8 2 1024 1024 0.013403320576597166
+58 roberta.encoder.layer.3.attention.self.value.bias bias 8 1 1024 0.009552001952972077
+59 roberta.encoder.layer.3.attention.output.dense.weight weight 8 2 1024 1024 0.011108398642158148
+60 roberta.encoder.layer.3.attention.output.dense.bias bias 8 1 1024 0.023464626872368898
+61 roberta.encoder.layer.3.attention.output.LayerNorm.weight weight 8 1 1024 0.0741406248213721
+62 roberta.encoder.layer.3.attention.output.LayerNorm.bias bias 8 1 1024 0.06629774346123082
+63 roberta.encoder.layer.3.intermediate.dense.weight weight 8 2 4096 1024 0.02043999600947755
+64 roberta.encoder.layer.3.intermediate.dense.bias bias 8 1 4096 0.027971540099129437
+65 roberta.encoder.layer.3.output.dense.weight weight 8 2 1024 4096 0.01721191406592249
+66 roberta.encoder.layer.3.output.dense.bias bias 8 1 1024 0.03694035515030117
+67 roberta.encoder.layer.3.output.LayerNorm.weight weight 8 1 1024 0.06064138086359117
+68 roberta.encoder.layer.3.output.LayerNorm.bias bias 8 1 1024 0.038926866730513404
+69 roberta.encoder.layer.4.attention.self.query.weight weight 8 2 1024 1024 0.017203776236395706
+70 roberta.encoder.layer.4.attention.self.query.bias bias 8 1 1024 0.04995727561868034
+71 roberta.encoder.layer.4.attention.self.key.weight weight 8 2 1024 1024 0.016493055492164406
+72 roberta.encoder.layer.4.attention.self.key.bias bias 8 1 1024 0.0011348724478567867
+73 roberta.encoder.layer.4.attention.self.value.weight weight 8 2 1024 1024 0.01367187509351472
+74 roberta.encoder.layer.4.attention.self.value.bias bias 8 1 1024 0.007080078094427006
+75 roberta.encoder.layer.4.attention.output.dense.weight weight 8 2 1024 1024 0.011789957658118886
+76 roberta.encoder.layer.4.attention.output.dense.bias bias 8 1 1024 0.017473493553340488
+77 roberta.encoder.layer.4.attention.output.LayerNorm.weight weight 8 1 1024 0.06458782311148645
+78 roberta.encoder.layer.4.attention.output.LayerNorm.bias bias 8 1 1024 0.0631626679332557
+79 roberta.encoder.layer.4.intermediate.dense.weight weight 8 2 4096 1024 0.02015516491831284
+80 roberta.encoder.layer.4.intermediate.dense.bias bias 8 1 4096 0.027570452180893053
+81 roberta.encoder.layer.4.output.dense.weight weight 8 2 1024 4096 0.016859266805076517
+82 roberta.encoder.layer.4.output.dense.bias bias 8 1 1024 0.03409249457024176
+83 roberta.encoder.layer.4.output.LayerNorm.weight weight 8 1 1024 0.0645204741637975
+84 roberta.encoder.layer.4.output.LayerNorm.bias bias 8 1 1024 0.04050021683530639
+85 roberta.encoder.layer.5.attention.self.query.weight weight 8 2 1024 1024 0.01708984405661746
+86 roberta.encoder.layer.5.attention.self.query.bias bias 8 1 1024 0.049682617049505925
+87 roberta.encoder.layer.5.attention.self.key.weight weight 8 2 1024 1024 0.01652018239778373
+88 roberta.encoder.layer.5.attention.self.key.bias bias 8 1 1024 0.001553535460877981
+89 roberta.encoder.layer.5.attention.self.value.weight weight 8 2 1024 1024 0.015041775300953079
+90 roberta.encoder.layer.5.attention.self.value.bias bias 8 1 1024 0.00669206903620013
+91 roberta.encoder.layer.5.attention.output.dense.weight weight 8 2 1024 1024 0.012084961091708748
+92 roberta.encoder.layer.5.attention.output.dense.bias bias 8 1 1024 0.011718750123038208
+93 roberta.encoder.layer.5.attention.output.LayerNorm.weight weight 8 1 1024 0.06901041664590922
+94 roberta.encoder.layer.5.attention.output.LayerNorm.bias bias 8 1 1024 0.0632052961141909
+95 roberta.encoder.layer.5.intermediate.dense.weight weight 8 2 4096 1024 0.020129394859216596
+96 roberta.encoder.layer.5.intermediate.dense.bias bias 8 1 4096 0.027804904605239218
+97 roberta.encoder.layer.5.output.dense.weight weight 8 2 1024 4096 0.016552734440434484
+98 roberta.encoder.layer.5.output.dense.bias bias 8 1 1024 0.02819824273384408
+99 roberta.encoder.layer.5.output.LayerNorm.weight weight 8 1 1024 0.06064138108322058
+100 roberta.encoder.layer.5.output.LayerNorm.bias bias 8 1 1024 0.0400390628556304
+101 roberta.encoder.layer.6.attention.self.query.weight weight 8 2 1024 1024 0.018788655761029848
+102 roberta.encoder.layer.6.attention.self.query.bias bias 8 1 1024 0.05024858000813491
+103 roberta.encoder.layer.6.attention.self.key.weight weight 8 2 1024 1024 0.017177036803953598
+104 roberta.encoder.layer.6.attention.self.key.bias bias 8 1 1024 0.001667022725594279
+105 roberta.encoder.layer.6.attention.self.value.weight weight 8 2 1024 1024 0.015164889145467583
+106 roberta.encoder.layer.6.attention.self.value.bias bias 8 1 1024 0.007654825926087811
+107 roberta.encoder.layer.6.attention.output.dense.weight weight 8 2 1024 1024 0.012207031459790652
+108 roberta.encoder.layer.6.attention.output.dense.bias bias 8 1 1024 0.014495849938656137
+109 roberta.encoder.layer.6.attention.output.LayerNorm.weight weight 8 1 1024 0.04880308493346734
+110 roberta.encoder.layer.6.attention.output.LayerNorm.bias bias 8 1 1024 0.06355794362745215
+111 roberta.encoder.layer.6.intermediate.dense.weight weight 8 2 4096 1024 0.019079589851464233
+112 roberta.encoder.layer.6.intermediate.dense.bias bias 8 1 4096 0.027954101476945877
+113 roberta.encoder.layer.6.output.dense.weight weight 8 2 1024 4096 0.01633300799210559
+114 roberta.encoder.layer.6.output.dense.bias bias 8 1 1024 0.039672851478156614
+115 roberta.encoder.layer.6.output.LayerNorm.weight weight 8 1 1024 0.0540736606320001
+116 roberta.encoder.layer.6.output.LayerNorm.bias bias 8 1 1024 0.03657226586231341
+117 roberta.encoder.layer.7.attention.self.query.weight weight 8 2 1024 1024 0.01915394193863315
+118 roberta.encoder.layer.7.attention.self.query.bias bias 8 1 1024 0.048029119355253204
+119 roberta.encoder.layer.7.attention.self.key.weight weight 8 2 1024 1024 0.017347548027856367
+120 roberta.encoder.layer.7.attention.self.key.bias bias 8 1 1024 0.003664982613137439
+121 roberta.encoder.layer.7.attention.self.value.weight weight 8 2 1024 1024 0.015028211787383724
+122 roberta.encoder.layer.7.attention.self.value.bias bias 8 1 1024 0.007228685630186836
+123 roberta.encoder.layer.7.attention.output.dense.weight weight 8 2 1024 1024 0.012235201346634219
+124 roberta.encoder.layer.7.attention.output.dense.bias bias 8 1 1024 0.015655517530340203
+125 roberta.encoder.layer.7.attention.output.LayerNorm.weight weight 8 1 1024 0.057173295335633006
+126 roberta.encoder.layer.7.attention.output.LayerNorm.bias bias 8 1 1024 0.06528320398452038
+127 roberta.encoder.layer.7.intermediate.dense.weight weight 8 2 4096 1024 0.01887207053254527
+128 roberta.encoder.layer.7.intermediate.dense.bias bias 8 1 4096 0.027940538550930927
+129 roberta.encoder.layer.7.output.dense.weight weight 8 2 1024 4096 0.01574707023403051
+130 roberta.encoder.layer.7.output.dense.bias bias 8 1 1024 0.03759765643682578
+131 roberta.encoder.layer.7.output.LayerNorm.weight weight 8 1 1024 0.05130912164141012
+132 roberta.encoder.layer.7.output.LayerNorm.bias bias 8 1 1024 0.03874860538029287
+133 roberta.encoder.layer.8.attention.self.query.weight weight 8 2 1024 1024 0.01977539077931581
+134 roberta.encoder.layer.8.attention.self.query.bias bias 8 1 1024 0.03645833375392314
+135 roberta.encoder.layer.8.attention.self.key.weight weight 8 2 1024 1024 0.018579101822700117
+136 roberta.encoder.layer.8.attention.self.key.bias bias 8 1 1024 0.003979206506443035
+137 roberta.encoder.layer.8.attention.self.value.weight weight 8 2 1024 1024 0.01368408224603887
+138 roberta.encoder.layer.8.attention.self.value.bias bias 8 1 1024 0.010572645461746962
+139 roberta.encoder.layer.8.attention.output.dense.weight weight 8 2 1024 1024 0.011718750019118544
+140 roberta.encoder.layer.8.attention.output.dense.bias bias 8 1 1024 0.019079590183050072
+141 roberta.encoder.layer.8.attention.output.LayerNorm.weight weight 8 1 1024 0.04880308487904221
+142 roberta.encoder.layer.8.attention.output.LayerNorm.bias bias 8 1 1024 0.050976562688029456
+143 roberta.encoder.layer.8.intermediate.dense.weight weight 8 2 4096 1024 0.018676758041999936
+144 roberta.encoder.layer.8.intermediate.dense.bias bias 8 1 4096 0.02706473207503326
+145 roberta.encoder.layer.8.output.dense.weight weight 8 2 1024 4096 0.01507568352818622
+146 roberta.encoder.layer.8.output.dense.bias bias 8 1 1024 0.03366699269583888
+147 roberta.encoder.layer.8.output.LayerNorm.weight weight 8 1 1024 0.044467659820342675
+148 roberta.encoder.layer.8.output.LayerNorm.bias bias 8 1 1024 0.03486328138851547
+149 roberta.encoder.layer.9.attention.self.query.weight weight 8 2 1024 1024 0.019681490710689864
+150 roberta.encoder.layer.9.attention.self.query.bias bias 8 1 1024 0.035620117032862594
+151 roberta.encoder.layer.9.attention.self.key.weight weight 8 2 1024 1024 0.017415364843524753
+152 roberta.encoder.layer.9.attention.self.key.bias bias 8 1 1024 0.004179381352839634
+153 roberta.encoder.layer.9.attention.self.value.weight weight 8 2 1024 1024 0.0148259943271081
+154 roberta.encoder.layer.9.attention.self.value.bias bias 8 1 1024 0.006679958868546282
+155 roberta.encoder.layer.9.attention.output.dense.weight weight 8 2 1024 1024 0.01215616862595707
+156 roberta.encoder.layer.9.attention.output.dense.bias bias 8 1 1024 0.02120535737739866
+157 roberta.encoder.layer.9.attention.output.LayerNorm.weight weight 8 1 1024 0.036390772305577
+158 roberta.encoder.layer.9.attention.output.LayerNorm.bias bias 8 1 1024 0.042445591633406915
+159 roberta.encoder.layer.9.intermediate.dense.weight weight 8 2 4096 1024 0.017370605528353983
+160 roberta.encoder.layer.9.intermediate.dense.bias bias 8 1 4096 0.027849469980641448
+161 roberta.encoder.layer.9.output.dense.weight weight 8 2 1024 4096 0.013563368258321187
+162 roberta.encoder.layer.9.output.dense.bias bias 8 1 1024 0.03969726555193208
+163 roberta.encoder.layer.9.output.LayerNorm.weight weight 8 1 1024 0.06064138107716821
+164 roberta.encoder.layer.9.output.LayerNorm.bias bias 8 1 1024 0.02802734377647264
+165 roberta.encoder.layer.10.attention.self.query.weight weight 8 2 1024 1024 0.0218912760248478
+166 roberta.encoder.layer.10.attention.self.query.bias bias 8 1 1024 0.02965369630103304
+167 roberta.encoder.layer.10.attention.self.key.weight weight 8 2 1024 1024 0.020130504254445188
+168 roberta.encoder.layer.10.attention.self.key.bias bias 8 1 1024 0.005026762019065316
+169 roberta.encoder.layer.10.attention.self.value.weight weight 8 2 1024 1024 0.013574218998509718
+170 roberta.encoder.layer.10.attention.self.value.bias bias 8 1 1024 0.007186889699023461
+171 roberta.encoder.layer.10.attention.output.dense.weight weight 8 2 1024 1024 0.012078857469354705
+172 roberta.encoder.layer.10.attention.output.dense.bias bias 8 1 1024 0.023590088158081557
+173 roberta.encoder.layer.10.attention.output.LayerNorm.weight weight 8 1 1024 0.03637234665255167
+174 roberta.encoder.layer.10.attention.output.LayerNorm.bias bias 8 1 1024 0.04760742255194079
+175 roberta.encoder.layer.10.intermediate.dense.weight weight 8 2 4096 1024 0.017333984560850058
+176 roberta.encoder.layer.10.intermediate.dense.bias bias 8 1 4096 0.02792080978220339
+177 roberta.encoder.layer.10.output.dense.weight weight 8 2 1024 4096 0.013464355606485021
+178 roberta.encoder.layer.10.output.dense.bias bias 8 1 1024 0.043267144456119414
+179 roberta.encoder.layer.10.output.LayerNorm.weight weight 8 1 1024 0.04257812486547534
+180 roberta.encoder.layer.10.output.LayerNorm.bias bias 8 1 1024 0.02758789078704353
+181 roberta.encoder.layer.11.attention.self.query.weight weight 8 2 1024 1024 0.02015516537187868
+182 roberta.encoder.layer.11.attention.self.query.bias bias 8 1 1024 0.02756347700014624
+183 roberta.encoder.layer.11.attention.self.key.weight weight 8 2 1024 1024 0.01940918002012835
+184 roberta.encoder.layer.11.attention.self.key.bias bias 8 1 1024 0.005460385639302185
+185 roberta.encoder.layer.11.attention.self.value.weight weight 8 2 1024 1024 0.014273507360889597
+186 roberta.encoder.layer.11.attention.self.value.bias bias 8 1 1024 0.004995727527384064
+187 roberta.encoder.layer.11.attention.output.dense.weight weight 8 2 1024 1024 0.012030707484694252
+188 roberta.encoder.layer.11.attention.output.dense.bias bias 8 1 1024 0.026179387390741164
+189 roberta.encoder.layer.11.attention.output.LayerNorm.weight weight 8 1 1024 0.035102982862478885
+190 roberta.encoder.layer.11.attention.output.LayerNorm.bias bias 8 1 1024 0.039672851949405424
+191 roberta.encoder.layer.11.intermediate.dense.weight weight 8 2 4096 1024 0.017203195035903462
+192 roberta.encoder.layer.11.intermediate.dense.bias bias 8 1 4096 0.027267456421197038
+193 roberta.encoder.layer.11.output.dense.weight weight 8 2 1024 4096 0.013305664210166284
+194 roberta.encoder.layer.11.output.dense.bias bias 8 1 1024 0.03777204288346341
+195 roberta.encoder.layer.11.output.LayerNorm.weight weight 8 1 1024 0.04880308487064035
+196 roberta.encoder.layer.11.output.LayerNorm.bias bias 8 1 1024 0.028372628220844243
+197 roberta.encoder.layer.12.attention.self.query.weight weight 8 2 1024 1024 0.0190429688632993
+198 roberta.encoder.layer.12.attention.self.query.bias bias 8 1 1024 0.030078125415799656
+199 roberta.encoder.layer.12.attention.self.key.weight weight 8 2 1024 1024 0.018920898451019866
+200 roberta.encoder.layer.12.attention.self.key.bias bias 8 1 1024 0.006054440684837112
+201 roberta.encoder.layer.12.attention.self.value.weight weight 8 2 1024 1024 0.015258789044978174
+202 roberta.encoder.layer.12.attention.self.value.bias bias 8 1 1024 0.007075718574717995
+203 roberta.encoder.layer.12.attention.output.dense.weight weight 8 2 1024 1024 0.012251420612185808
+204 roberta.encoder.layer.12.attention.output.dense.bias bias 8 1 1024 0.020690918172701966
+205 roberta.encoder.layer.12.attention.output.LayerNorm.weight weight 8 1 1024 0.04880308482291446
+206 roberta.encoder.layer.12.attention.output.LayerNorm.bias bias 8 1 1024 0.041364397955042494
+207 roberta.encoder.layer.12.intermediate.dense.weight weight 8 2 4096 1024 0.017023260302331235
+208 roberta.encoder.layer.12.intermediate.dense.bias bias 8 1 4096 0.027850811630668507
+209 roberta.encoder.layer.12.output.dense.weight weight 8 2 1024 4096 0.013623047106077887
+210 roberta.encoder.layer.12.output.dense.bias bias 8 1 1024 0.040174696470146945
+211 roberta.encoder.layer.12.output.LayerNorm.weight weight 8 1 1024 0.0392418686050371
+212 roberta.encoder.layer.12.output.LayerNorm.bias bias 8 1 1024 0.027099609678957665
+213 roberta.encoder.layer.13.attention.self.query.weight weight 8 2 1024 1024 0.0201822918466178
+214 roberta.encoder.layer.13.attention.self.query.bias bias 8 1 1024 0.041772461318520984
+215 roberta.encoder.layer.13.attention.self.key.weight weight 8 2 1024 1024 0.018920898780085807
+216 roberta.encoder.layer.13.attention.self.key.bias bias 8 1 1024 0.01571655293739061
+217 roberta.encoder.layer.13.attention.self.value.weight weight 8 2 1024 1024 0.015466308672627289
+218 roberta.encoder.layer.13.attention.self.value.bias bias 8 1 1024 0.006204223708314365
+219 roberta.encoder.layer.13.attention.output.dense.weight weight 8 2 1024 1024 0.013142903835840426
+220 roberta.encoder.layer.13.attention.output.dense.bias bias 8 1 1024 0.023193359858329585
+221 roberta.encoder.layer.13.attention.output.LayerNorm.weight weight 8 1 1024 0.040828623673773864
+222 roberta.encoder.layer.13.attention.output.LayerNorm.bias bias 8 1 1024 0.04195149779461469
+223 roberta.encoder.layer.13.intermediate.dense.weight weight 8 2 4096 1024 0.017089843701300338
+224 roberta.encoder.layer.13.intermediate.dense.bias bias 8 1 4096 0.027533637073767353
+225 roberta.encoder.layer.13.output.dense.weight weight 8 2 1024 4096 0.014369419854562412
+226 roberta.encoder.layer.13.output.dense.bias bias 8 1 1024 0.03979492268198413
+227 roberta.encoder.layer.13.output.LayerNorm.weight weight 8 1 1024 0.021053847428046966
+228 roberta.encoder.layer.13.output.LayerNorm.bias bias 8 1 1024 0.03398437493415725
+229 roberta.encoder.layer.14.attention.self.query.weight weight 8 2 1024 1024 0.020251464810464817
+230 roberta.encoder.layer.14.attention.self.query.bias bias 8 1 1024 0.041775173847496766
+231 roberta.encoder.layer.14.attention.self.key.weight weight 8 2 1024 1024 0.018887606653451877
+232 roberta.encoder.layer.14.attention.self.key.bias bias 8 1 1024 0.006786575159914185
+233 roberta.encoder.layer.14.attention.self.value.weight weight 8 2 1024 1024 0.01607259131085967
+234 roberta.encoder.layer.14.attention.self.value.bias bias 8 1 1024 0.006256103579115767
+235 roberta.encoder.layer.14.attention.output.dense.weight weight 8 2 1024 1024 0.013288225562601178
+236 roberta.encoder.layer.14.attention.output.dense.bias bias 8 1 1024 0.01983642594578668
+237 roberta.encoder.layer.14.attention.output.LayerNorm.weight weight 8 1 1024 0.0253272118043184
+238 roberta.encoder.layer.14.attention.output.LayerNorm.bias bias 8 1 1024 0.039934430764618334
+239 roberta.encoder.layer.14.intermediate.dense.weight weight 8 2 4096 1024 0.017103407209357636
+240 roberta.encoder.layer.14.intermediate.dense.bias bias 8 1 4096 0.027994791823528452
+241 roberta.encoder.layer.14.output.dense.weight weight 8 2 1024 4096 0.014160156384697854
+242 roberta.encoder.layer.14.output.dense.bias bias 8 1 1024 0.04050514916871276
+243 roberta.encoder.layer.14.output.LayerNorm.weight weight 8 1 1024 0.028178781717262326
+244 roberta.encoder.layer.14.output.LayerNorm.bias bias 8 1 1024 0.0275006977048213
+245 roberta.encoder.layer.15.attention.self.query.weight weight 8 2 1024 1024 0.02001953150071653
+246 roberta.encoder.layer.15.attention.self.query.bias bias 8 1 1024 0.030314127584797446
+247 roberta.encoder.layer.15.attention.self.key.weight weight 8 2 1024 1024 0.018554687889153203
+248 roberta.encoder.layer.15.attention.self.key.bias bias 8 1 1024 0.009209272369540611
+249 roberta.encoder.layer.15.attention.self.value.weight weight 8 2 1024 1024 0.016113281435237964
+250 roberta.encoder.layer.15.attention.self.value.bias bias 8 1 1024 0.0046363244487690755
+251 roberta.encoder.layer.15.attention.output.dense.weight weight 8 2 1024 1024 0.013098144737013265
+252 roberta.encoder.layer.15.attention.output.dense.bias bias 8 1 1024 0.015612793075231864
+253 roberta.encoder.layer.15.attention.output.LayerNorm.weight weight 8 1 1024 0.029005363810893876
+254 roberta.encoder.layer.15.attention.output.LayerNorm.bias bias 8 1 1024 0.03752790203862137
+255 roberta.encoder.layer.15.intermediate.dense.weight weight 8 2 4096 1024 0.016821289107158258
+256 roberta.encoder.layer.15.intermediate.dense.bias bias 8 1 4096 0.02783203131560461
+257 roberta.encoder.layer.15.output.dense.weight weight 8 2 1024 4096 0.013296944885752341
+258 roberta.encoder.layer.15.output.dense.bias bias 8 1 1024 0.03948974595871135
+259 roberta.encoder.layer.15.output.LayerNorm.weight weight 8 1 1024 0.023000919062892755
+260 roberta.encoder.layer.15.output.LayerNorm.bias bias 8 1 1024 0.024346245910620352
+261 roberta.encoder.layer.16.attention.self.query.weight weight 8 2 1024 1024 0.020141601661142487
+262 roberta.encoder.layer.16.attention.self.query.bias bias 8 1 1024 0.027612305135585588
+263 roberta.encoder.layer.16.attention.self.key.weight weight 8 2 1024 1024 0.01882595525811463
+264 roberta.encoder.layer.16.attention.self.key.bias bias 8 1 1024 0.011390656509885936
+265 roberta.encoder.layer.16.attention.self.value.weight weight 8 2 1024 1024 0.015347567732689287
+266 roberta.encoder.layer.16.attention.self.value.bias bias 8 1 1024 0.004473005044542182
+267 roberta.encoder.layer.16.attention.output.dense.weight weight 8 2 1024 1024 0.012930733834664544
+268 roberta.encoder.layer.16.attention.output.dense.bias bias 8 1 1024 0.01921929263620816
+269 roberta.encoder.layer.16.attention.output.LayerNorm.weight weight 8 1 1024 0.02817878167049874
+270 roberta.encoder.layer.16.attention.output.LayerNorm.bias bias 8 1 1024 0.031127929729791524
+271 roberta.encoder.layer.16.intermediate.dense.weight weight 8 2 4096 1024 0.016540527502910782
+272 roberta.encoder.layer.16.intermediate.dense.bias bias 8 1 4096 0.028164950615963774
+273 roberta.encoder.layer.16.output.dense.weight weight 8 2 1024 4096 0.012869698921359352
+274 roberta.encoder.layer.16.output.dense.bias bias 8 1 1024 0.03226144002065502
+275 roberta.encoder.layer.16.output.LayerNorm.weight weight 8 1 1024 0.024710739638680198
+276 roberta.encoder.layer.16.output.LayerNorm.bias bias 8 1 1024 0.023437500337555497
+277 roberta.encoder.layer.17.attention.self.query.weight weight 8 2 1024 1024 0.019970703252952766
+278 roberta.encoder.layer.17.attention.self.query.bias bias 8 1 1024 0.02829996778957403
+279 roberta.encoder.layer.17.attention.self.key.weight weight 8 2 1024 1024 0.01892089835736397
+280 roberta.encoder.layer.17.attention.self.key.bias bias 8 1 1024 0.01982008594567807
+281 roberta.encoder.layer.17.attention.self.value.weight weight 8 2 1024 1024 0.015625000067556866
+282 roberta.encoder.layer.17.attention.self.value.bias bias 8 1 1024 0.00439453131091274
+283 roberta.encoder.layer.17.attention.output.dense.weight weight 8 2 1024 1024 0.013061523696947196
+284 roberta.encoder.layer.17.attention.output.dense.bias bias 8 1 1024 0.014592951182442146
+285 roberta.encoder.layer.17.attention.output.LayerNorm.weight weight 8 1 1024 0.029019939365936467
+286 roberta.encoder.layer.17.attention.output.LayerNorm.bias bias 8 1 1024 0.03002929677150621
+287 roberta.encoder.layer.17.intermediate.dense.weight weight 8 2 4096 1024 0.01637098535998295
+288 roberta.encoder.layer.17.intermediate.dense.bias bias 8 1 4096 0.027640206614986833
+289 roberta.encoder.layer.17.output.dense.weight weight 8 2 1024 4096 0.012808663741058565
+290 roberta.encoder.layer.17.output.dense.bias bias 8 1 1024 0.029008345409938324
+291 roberta.encoder.layer.17.output.LayerNorm.weight weight 8 1 1024 0.02469837812217347
+292 roberta.encoder.layer.17.output.LayerNorm.bias bias 8 1 1024 0.020812988250627346
+293 roberta.encoder.layer.18.attention.self.query.weight weight 8 2 1024 1024 0.02014160166709767
+294 roberta.encoder.layer.18.attention.self.query.bias bias 8 1 1024 0.026053292608256232
+295 roberta.encoder.layer.18.attention.self.key.weight weight 8 2 1024 1024 0.019409180027288336
+296 roberta.encoder.layer.18.attention.self.key.bias bias 8 1 1024 0.009971758846737825
+297 roberta.encoder.layer.18.attention.self.value.weight weight 8 2 1024 1024 0.014685058796821842
+298 roberta.encoder.layer.18.attention.self.value.bias bias 8 1 1024 0.003980364144480349
+299 roberta.encoder.layer.18.attention.output.dense.weight weight 8 2 1024 1024 0.01232910182991171
+300 roberta.encoder.layer.18.attention.output.dense.bias bias 8 1 1024 0.01832798547778402
+301 roberta.encoder.layer.18.attention.output.LayerNorm.weight weight 8 1 1024 0.026674871534995447
+302 roberta.encoder.layer.18.attention.output.LayerNorm.bias bias 8 1 1024 0.030639648731760012
+303 roberta.encoder.layer.18.intermediate.dense.weight weight 8 2 4096 1024 0.01643066426719009
+304 roberta.encoder.layer.18.intermediate.dense.bias bias 8 1 4096 0.027849470197713357
+305 roberta.encoder.layer.18.output.dense.weight weight 8 2 1024 4096 0.013000488462130113
+306 roberta.encoder.layer.18.output.dense.bias bias 8 1 1024 0.022931780639330834
+307 roberta.encoder.layer.18.output.LayerNorm.weight weight 8 1 1024 0.031762295005741625
+308 roberta.encoder.layer.18.output.LayerNorm.bias bias 8 1 1024 0.015462239740178414
+309 roberta.encoder.layer.19.attention.self.query.weight weight 8 2 1024 1024 0.020336914240414346
+310 roberta.encoder.layer.19.attention.self.query.bias bias 8 1 1024 0.024801815329988226
+311 roberta.encoder.layer.19.attention.self.key.weight weight 8 2 1024 1024 0.019205729486038513
+312 roberta.encoder.layer.19.attention.self.key.bias bias 8 1 1024 0.020736694470866297
+313 roberta.encoder.layer.19.attention.self.value.weight weight 8 2 1024 1024 0.014221191437056184
+314 roberta.encoder.layer.19.attention.self.value.bias bias 8 1 1024 0.005551147577046605
+315 roberta.encoder.layer.19.attention.output.dense.weight weight 8 2 1024 1024 0.01221812852296858
+316 roberta.encoder.layer.19.attention.output.dense.bias bias 8 1 1024 0.01972307513406863
+317 roberta.encoder.layer.19.attention.output.LayerNorm.weight weight 8 1 1024 0.0230009191113575
+318 roberta.encoder.layer.19.attention.output.LayerNorm.bias bias 8 1 1024 0.031176758227032267
+319 roberta.encoder.layer.19.intermediate.dense.weight weight 8 2 4096 1024 0.016560872562250924
+320 roberta.encoder.layer.19.intermediate.dense.bias bias 8 1 4096 0.026925223225979115
+321 roberta.encoder.layer.19.output.dense.weight weight 8 2 1024 4096 0.013272372241225863
+322 roberta.encoder.layer.19.output.dense.bias bias 8 1 1024 0.02624511758510388
+323 roberta.encoder.layer.19.output.LayerNorm.weight weight 8 1 1024 0.04259982630695503
+324 roberta.encoder.layer.19.output.LayerNorm.bias bias 8 1 1024 0.015802557051625192
+325 roberta.encoder.layer.20.attention.self.query.weight weight 8 2 1024 1024 0.02009465137762291
+326 roberta.encoder.layer.20.attention.self.query.bias bias 8 1 1024 0.026416015550392538
+327 roberta.encoder.layer.20.attention.self.key.weight weight 8 2 1024 1024 0.019775390992171495
+328 roberta.encoder.layer.20.attention.self.key.bias bias 8 1 1024 0.02078040613544397
+329 roberta.encoder.layer.20.attention.self.value.weight weight 8 2 1024 1024 0.012991768984475403
+330 roberta.encoder.layer.20.attention.self.value.bias bias 8 1 1024 0.006109619259642455
+331 roberta.encoder.layer.20.attention.output.dense.weight weight 8 2 1024 1024 0.011213030252039905
+332 roberta.encoder.layer.20.attention.output.dense.bias bias 8 1 1024 0.020690918129285522
+333 roberta.encoder.layer.20.attention.output.LayerNorm.weight weight 8 1 1024 0.02985276434785082
+334 roberta.encoder.layer.20.attention.output.LayerNorm.bias bias 8 1 1024 0.0294189454213847
+335 roberta.encoder.layer.20.intermediate.dense.weight weight 8 2 4096 1024 0.016276041685355486
+336 roberta.encoder.layer.20.intermediate.dense.bias bias 8 1 4096 0.02805175807818297
+337 roberta.encoder.layer.20.output.dense.weight weight 8 2 1024 4096 0.014051649246985702
+338 roberta.encoder.layer.20.output.dense.bias bias 8 1 1024 0.027221679967221572
+339 roberta.encoder.layer.20.output.LayerNorm.weight weight 8 1 1024 0.029867788411992682
+340 roberta.encoder.layer.20.output.LayerNorm.bias bias 8 1 1024 0.01809082031252538
+341 roberta.encoder.layer.21.attention.self.query.weight weight 8 2 1024 1024 0.019042969065345302
+342 roberta.encoder.layer.21.attention.self.query.bias bias 8 1 1024 0.033154296822145726
+343 roberta.encoder.layer.21.attention.self.key.weight weight 8 2 1024 1024 0.018948025123593636
+344 roberta.encoder.layer.21.attention.self.key.bias bias 8 1 1024 0.027833663763590352
+345 roberta.encoder.layer.21.attention.self.value.weight weight 8 2 1024 1024 0.012218128497763055
+346 roberta.encoder.layer.21.attention.self.value.bias bias 8 1 1024 0.006564670197567001
+347 roberta.encoder.layer.21.attention.output.dense.weight weight 8 2 1024 1024 0.011083984393351792
+348 roberta.encoder.layer.21.attention.output.dense.bias bias 8 1 1024 0.026189630877613855
+349 roberta.encoder.layer.21.attention.output.LayerNorm.weight weight 8 1 1024 0.024698378162575946
+350 roberta.encoder.layer.21.attention.output.LayerNorm.bias bias 8 1 1024 0.028881835984622496
+351 roberta.encoder.layer.21.intermediate.dense.weight weight 8 2 4096 1024 0.014892578394006487
+352 roberta.encoder.layer.21.intermediate.dense.bias bias 8 1 4096 0.025296725137304358
+353 roberta.encoder.layer.21.output.dense.weight weight 8 2 1024 4096 0.013394442548607575
+354 roberta.encoder.layer.21.output.dense.bias bias 8 1 1024 0.025824653010840443
+355 roberta.encoder.layer.21.output.LayerNorm.weight weight 8 1 1024 0.03176229503748228
+356 roberta.encoder.layer.21.output.LayerNorm.bias bias 8 1 1024 0.026953124954140248
+357 roberta.encoder.layer.22.attention.self.query.weight weight 8 2 1024 1024 0.020211356223004892
+358 roberta.encoder.layer.22.attention.self.query.bias bias 8 1 1024 0.04219563816537236
+359 roberta.encoder.layer.22.attention.self.key.weight weight 8 2 1024 1024 0.019694010790564348
+360 roberta.encoder.layer.22.attention.self.key.bias bias 8 1 1024 0.06256965933839834
+361 roberta.encoder.layer.22.attention.self.value.weight weight 8 2 1024 1024 0.012311663014569825
+362 roberta.encoder.layer.22.attention.self.value.bias bias 8 1 1024 0.006384277385555338
+363 roberta.encoder.layer.22.attention.output.dense.weight weight 8 2 1024 1024 0.011230468947854446
+364 roberta.encoder.layer.22.attention.output.dense.bias bias 8 1 1024 0.02844238319811697
+365 roberta.encoder.layer.22.attention.output.LayerNorm.weight weight 8 1 1024 0.03176229499213546
+366 roberta.encoder.layer.22.attention.output.LayerNorm.bias bias 8 1 1024 0.030541992567932795
+367 roberta.encoder.layer.22.intermediate.dense.weight weight 8 2 4096 1024 0.013638583063355041
+368 roberta.encoder.layer.22.intermediate.dense.bias bias 8 1 4096 0.024438476745664045
+369 roberta.encoder.layer.22.output.dense.weight weight 8 2 1024 4096 0.013089693581883406
+370 roberta.encoder.layer.22.output.dense.bias bias 8 1 1024 0.015345982388386852
+371 roberta.encoder.layer.22.output.LayerNorm.weight weight 8 1 1024 0.03640919806343185
+372 roberta.encoder.layer.22.output.LayerNorm.bias bias 8 1 1024 0.02103097113521451
+373 roberta.encoder.layer.23.attention.self.query.weight weight 8 2 1024 1024 0.019287109556197307
+374 roberta.encoder.layer.23.attention.self.query.bias bias 8 1 1024 0.04192560360482658
+375 roberta.encoder.layer.23.attention.self.key.weight weight 8 2 1024 1024 0.01879882815469428
+376 roberta.encoder.layer.23.attention.self.key.bias bias 8 1 1024 0.02065022814188814
+377 roberta.encoder.layer.23.attention.self.value.weight weight 8 2 1024 1024 0.013685438561173904
+378 roberta.encoder.layer.23.attention.self.value.bias bias 8 1 1024 0.00537109379588925
+379 roberta.encoder.layer.23.attention.output.dense.weight weight 8 2 1024 1024 0.012097168073985424
+380 roberta.encoder.layer.23.attention.output.dense.bias bias 8 1 1024 0.030843099671295508
+381 roberta.encoder.layer.23.attention.output.LayerNorm.weight weight 8 1 1024 0.04654153962677367
+382 roberta.encoder.layer.23.attention.output.LayerNorm.bias bias 8 1 1024 0.04666573704242089
+383 roberta.encoder.layer.23.intermediate.dense.weight weight 8 2 4096 1024 0.012342665019890833
+384 roberta.encoder.layer.23.intermediate.dense.bias bias 8 1 4096 0.025105794550218323
+385 roberta.encoder.layer.23.output.dense.weight weight 8 2 1024 4096 0.012141301188594564
+386 roberta.encoder.layer.23.output.dense.bias bias 8 1 1024 0.027514648624038185
+387 roberta.encoder.layer.23.output.LayerNorm.weight weight 8 1 1024 0.007584764060680351
+388 roberta.encoder.layer.23.output.LayerNorm.bias bias 8 1 1024 0.014053344909098611
+389 lm_head.bias bias 8 1 50265 0.08081054672471175
+390 lm_head.dense.weight weight 8 2 1024 1024 0.031738281946356556
+391 lm_head.dense.bias bias 8 1 1024 0.021533203379657542
+392 lm_head.layer_norm.weight weight 8 1 1024 0.007758460944589986
+393 lm_head.layer_norm.bias bias 8 1 1024 0.08140345977755972
+394 roberta.embeddings.position_ids buffer 32 2 1 514 1.0
+395 roberta.embeddings.token_type_ids buffer 32 2 1 514 1.0

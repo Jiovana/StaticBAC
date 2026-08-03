@@ -1,0 +1,206 @@
+numTensors 204
+
+0 bert.embeddings.word_embeddings.weight weight 8 2 30522 768 0.020325620177529584
+1 bert.embeddings.position_embeddings.weight weight 8 2 512 768 0.006695107391495194
+2 bert.embeddings.token_type_embeddings.weight weight 8 2 2 768 0.01482132180228532
+3 bert.embeddings.LayerNorm.weight weight 8 1 768 0.12690582476020143
+4 bert.embeddings.LayerNorm.bias bias 8 1 768 0.025361466574580875
+5 bert.encoder.layer.0.attention.self.query.weight weight 8 2 768 768 0.01718304003645047
+6 bert.encoder.layer.0.attention.self.query.bias bias 8 1 768 0.11045673108446277
+7 bert.encoder.layer.0.attention.self.key.weight weight 8 2 768 768 0.017071696868122776
+8 bert.encoder.layer.0.attention.self.key.bias bias 8 1 768 0.0011588229689892524
+9 bert.encoder.layer.0.attention.self.value.weight weight 8 2 768 768 0.011445808037566126
+10 bert.encoder.layer.0.attention.self.value.bias bias 8 1 768 0.017352940454633783
+11 bert.encoder.layer.0.attention.output.dense.weight weight 8 2 768 768 0.011353037791279118
+12 bert.encoder.layer.0.attention.output.dense.bias bias 8 1 768 0.015354839165931548
+13 bert.encoder.layer.0.attention.output.LayerNorm.weight weight 8 1 768 0.2390943371863114
+14 bert.encoder.layer.0.attention.output.LayerNorm.bias bias 8 1 768 0.12735600444491185
+15 bert.encoder.layer.0.intermediate.dense.weight weight 8 2 3072 768 0.01500386683096434
+16 bert.encoder.layer.0.intermediate.dense.bias bias 8 1 3072 0.04216473906710452
+17 bert.encoder.layer.0.output.dense.weight weight 8 2 768 3072 0.014343460072879132
+18 bert.encoder.layer.0.output.dense.bias bias 8 1 768 0.029726969214338532
+19 bert.encoder.layer.0.output.LayerNorm.weight weight 8 1 768 0.10792374612105521
+20 bert.encoder.layer.0.output.LayerNorm.bias bias 8 1 768 0.041484865362113425
+21 bert.encoder.layer.1.attention.self.query.weight weight 8 2 768 768 0.017035195695069526
+22 bert.encoder.layer.1.attention.self.query.bias bias 8 1 768 0.07250508050511162
+23 bert.encoder.layer.1.attention.self.key.weight weight 8 2 768 768 0.017032564974304807
+24 bert.encoder.layer.1.attention.self.key.bias bias 8 1 768 0.002278605004344067
+25 bert.encoder.layer.1.attention.self.value.weight weight 8 2 768 768 0.011344406406487081
+26 bert.encoder.layer.1.attention.self.value.bias bias 8 1 768 0.018529993906298902
+27 bert.encoder.layer.1.attention.output.dense.weight weight 8 2 768 768 0.011172922174768849
+28 bert.encoder.layer.1.attention.output.dense.bias bias 8 1 768 0.023927891103216546
+29 bert.encoder.layer.1.attention.output.LayerNorm.weight weight 8 1 768 0.21818985207804853
+30 bert.encoder.layer.1.attention.output.LayerNorm.bias bias 8 1 768 0.07378204175129166
+31 bert.encoder.layer.1.intermediate.dense.weight weight 8 2 3072 768 0.01575806016307373
+32 bert.encoder.layer.1.intermediate.dense.bias bias 8 1 3072 0.03792401751236057
+33 bert.encoder.layer.1.output.dense.weight weight 8 2 768 3072 0.015392988925830724
+34 bert.encoder.layer.1.output.dense.bias bias 8 1 768 0.023911166179164868
+35 bert.encoder.layer.1.output.LayerNorm.weight weight 8 1 768 0.221005804109508
+36 bert.encoder.layer.1.output.LayerNorm.bias bias 8 1 768 0.03238141584889126
+37 bert.encoder.layer.2.attention.self.query.weight weight 8 2 768 768 0.01918070878014933
+38 bert.encoder.layer.2.attention.self.query.bias bias 8 1 768 0.05585108797881816
+39 bert.encoder.layer.2.attention.self.key.weight weight 8 2 768 768 0.018527718624103358
+40 bert.encoder.layer.2.attention.self.key.bias bias 8 1 768 0.0017304967716005638
+41 bert.encoder.layer.2.attention.self.value.weight weight 8 2 768 768 0.011138220327863336
+42 bert.encoder.layer.2.attention.self.value.bias bias 8 1 768 0.020490442924920357
+43 bert.encoder.layer.2.attention.output.dense.weight weight 8 2 768 768 0.010806826531733604
+44 bert.encoder.layer.2.attention.output.dense.bias bias 8 1 768 0.039927669080187786
+45 bert.encoder.layer.2.attention.output.LayerNorm.weight weight 8 1 768 0.2204610906493943
+46 bert.encoder.layer.2.attention.output.LayerNorm.bias bias 8 1 768 0.07500661374037906
+47 bert.encoder.layer.2.intermediate.dense.weight weight 8 2 3072 768 0.015838598744010758
+48 bert.encoder.layer.2.intermediate.dense.bias bias 8 1 3072 0.051067501645733496
+49 bert.encoder.layer.2.output.dense.weight weight 8 2 768 3072 0.016070151022614727
+50 bert.encoder.layer.2.output.dense.bias bias 8 1 768 0.027628070454613816
+51 bert.encoder.layer.2.output.LayerNorm.weight weight 8 1 768 0.1076115369969545
+52 bert.encoder.layer.2.output.LayerNorm.bias bias 8 1 768 0.030271920351004143
+53 bert.encoder.layer.3.attention.self.query.weight weight 8 2 768 768 0.017079874934322885
+54 bert.encoder.layer.3.attention.self.query.bias bias 8 1 768 0.05370592635728798
+55 bert.encoder.layer.3.attention.self.key.weight weight 8 2 768 768 0.017293361371860952
+56 bert.encoder.layer.3.attention.self.key.bias bias 8 1 768 0.0019380474370709155
+57 bert.encoder.layer.3.attention.self.value.weight weight 8 2 768 768 0.012405837223505153
+58 bert.encoder.layer.3.attention.self.value.bias bias 8 1 768 0.013154370196791457
+59 bert.encoder.layer.3.attention.output.dense.weight weight 8 2 768 768 0.01149741485144247
+60 bert.encoder.layer.3.attention.output.dense.bias bias 8 1 768 0.027303792257442033
+61 bert.encoder.layer.3.attention.output.LayerNorm.weight weight 8 1 768 0.28992866738416806
+62 bert.encoder.layer.3.attention.output.LayerNorm.bias bias 8 1 768 0.06086982374151463
+63 bert.encoder.layer.3.intermediate.dense.weight weight 8 2 3072 768 0.016184350809037858
+64 bert.encoder.layer.3.intermediate.dense.bias bias 8 1 3072 0.042714851723128486
+65 bert.encoder.layer.3.output.dense.weight weight 8 2 768 3072 0.019442354335081267
+66 bert.encoder.layer.3.output.dense.bias bias 8 1 768 0.026091951002458827
+67 bert.encoder.layer.3.output.LayerNorm.weight weight 8 1 768 0.136590805676381
+68 bert.encoder.layer.3.output.LayerNorm.bias bias 8 1 768 0.021621091735334542
+69 bert.encoder.layer.4.attention.self.query.weight weight 8 2 768 768 0.016953514529888386
+70 bert.encoder.layer.4.attention.self.query.bias bias 8 1 768 0.05126189694335832
+71 bert.encoder.layer.4.attention.self.key.weight weight 8 2 768 768 0.016667493498952028
+72 bert.encoder.layer.4.attention.self.key.bias bias 8 1 768 0.0017063742064337372
+73 bert.encoder.layer.4.attention.self.value.weight weight 8 2 768 768 0.014083892095444955
+74 bert.encoder.layer.4.attention.self.value.bias bias 8 1 768 0.012087376235200013
+75 bert.encoder.layer.4.attention.output.dense.weight weight 8 2 768 768 0.01284294739299945
+76 bert.encoder.layer.4.attention.output.dense.bias bias 8 1 768 0.01581331797193751
+77 bert.encoder.layer.4.attention.output.LayerNorm.weight weight 8 1 768 0.41798314799248876
+78 bert.encoder.layer.4.attention.output.LayerNorm.bias bias 8 1 768 0.060282167069122136
+79 bert.encoder.layer.4.intermediate.dense.weight weight 8 2 3072 768 0.01628048867141424
+80 bert.encoder.layer.4.intermediate.dense.bias bias 8 1 3072 0.04913699957909014
+81 bert.encoder.layer.4.output.dense.weight weight 8 2 768 3072 0.01773018486174731
+82 bert.encoder.layer.4.output.dense.bias bias 8 1 768 0.024066462080719594
+83 bert.encoder.layer.4.output.LayerNorm.weight weight 8 1 768 0.13946481180858522
+84 bert.encoder.layer.4.output.LayerNorm.bias bias 8 1 768 0.021712835097739715
+85 bert.encoder.layer.5.attention.self.query.weight weight 8 2 768 768 0.017122286372130716
+86 bert.encoder.layer.5.attention.self.query.bias bias 8 1 768 0.04919635101675031
+87 bert.encoder.layer.5.attention.self.key.weight weight 8 2 768 768 0.017418288518512962
+88 bert.encoder.layer.5.attention.self.key.bias bias 8 1 768 0.0025845679313316245
+89 bert.encoder.layer.5.attention.self.value.weight weight 8 2 768 768 0.014091229874504545
+90 bert.encoder.layer.5.attention.self.value.bias bias 8 1 768 0.009914104853529185
+91 bert.encoder.layer.5.attention.output.dense.weight weight 8 2 768 768 0.0131736580331787
+92 bert.encoder.layer.5.attention.output.dense.bias bias 8 1 768 0.01684523544643332
+93 bert.encoder.layer.5.attention.output.LayerNorm.weight weight 8 1 768 0.2799163809241915
+94 bert.encoder.layer.5.attention.output.LayerNorm.bias bias 8 1 768 0.049822380552394234
+95 bert.encoder.layer.5.intermediate.dense.weight weight 8 2 3072 768 0.016280418733117655
+96 bert.encoder.layer.5.intermediate.dense.bias bias 8 1 3072 0.04469374420322703
+97 bert.encoder.layer.5.output.dense.weight weight 8 2 768 3072 0.017132817667686796
+98 bert.encoder.layer.5.output.dense.bias bias 8 1 768 0.021111873565624384
+99 bert.encoder.layer.5.output.LayerNorm.weight weight 8 1 768 0.09320715577433056
+100 bert.encoder.layer.5.output.LayerNorm.bias bias 8 1 768 0.026279109363209256
+101 bert.encoder.layer.6.attention.self.query.weight weight 8 2 768 768 0.017271939005776747
+102 bert.encoder.layer.6.attention.self.query.bias bias 8 1 768 0.05617346787191584
+103 bert.encoder.layer.6.attention.self.key.weight weight 8 2 768 768 0.017336955583076817
+104 bert.encoder.layer.6.attention.self.key.bias bias 8 1 768 0.0020811879739796426
+105 bert.encoder.layer.6.attention.self.value.weight weight 8 2 768 768 0.013701356279265471
+106 bert.encoder.layer.6.attention.self.value.bias bias 8 1 768 0.014315684982544628
+107 bert.encoder.layer.6.attention.output.dense.weight weight 8 2 768 768 0.012756294220156115
+108 bert.encoder.layer.6.attention.output.dense.bias bias 8 1 768 0.019881165170679324
+109 bert.encoder.layer.6.attention.output.LayerNorm.weight weight 8 1 768 0.2767764669784095
+110 bert.encoder.layer.6.attention.output.LayerNorm.bias bias 8 1 768 0.057029022221542096
+111 bert.encoder.layer.6.intermediate.dense.weight weight 8 2 3072 768 0.016255344090731594
+112 bert.encoder.layer.6.intermediate.dense.bias bias 8 1 3072 0.04850155598459889
+113 bert.encoder.layer.6.output.dense.weight weight 8 2 768 3072 0.016337669481162338
+114 bert.encoder.layer.6.output.dense.bias bias 8 1 768 0.02834824025839495
+115 bert.encoder.layer.6.output.LayerNorm.weight weight 8 1 768 0.07667349614517444
+116 bert.encoder.layer.6.output.LayerNorm.bias bias 8 1 768 0.02625910963954472
+117 bert.encoder.layer.7.attention.self.query.weight weight 8 2 768 768 0.017323366323679916
+118 bert.encoder.layer.7.attention.self.query.bias bias 8 1 768 0.05777540045468989
+119 bert.encoder.layer.7.attention.self.key.weight weight 8 2 768 768 0.01749283199233543
+120 bert.encoder.layer.7.attention.self.key.bias bias 8 1 768 0.0020445368898504746
+121 bert.encoder.layer.7.attention.self.value.weight weight 8 2 768 768 0.013353645916710063
+122 bert.encoder.layer.7.attention.self.value.bias bias 8 1 768 0.01735057898043832
+123 bert.encoder.layer.7.attention.output.dense.weight weight 8 2 768 768 0.01261630870510326
+124 bert.encoder.layer.7.attention.output.dense.bias bias 8 1 768 0.023971086226775795
+125 bert.encoder.layer.7.attention.output.LayerNorm.weight weight 8 1 768 0.27158946964802677
+126 bert.encoder.layer.7.attention.output.LayerNorm.bias bias 8 1 768 0.0560170549068759
+127 bert.encoder.layer.7.intermediate.dense.weight weight 8 2 3072 768 0.015646142098239092
+128 bert.encoder.layer.7.intermediate.dense.bias bias 8 1 3072 0.048824604419433815
+129 bert.encoder.layer.7.output.dense.weight weight 8 2 768 3072 0.015710393138228404
+130 bert.encoder.layer.7.output.dense.bias bias 8 1 768 0.03356757486179286
+131 bert.encoder.layer.7.output.LayerNorm.weight weight 8 1 768 0.1005378881198255
+132 bert.encoder.layer.7.output.LayerNorm.bias bias 8 1 768 0.03385355666943553
+133 bert.encoder.layer.8.attention.self.query.weight weight 8 2 768 768 0.017531824270198254
+134 bert.encoder.layer.8.attention.self.query.bias bias 8 1 768 0.06645177702908078
+135 bert.encoder.layer.8.attention.self.key.weight weight 8 2 768 768 0.01775601801386644
+136 bert.encoder.layer.8.attention.self.key.bias bias 8 1 768 0.00253064119868631
+137 bert.encoder.layer.8.attention.self.value.weight weight 8 2 768 768 0.014355717944951857
+138 bert.encoder.layer.8.attention.self.value.bias bias 8 1 768 0.01856786568018408
+139 bert.encoder.layer.8.attention.output.dense.weight weight 8 2 768 768 0.013467924474088927
+140 bert.encoder.layer.8.attention.output.dense.bias bias 8 1 768 0.025156411808002023
+141 bert.encoder.layer.8.attention.output.LayerNorm.weight weight 8 1 768 0.20858100442832228
+142 bert.encoder.layer.8.attention.output.LayerNorm.bias bias 8 1 768 0.047317711206942246
+143 bert.encoder.layer.8.intermediate.dense.weight weight 8 2 3072 768 0.01559340216444548
+144 bert.encoder.layer.8.intermediate.dense.bias bias 8 1 3072 0.04623111666252435
+145 bert.encoder.layer.8.output.dense.weight weight 8 2 768 3072 0.015523888360234717
+146 bert.encoder.layer.8.output.dense.bias bias 8 1 768 0.03870032171828844
+147 bert.encoder.layer.8.output.LayerNorm.weight weight 8 1 768 0.10377317243093499
+148 bert.encoder.layer.8.output.LayerNorm.bias bias 8 1 768 0.02561410398725754
+149 bert.encoder.layer.9.attention.self.query.weight weight 8 2 768 768 0.01857005239744164
+150 bert.encoder.layer.9.attention.self.query.bias bias 8 1 768 0.07336080538349418
+151 bert.encoder.layer.9.attention.self.key.weight weight 8 2 768 768 0.018371505750650687
+152 bert.encoder.layer.9.attention.self.key.bias bias 8 1 768 0.0026068101383095637
+153 bert.encoder.layer.9.attention.self.value.weight weight 8 2 768 768 0.01372238168729784
+154 bert.encoder.layer.9.attention.self.value.bias bias 8 1 768 0.01646112432020991
+155 bert.encoder.layer.9.attention.output.dense.weight weight 8 2 768 768 0.01315390530675592
+156 bert.encoder.layer.9.attention.output.dense.bias bias 8 1 768 0.026657951785274733
+157 bert.encoder.layer.9.attention.output.LayerNorm.weight weight 8 1 768 0.20604034283431058
+158 bert.encoder.layer.9.attention.output.LayerNorm.bias bias 8 1 768 0.04915678601906687
+159 bert.encoder.layer.9.intermediate.dense.weight weight 8 2 3072 768 0.015894657808248207
+160 bert.encoder.layer.9.intermediate.dense.bias bias 8 1 3072 0.04503099446611835
+161 bert.encoder.layer.9.output.dense.weight weight 8 2 768 3072 0.016659273419754324
+162 bert.encoder.layer.9.output.dense.bias bias 8 1 768 0.030277422472391947
+163 bert.encoder.layer.9.output.LayerNorm.weight weight 8 1 768 0.11457186447690912
+164 bert.encoder.layer.9.output.LayerNorm.bias bias 8 1 768 0.025648547505501086
+165 bert.encoder.layer.10.attention.self.query.weight weight 8 2 768 768 0.018423067408107632
+166 bert.encoder.layer.10.attention.self.query.bias bias 8 1 768 0.0901848265467377
+167 bert.encoder.layer.10.attention.self.key.weight weight 8 2 768 768 0.0183620386535324
+168 bert.encoder.layer.10.attention.self.key.bias bias 8 1 768 0.002357117845611901
+169 bert.encoder.layer.10.attention.self.value.weight weight 8 2 768 768 0.014193310503108663
+170 bert.encoder.layer.10.attention.self.value.bias bias 8 1 768 0.010067056080432232
+171 bert.encoder.layer.10.attention.output.dense.weight weight 8 2 768 768 0.013229444790186937
+172 bert.encoder.layer.10.attention.output.dense.bias bias 8 1 768 0.019185216602556385
+173 bert.encoder.layer.10.attention.output.LayerNorm.weight weight 8 1 768 0.20718210884085553
+174 bert.encoder.layer.10.attention.output.LayerNorm.bias bias 8 1 768 0.058209746978533275
+175 bert.encoder.layer.10.intermediate.dense.weight weight 8 2 3072 768 0.015615778128738586
+176 bert.encoder.layer.10.intermediate.dense.bias bias 8 1 3072 0.04358586265406058
+177 bert.encoder.layer.10.output.dense.weight weight 8 2 768 3072 0.0171882748598707
+178 bert.encoder.layer.10.output.dense.bias bias 8 1 768 0.040489155112445524
+179 bert.encoder.layer.10.output.LayerNorm.weight weight 8 1 768 0.11747170514522726
+180 bert.encoder.layer.10.output.LayerNorm.bias bias 8 1 768 0.0287248441286463
+181 bert.encoder.layer.11.attention.self.query.weight weight 8 2 768 768 0.018420136791214407
+182 bert.encoder.layer.11.attention.self.query.bias bias 8 1 768 0.0862105061622058
+183 bert.encoder.layer.11.attention.self.key.weight weight 8 2 768 768 0.017947445928202077
+184 bert.encoder.layer.11.attention.self.key.bias bias 8 1 768 0.0021330958155048674
+185 bert.encoder.layer.11.attention.self.value.weight weight 8 2 768 768 0.015660628907218622
+186 bert.encoder.layer.11.attention.self.value.bias bias 8 1 768 0.0084014350182781
+187 bert.encoder.layer.11.attention.output.dense.weight weight 8 2 768 768 0.014839348297808634
+188 bert.encoder.layer.11.attention.output.dense.bias bias 8 1 768 0.014589109403713232
+189 bert.encoder.layer.11.attention.output.LayerNorm.weight weight 8 1 768 0.17248355576831914
+190 bert.encoder.layer.11.attention.output.LayerNorm.bias bias 8 1 768 0.04724615565307609
+191 bert.encoder.layer.11.intermediate.dense.weight weight 8 2 3072 768 0.01581173160323243
+192 bert.encoder.layer.11.intermediate.dense.bias bias 8 1 3072 0.035995954617085726
+193 bert.encoder.layer.11.output.dense.weight weight 8 2 768 3072 0.01445958121575117
+194 bert.encoder.layer.11.output.dense.bias bias 8 1 768 0.0231676468281957
+195 bert.encoder.layer.11.output.LayerNorm.weight weight 8 1 768 0.05714268334727983
+196 bert.encoder.layer.11.output.LayerNorm.bias bias 8 1 768 0.021891703587199867
+197 cls.predictions.bias bias 8 1 30522 0.1078645950053017
+198 cls.predictions.transform.dense.weight weight 8 2 768 768 0.02055913583757822
+199 cls.predictions.transform.dense.bias bias 8 1 768 0.040670327447076535
+200 cls.predictions.transform.LayerNorm.weight weight 8 1 768 1.191313805905792
+201 cls.predictions.transform.LayerNorm.bias bias 8 1 768 0.1256008867122762
+202 bert.embeddings.position_ids buffer 32 2 1 512 1.0
+203 bert.embeddings.token_type_ids buffer 32 2 1 512 1.0
