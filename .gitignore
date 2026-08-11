@@ -49,3 +49,5 @@
 
 #numpy files
 *.npz
+
+*_decoded/
