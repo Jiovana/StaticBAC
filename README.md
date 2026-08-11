@@ -29,7 +29,7 @@ This framework is designed for:
 ---
 
 ## Repository Structure
-
+**The main branch contains the code for Version 1.**  
 
 StaticBAC/  
 │  
@@ -40,6 +40,9 @@ StaticBAC/
 └── README.md  
 
 --> Main file is test_model_args.cpp
+
+The branch *context_analysis_v2* contains the code for the StaticBAC Version 2  
+
 ---
 
 ## Requirements
