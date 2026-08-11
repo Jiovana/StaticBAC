@@ -71,6 +71,12 @@ Arguments:
 --no_quant (flag)
     Skip quantization (assumes tensors are already quantized)
 
+--quantizer <string> (default: mse)
+    Selects quantization mode: mse or rd
+
+--lambda_rd <value> (default: 0.15)
+    Degree of distortion for RD quantization. 0.0 = no distortion
+
 -------------------------------------------------------------------------------
 Outputs:
 -------------------------------------------------------------------------------
@@ -551,7 +557,7 @@ def main():
 
     parser.add_argument("--quantizer", choices=["mse","rd"], default="mse", help="Pure MSE minimization or rate-distortion")
 
-    parser.add_argument("--lambda_rd", type=float, default = 0.5 , help="Lambda for rate-distortion, 0.0 = pure MSE, above=more compression")
+    parser.add_argument("--lambda_rd", type=float, default = 0.15 , help="Lambda for rate-distortion, 0.0 = pure MSE, above=more compression")
 
     args = parser.parse_args()
 
