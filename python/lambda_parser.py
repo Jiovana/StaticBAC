@@ -1,7 +1,7 @@
 import re
 import numpy as np
 
-with open("efficientnet_b7_015.txt", "r") as f:
+with open("qwen_015.txt", "r") as f:
     text = f.read()
 
 entropy = []

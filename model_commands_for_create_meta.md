@@ -4,7 +4,9 @@
 * google-t5/t5-base:	python create_meta.py --model google-t5/t5-base --out_dir ../models8/google-t5 --source hf --quantizer rd --lambda_rd 0.15									
 * google-bert/bert-base-uncased:	python create_meta.py --model google-bert/bert-base-uncased --out_dir ../models8/google-bert --source hf --quantizer rd --lambda_rd 0.15								
 * openai-community/gpt2:	python create_meta.py --model openai-community/gpt2 --out_dir ../models8/gpt2 --source hf --quantizer rd --lambda_rd 0.15									
-* openai-community/openai-gpt:	python create_meta.py --model openai-community/openai-gpt --out_dir ../models8/gpt --source hf	--quantizer rd --lambda_rd 0.15								
+* openai-community/openai-gpt:	python create_meta.py --model openai-community/openai-gpt --out_dir ../models8/gpt --source hf	--quantizer rd --lambda_rd 0.15	
+
+* Qwen/Qwen2.5-3B:  python create_meta.py --model Qwen/Qwen2.5-3B --out_dir ../models8/qwen --source hf --quantizer rd --lambda 0.15				
 										
 **torchvision**	https://docs.pytorch.org/vision/main/models.html									
 * vit_b_16:	python create_meta.py --model vit_b_16 --out_dir ../models8/vit_b_16 --source torchvision --weights ViT_B_16_Weights.IMAGENET1K_V1 --quantizer rd --lambda_rd 0.15							

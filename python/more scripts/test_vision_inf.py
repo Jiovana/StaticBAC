@@ -222,7 +222,7 @@ def main():
     device = "cpu"
     print("Using device:", device)
 
-    imagenet_val_dir = r"C:\Users\gomes\OneDrive\Documentos\imagenet\ILSVRC\Data\CLS-LOC\val"
+    imagenet_val_dir = r"C:\Users\Jiovana\Documents\imagenet_validation"
 
     model_name = "resnet50"
 

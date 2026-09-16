@@ -636,12 +636,49 @@ int main(int argc, char* argv[])
         std::string bitstreamFile = g_modelName + ".bin";
         std::string decodedDir    = g_modelName + "_decoded";
 
+        std::cout << "Saving bitstream ("
+                << (double)bytestream.size() / (1024.0 * 1024.0 * 1024.0)
+                << " GiB)...\n";
+
         std::ofstream f(bitstreamFile, std::ios::binary);
-        f.write(reinterpret_cast<const char*>(bytestream.data()),
-            bytestream.size());
 
-        std::cout << "Bitstream saved to: " << bitstreamFile << "\n";
+        if (!f) {
+            std::cerr << "ERROR: Could not open bitstream file!\n";
+            return 1;
+        }
 
+        const size_t CHUNK_SIZE = 64 * 1024 * 1024; // 64 MiB
+        size_t written = 0;
+
+        while (written < bytestream.size()) {
+
+            size_t chunk =
+                std::min(CHUNK_SIZE, bytestream.size() - written);
+
+            f.write(
+                reinterpret_cast<const char*>(bytestream.data() + written),
+                chunk
+            );
+
+            if (!f) {
+                std::cerr << "\nERROR: Write failed at "
+                        << written << " bytes\n";
+                return 1;
+            }
+
+            written += chunk;
+
+            std::cout << "\rWritten "
+                    << written / (1024.0 * 1024.0 * 1024.0)
+                    << " / "
+                    << bytestream.size() / (1024.0 * 1024.0 * 1024.0)
+                    << " GiB"
+                    << std::flush;
+        }
+
+        f.close();
+
+        std::cout << "\nBitstream saved successfully.\n";
         
 
         int num_tensors = modelTensors.size();
