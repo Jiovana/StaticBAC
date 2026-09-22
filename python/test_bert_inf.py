@@ -1,263 +1,959 @@
-import csv
-import os
 import torch
 import numpy as np
-from tqdm import tqdm
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from transformers import AutoTokenizer, AutoModelForMaskedLM
 from datasets import load_dataset
+from tqdm import tqdm
+import transformers
+
+transformers.logging.set_verbosity_error()
 
 
-BITWIDTH_MAP = {
-    0:4, 1:8, 2:12, 3:16, 4:20, 5:24, 6:32
-}
+# ======================================================================
+# Configuration
+# ======================================================================
+
+MODEL_NAME = "google-bert/bert-base-uncased"
+
+# StaticBAC reconstructed NPZ
+RECONSTRUCTION_PATH = (
+    "bert_015_reconstructed.npz"
+)
+
+# WikiText-2 evaluation configuration
+MAX_LENGTH = 512
+# BERT MLM configuration
+MASK_PROBABILITY = 0.15
+
+SEED = 42
+
+DEVICE = torch.device(
+    "cuda" if torch.cuda.is_available() else "cpu"
+)
 
 
-# Path to your CSV file
-qstep_file = r"C:\Users\gomes\OneDrive\Documentos\GitHub\nncodec2_work\example\compression scripts\bert_quant_eval_mixed_run5\compression_results.csv"
+# ======================================================================
+# Load WikiText-2
+# ======================================================================
 
-def build_id_to_name_map(model, decoded_meta):
-    sd = model.state_dict()
-    keys = list(sd.keys())
+def load_wikitext():
 
-    if len(keys) != len(decoded_meta):
-        raise RuntimeError(
-            f"Mismatch: model has {len(keys)} tensors but decoded_meta has {len(decoded_meta)}"
+    print("\n" + "=" * 70)
+    print("LOADING WIKITEXT-2")
+    print("=" * 70)
+
+    dataset = load_dataset(
+        "Salesforce/wikitext",
+        "wikitext-2-raw-v1",
+        split="validation"
+    )
+
+    texts = [
+        text
+        for text in dataset["text"]
+        if text.strip()
+    ]
+
+    text = "\n".join(texts)
+
+    print(
+        f"WikiText-2 validation entries: "
+        f"{len(dataset)}"
+    )
+
+    print(
+        f"Non-empty entries used: "
+        f"{len(texts)}"
+    )
+
+    print(
+        f"Total characters: "
+        f"{len(text):,}"
+    )
+
+    return text
+
+
+# ======================================================================
+# Tokenize WikiText-2
+# ======================================================================
+
+def tokenize_wikitext(
+    tokenizer,
+    text
+):
+
+    print("\n" + "=" * 70)
+    print("TOKENIZING WIKITEXT-2")
+    print("=" * 70)
+
+    # --------------------------------------------------------------
+    # Tokenize without truncation.
+    # --------------------------------------------------------------
+
+    token_ids = tokenizer(
+        text,
+        add_special_tokens=False,
+        truncation=False
+    )["input_ids"]
+
+    print(
+        f"Total content tokens: "
+        f"{len(token_ids):,}"
+    )
+
+    # --------------------------------------------------------------
+    # BERT sequences:
+    #
+    # [CLS] + 510 content tokens + [SEP]
+    #
+    # This gives a maximum sequence length of 512.
+    # --------------------------------------------------------------
+
+    chunk_size = MAX_LENGTH - 2
+
+    sequences = []
+
+    for start in range(
+        0,
+        len(token_ids),
+        chunk_size
+    ):
+
+        chunk = token_ids[
+            start:start + chunk_size
+        ]
+
+        if len(chunk) < 2:
+            continue
+
+        sequence = (
+            [tokenizer.cls_token_id]
+            + chunk
+            + [tokenizer.sep_token_id]
         )
 
-    id_to_name = {}
+        # ----------------------------------------------------------
+        # Pad shorter final sequence.
+        # ----------------------------------------------------------
 
-    for i, t in enumerate(decoded_meta):
-        tensor_id = t["idx"]
-        name = keys[i]
+        padding_length = (
+            MAX_LENGTH
+            - len(sequence)
+        )
 
-        # 🔒 Strong safety check
-        if list(sd[name].shape) != list(t["shape"]):
-            raise RuntimeError(
-                f"Shape mismatch at ID {tensor_id}: "
-                f"{name} {list(sd[name].shape)} vs decoded {list(t['shape'])}"
+        sequence += (
+            [tokenizer.pad_token_id]
+            * padding_length
+        )
+
+        sequences.append(sequence)
+
+    input_ids = torch.tensor(
+        sequences,
+        dtype=torch.long
+    )
+
+    attention_mask = (
+        input_ids != tokenizer.pad_token_id
+    ).long()
+
+    encodings = {
+        "input_ids": input_ids,
+        "attention_mask": attention_mask
+    }
+
+    print(
+        f"BERT input shape: "
+        f"{tuple(input_ids.shape)}"
+    )
+
+    print(
+        f"Number of sequences: "
+        f"{input_ids.shape[0]:,}"
+    )
+
+    return encodings
+
+
+# ======================================================================
+# Create MLM masks
+# ======================================================================
+
+def create_mlm_batch(
+    encodings,
+    tokenizer
+):
+
+    print("\n" + "=" * 70)
+    print("CREATING MLM MASKS")
+    print("=" * 70)
+
+    input_ids = encodings["input_ids"].clone()
+    attention_mask = encodings["attention_mask"]
+
+    labels = input_ids.clone()
+
+    # --------------------------------------------------------------
+    # Random generator
+    #
+    # No global seed is required.
+    #
+    # The same mlm_inputs object is used for both the original
+    # and reconstructed models, so both models see exactly the
+    # same masked inputs.
+    # --------------------------------------------------------------
+
+    rng = np.random.default_rng(SEED)
+
+    # --------------------------------------------------------------
+    # Identify special tokens
+    # --------------------------------------------------------------
+
+    special_masks = []
+
+    for ids in input_ids:
+
+        special_masks.append(
+            tokenizer.get_special_tokens_mask(
+                ids.tolist(),
+                already_has_special_tokens=True
             )
-
-        id_to_name[tensor_id] = name
-
-    print("ID → name mapping built and verified.")
-    return id_to_name
-
-# ------------------------------------------------------------
-# read decoded meta
-# ------------------------------------------------------------
-def read_decoded_meta(path):
-
-    tensors = []
-
-    with open(path) as f:
-        lines = f.readlines()
-
-    for line in lines:
-
-        line = line.strip()
-
-        if not line:
-            continue
-
-        if line.startswith("numTensors"):
-            continue
-
-        parts = line.split()
-
-        # safety check
-        if len(parts) < 6:
-            continue
-
-        idx = int(parts[0])
-        filename = parts[1]
-        bw_enum = int(parts[3])
-        dims = int(parts[4])
-
-        shape = tuple(map(int, parts[5:5+dims]))
-
-        tensors.append({
-            "idx": idx,
-            "filename": filename,
-            "bitwidth": BITWIDTH_MAP[bw_enum],
-            "shape": shape
-        })
-
-    return tensors
-
-
-# ------------------------------------------------------------
-# load tensor binary
-# ------------------------------------------------------------
-def load_tensor(path, bitwidth, shape):
-
-    # decoded tensors appear to be stored as int32
-    dtype = np.int32
-
-    arr = np.fromfile(path, dtype=dtype)
-
-    expected = np.prod(shape)
-
-    if arr.size != expected:
-        raise RuntimeError(
-            f"{path}: expected {expected} values but found {arr.size}"
         )
 
-    arr = arr.reshape(shape)
+    special_masks = torch.tensor(
+        special_masks,
+        dtype=torch.bool
+    )
 
-    return torch.from_numpy(arr)
+    # --------------------------------------------------------------
+    # Select tokens for prediction
+    # --------------------------------------------------------------
+
+    random_values = torch.from_numpy(
+        rng.random(input_ids.shape)
+    )
+
+    candidate_mask = (
+        attention_mask.bool()
+        & ~special_masks
+    )
+
+    masked_positions = (
+        candidate_mask
+        & (random_values < MASK_PROBABILITY)
+    )
+
+    labels[~masked_positions] = -100
+
+    # --------------------------------------------------------------
+    # 80% [MASK]
+    # 10% random token
+    # 10% unchanged
+    # --------------------------------------------------------------
+
+    mask_random = rng.random(
+        input_ids.shape
+    )
+
+    mask_positions = (
+        masked_positions
+        & torch.from_numpy(
+            mask_random < 0.80
+        )
+    )
+
+    random_positions = (
+        masked_positions
+        & torch.from_numpy(
+            (mask_random >= 0.80)
+            & (mask_random < 0.90)
+        )
+    )
+
+    input_ids[mask_positions] = (
+        tokenizer.mask_token_id
+    )
+
+    random_token_ids = torch.from_numpy(
+        rng.integers(
+            low=0,
+            high=tokenizer.vocab_size,
+            size=input_ids.shape
+        )
+    ).long()
+
+    input_ids[random_positions] = (
+        random_token_ids[random_positions]
+    )
+
+    masked_tokens = (
+        masked_positions.sum().item()
+    )
+
+    print(
+        f"Masked tokens: "
+        f"{masked_tokens:,}"
+    )
+
+    return {
+        "input_ids": input_ids,
+        "attention_mask": attention_mask,
+        "labels": labels
+    }
 
 
-# ------------------------------------------------------------
-# inject tensors by order
-# ------------------------------------------------------------
-def load_by_id(model, decoded_meta, folder, qstep_file):
-    """
-    Load decoded tensors into a model by order, reconstructing them using qstep.
-    
-    Args:
-        model: PyTorch model.
-        decoded_meta: List of dictionaries with keys ['filename', 'bitwidth', 'shape'] for each tensor.
-        folder: Folder where decoded tensors are stored.
-        qstep_file: CSV file containing qsteps for all tensors.
-    """
-    # Load qsteps into a dict: param_name -> qstep
-    tensor_qsteps = {}
-    with open(qstep_file, newline='') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            name = row['param_name']
-            qstep = float(row['qstep'])
-            tensor_qsteps[name] = qstep
+# ======================================================================
+# MLM evaluation
+# ======================================================================
 
-    sd = model.state_dict()
-
-    id_to_name = build_id_to_name_map(model, decoded_meta)
-
-    with torch.no_grad():
-        for t in decoded_meta:
-            tensor_id = t["idx"]
-            param_name = id_to_name[tensor_id]
-            bin_path = os.path.join(folder, t["filename"])
-
-            # Load integer tensor
-            tensor = load_tensor(bin_path, t["bitwidth"], t["shape"])
-
-            # Reconstruct using qstep
-            if param_name not in tensor_qsteps:
-                raise ValueError(f"qstep for {param_name} not found in qstep file")
-            qstep = tensor_qsteps[param_name]
-
-            tensor = tensor.to(torch.float32) * qstep
-
-            # Ensure dtype matches model
-            tensor_torch = tensor.to(sd[param_name].dtype)
-
-            if sd[param_name].shape != tensor_torch.shape:
-                print("Shape mismatch:", param_name, sd[param_name].shape, tensor_torch.shape)
-                raise RuntimeError(f"Shape mismatch for {param_name}")
-
-            # Copy reconstructed tensor to model
-            sd[param_name].copy_(tensor_torch)
-
-            if not torch.allclose(sd[param_name], tensor_torch):
-                raise RuntimeError(f"Copy failed for {param_name}")
-
-    print("All tensors loaded and reconstructed successfully.")
-
-
-
-
-
-def load_qsteps(csv_file):
-    # Create a dictionary to store qstep per tensor
-    tensor_qsteps = {}
-
-    with open(csv_file, newline='') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            # Extract tensor name and qstep
-            name = row['param_name']
-            qstep = float(row['qstep'])
-            shape_str = row['shape']  # e.g., "(768, 3072)"
-            shape = tuple(int(x) for x in shape_str.strip("()").split(","))
-
-            # Store qstep and shape in dict
-            tensor_qsteps[name] = {
-                "qstep": qstep,
-                "shape": shape,
-                "dtype": np.float32  # you can adjust if needed
-            }
-    return tensor_qsteps
-
-# ------------------------------------------------------------
-# evaluation
-# ------------------------------------------------------------
-def evaluate(model, tokenizer, dataset):
+def evaluate_mlm(
+    model,
+    inputs,
+    batch_size=8
+):
 
     model.eval()
 
-    correct = 0
-    total = 0
+    input_ids = inputs["input_ids"]
+    attention_mask = inputs["attention_mask"]
+    labels = inputs["labels"]
 
-    for item in tqdm(dataset):
+    total_loss = 0.0
+    total_correct = 0
+    total_masked = 0
 
-        inputs = tokenizer(
-            item["sentence"],
-            return_tensors="pt",
-            truncation=True
+    num_samples = input_ids.shape[0]
+
+    print(
+        f"Evaluating {num_samples} samples "
+        f"with batch size {batch_size}..."
+    )
+
+    with torch.no_grad():
+
+        for start in tqdm(
+            range(0, num_samples, batch_size),
+            desc="MLM inference"
+        ):
+
+            end = min(
+                start + batch_size,
+                num_samples
+            )
+
+            batch_input_ids = (
+                input_ids[start:end]
+                .to(DEVICE)
+            )
+
+            batch_attention_mask = (
+                attention_mask[start:end]
+                .to(DEVICE)
+            )
+
+            batch_labels = (
+                labels[start:end]
+                .to(DEVICE)
+            )
+
+            outputs = model(
+                input_ids=batch_input_ids,
+                attention_mask=batch_attention_mask,
+                labels=batch_labels
+            )
+
+            logits = outputs.logits
+
+            masked = (
+                batch_labels != -100
+            )
+
+            masked_count = (
+                masked.sum().item()
+            )
+
+            total_loss += (
+                outputs.loss.item()
+                * masked_count
+            )
+
+            predictions = logits.argmax(
+                dim=-1
+            )
+
+            total_correct += (
+                (
+                    predictions == batch_labels
+                )
+                & masked
+            ).sum().item()
+
+            total_masked += masked_count
+
+    mean_loss = (
+        total_loss / total_masked
+    )
+
+    accuracy = (
+        total_correct / total_masked
+    )
+
+    return {
+        "loss": mean_loss,
+        "accuracy": accuracy,
+        "masked_tokens": total_masked
+    }
+
+
+# ======================================================================
+# Parse StaticBAC NPZ
+# ======================================================================
+
+def read_staticbac_npz(path):
+
+    print("\n" + "=" * 70)
+    print("LOADING STATICBAC RECONSTRUCTION")
+    print("=" * 70)
+
+    print(f"Path: {path}")
+
+    data = np.load(
+        path,
+        allow_pickle=False
+    )
+
+    parameters = {}
+    buffers = {}
+
+    for key in data.files:
+
+        if key.startswith("param_"):
+
+            parts = key.split("_", 2)
+
+            if len(parts) != 3:
+                raise RuntimeError(
+                    f"Invalid parameter key: {key}"
+                )
+
+            tensor_id = int(parts[1])
+            tensor_name = parts[2]
+
+            parameters[tensor_name] = {
+                "id": tensor_id,
+                "array": data[key]
+            }
+
+        elif key.startswith("buffer_"):
+
+            parts = key.split("_", 2)
+
+            if len(parts) != 3:
+                raise RuntimeError(
+                    f"Invalid buffer key: {key}"
+                )
+
+            tensor_id = int(parts[1])
+            tensor_name = parts[2]
+
+            buffers[tensor_name] = {
+                "id": tensor_id,
+                "array": data[key]
+            }
+
+        else:
+
+            print(
+                f"WARNING: Ignoring NPZ entry: {key}"
+            )
+
+    print(
+        f"Parameter tensors: {len(parameters)}"
+    )
+
+    print(
+        f"Buffer tensors:    {len(buffers)} "
+        f"(ignored)"
+    )
+
+    return parameters, buffers
+
+
+# ======================================================================
+# Parameter coverage
+# ======================================================================
+
+def check_parameter_coverage(
+    model,
+    reconstructed
+):
+
+    model_parameters = {
+        name: tensor
+        for name, tensor in model.named_parameters()
+    }
+
+    model_names = set(
+        model_parameters.keys()
+    )
+
+    reconstructed_names = set(
+        reconstructed.keys()
+    )
+
+    matching = sorted(
+        model_names & reconstructed_names
+    )
+
+    missing = sorted(
+        model_names - reconstructed_names
+    )
+
+    extra = sorted(
+        reconstructed_names - model_names
+    )
+
+    print("\n" + "=" * 70)
+    print("RECONSTRUCTION COVERAGE CHECK")
+    print("=" * 70)
+
+    print(
+        f"Model parameters:       "
+        f"{len(model_names)}"
+    )
+
+    print(
+        f"Reconstructed entries:  "
+        f"{len(reconstructed_names)}"
+    )
+
+    print(
+        f"Matching parameters:    "
+        f"{len(matching)}"
+    )
+
+    print(
+        f"Missing parameters:     "
+        f"{len(missing)}"
+    )
+
+    print(
+        f"Extra NPZ entries:      "
+        f"{len(extra)}"
+    )
+
+    if missing:
+
+        print("\nMissing parameters:")
+
+        for name in missing:
+            print(f"  {name}")
+
+        raise RuntimeError(
+            "StaticBAC reconstruction is incomplete."
         )
 
-        with torch.no_grad():
-            logits = model(**inputs).logits
+    if extra:
 
-        pred = torch.argmax(logits, dim=-1).item()
+        print("\nExtra NPZ entries:")
 
-        correct += pred == item["label"]
-        total += 1
+        for name in extra:
+            print(f"  {name}")
 
-    return correct / total
+        raise RuntimeError(
+            "StaticBAC reconstruction contains "
+            "unexpected entries."
+        )
+
+    print(
+        "\nParameter names match exactly."
+    )
+
+    return matching
 
 
-# ------------------------------------------------------------
-# MAIN
-# ------------------------------------------------------------
+# ======================================================================
+# Load reconstructed parameters
+# ======================================================================
+
+def load_reconstructed_parameters(
+    model,
+    reconstructed,
+    matching
+):
+
+    print("\n" + "=" * 70)
+    print("LOADING STATICBAC PARAMETERS")
+    print("=" * 70)
+
+    model_parameters = {
+        name: tensor
+        for name, tensor in model.named_parameters()
+    }
+
+    with torch.no_grad():
+
+        for name in matching:
+
+            model_tensor = (
+                model_parameters[name]
+            )
+
+            reconstructed_tensor = (
+                torch.from_numpy(
+                    reconstructed[name]["array"]
+                )
+            )
+
+            if tuple(
+                model_tensor.shape
+            ) != tuple(
+                reconstructed_tensor.shape
+            ):
+
+                raise RuntimeError(
+                    f"Shape mismatch for {name}: "
+                    f"model="
+                    f"{tuple(model_tensor.shape)}, "
+                    f"NPZ="
+                    f"{tuple(reconstructed_tensor.shape)}"
+                )
+
+            reconstructed_tensor = (
+                reconstructed_tensor.to(
+                    device=model_tensor.device,
+                    dtype=model_tensor.dtype
+                )
+            )
+
+            model_tensor.copy_(
+                reconstructed_tensor
+            )
+
+    print(
+        "All reconstructed parameters loaded."
+    )
+
+
+# ======================================================================
+# Verify reconstruction
+# ======================================================================
+
+def verify_reconstruction_load(
+    model,
+    reconstructed,
+    matching
+):
+
+    print("\n" + "=" * 70)
+    print("VERIFYING RECONSTRUCTION")
+    print("=" * 70)
+
+    model_parameters = {
+        name: tensor
+        for name, tensor in model.named_parameters()
+    }
+
+    max_error = 0.0
+
+    for name in matching:
+
+        model_tensor = (
+            model_parameters[name]
+            .detach()
+            .cpu()
+            .numpy()
+        )
+
+        reconstructed_tensor = (
+            reconstructed[name]["array"]
+        )
+
+        error = np.max(
+            np.abs(
+                model_tensor.astype(np.float64)
+                - reconstructed_tensor.astype(np.float64)
+            )
+        )
+
+        max_error = max(
+            max_error,
+            float(error)
+        )
+
+    print(
+        f"Maximum difference: "
+        f"{max_error:.10g}"
+    )
+
+    if max_error == 0:
+
+        print(
+            "Exact reconstruction load verified."
+        )
+
+    else:
+
+        print(
+            "WARNING: Non-zero difference detected."
+        )
+
+
+# ======================================================================
+# Main
+# ======================================================================
+
 if __name__ == "__main__":
 
-    MODEL_NAME = "textattack/bert-base-uncased-SST-2"
+    print("\n" + "=" * 70)
+    print("BERT STATICBAC MACHINE-FIDELITY EVALUATION")
+    print("=" * 70)
 
-    DECODED_FOLDER = "bert_decoded"
-    META_PATH = os.path.join(DECODED_FOLDER, "decoded_tensors.meta")
+    print(
+        f"Model:        {MODEL_NAME}"
+    )
 
-    print("Loading model...")
-    model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
+    print(
+        f"NPZ:          {RECONSTRUCTION_PATH}"
+    )
 
-    print("Reading decoded metadata...")
-    decoded_meta = read_decoded_meta(META_PATH)
-    print("Decoded tensors:", len(decoded_meta))
+    print(
+        f"Device:       {DEVICE}"
+    )
 
-    for name, param in model.named_parameters():
-        print(name, torch.mean(param).item())
-        break
+    print(
+        f"Max length:   {MAX_LENGTH}"
+    )
 
-    print("Reconstructing weights...")
-    load_by_id(model, decoded_meta, DECODED_FOLDER, qstep_file)
-
-    for name, param in model.named_parameters():
-        print(name, torch.mean(param).item())
-        break
-
-
-    model_orig = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
-
-    for (n1, p1), (n2, p2) in zip(model_orig.named_parameters(), model.named_parameters()):
-        diff = torch.max(torch.abs(p1 - p2)).item()
-        print(n1, diff)
-        break
+    print(
+        f"Mask prob.:   {MASK_PROBABILITY}"
+    )
 
 
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-    dataset = load_dataset("sst2", split="validation[:1000]")
+    # ==================================================================
+    # LOAD WIKITEXT-2 FIRST
+    # ==================================================================
 
-    acc = evaluate(model, tokenizer, dataset)
+    text = load_wikitext()
 
-    print("\nAccuracy:", acc)
+
+    # ==================================================================
+    # LOAD TOKENIZER
+    # ==================================================================
+
+    print("\n" + "=" * 70)
+    print("LOADING TOKENIZER")
+    print("=" * 70)
+
+    tokenizer = AutoTokenizer.from_pretrained(
+        MODEL_NAME
+    )
+
+    print(
+        f"Tokenizer: {MODEL_NAME}"
+    )
+
+
+    # ==================================================================
+    # TOKENIZE
+    # ==================================================================
+
+    encodings = tokenize_wikitext(
+        tokenizer,
+        text
+    )
+
+
+    # ==================================================================
+    # CREATE FIXED MLM INPUT
+    # ==================================================================
+
+    mlm_inputs = create_mlm_batch(
+        encodings,
+        tokenizer
+    )
+
+
+    # ==================================================================
+    # LOAD ORIGINAL MODEL
+    # ==================================================================
+
+    print("\n" + "=" * 70)
+    print("LOADING ORIGINAL MODEL")
+    print("=" * 70)
+
+    model = AutoModelForMaskedLM.from_pretrained(
+        MODEL_NAME
+    ).to(DEVICE)
+
+    model.eval()
+
+    print(
+        f"Model: {MODEL_NAME}"
+    )
+
+
+    # ==================================================================
+    # ORIGINAL INFERENCE
+    # ==================================================================
+
+    print("\n" + "=" * 70)
+    print("ORIGINAL MODEL INFERENCE")
+    print("=" * 70)
+
+    original_results = evaluate_mlm(
+        model,
+        mlm_inputs,
+        batch_size=8
+    )
+
+    print("\nOriginal BERT:")
+
+    print(
+        f"  MLM loss:     "
+        f"{original_results['loss']:.6f}"
+    )
+
+    print(
+        f"  MLM accuracy: "
+        f"{original_results['accuracy']:.6%}"
+    )
+
+    print(
+        f"  Masked tokens: "
+        f"{original_results['masked_tokens']:,}"
+    )
+
+
+    # ==================================================================
+    # LOAD STATICBAC RECONSTRUCTION
+    # ==================================================================
+
+    reconstructed, ignored_buffers = (
+        read_staticbac_npz(
+            RECONSTRUCTION_PATH
+        )
+    )
+
+    matching = check_parameter_coverage(
+        model,
+        reconstructed
+    )
+
+
+    # ==================================================================
+    # LOAD RECONSTRUCTED PARAMETERS
+    # ==================================================================
+
+    load_reconstructed_parameters(
+        model,
+        reconstructed,
+        matching
+    )
+
+
+    # ==================================================================
+    # VERIFY RECONSTRUCTION
+    # ==================================================================
+
+    verify_reconstruction_load(
+        model,
+        reconstructed,
+        matching
+    )
+
+
+    # ==================================================================
+    # RECONSTRUCTED INFERENCE
+    # ==================================================================
+
+    print("\n" + "=" * 70)
+    print("STATICBAC RECONSTRUCTED MODEL INFERENCE")
+    print("=" * 70)
+
+    reconstructed_results = evaluate_mlm(
+        model,
+        mlm_inputs,
+        batch_size=8
+    )
+
+    print("\nStaticBAC reconstructed BERT:")
+
+    print(
+        f"  MLM loss:     "
+        f"{reconstructed_results['loss']:.6f}"
+    )
+
+    print(
+        f"  MLM accuracy: "
+        f"{reconstructed_results['accuracy']:.6%}"
+    )
+
+    print(
+        f"  Masked tokens: "
+        f"{reconstructed_results['masked_tokens']:,}"
+    )
+
+
+    # ==================================================================
+    # FINAL COMPARISON
+    # ==================================================================
+
+    loss_difference = (
+        reconstructed_results["loss"]
+        - original_results["loss"]
+    )
+
+    accuracy_difference = (
+        reconstructed_results["accuracy"]
+        - original_results["accuracy"]
+    )
+
+    relative_loss_change = (
+        100.0
+        * loss_difference
+        / original_results["loss"]
+    )
+
+    print("\n" + "=" * 70)
+    print("FINAL RESULT")
+    print("=" * 70)
+
+    print(
+        f"Baseline MLM loss:       "
+        f"{original_results['loss']:.8f}"
+    )
+
+    print(
+        f"Reconstructed MLM loss:  "
+        f"{reconstructed_results['loss']:.8f}"
+    )
+
+    print(
+        f"MLM loss difference:     "
+        f"{loss_difference:+.8f}"
+    )
+
+    print(
+        f"MLM loss relative change:"
+        f" {relative_loss_change:+.4f}%"
+    )
+
+    print()
+
+    print(
+        f"Baseline MLM accuracy:       "
+        f"{original_results['accuracy']:.6%}"
+    )
+
+    print(
+        f"Reconstructed MLM accuracy:  "
+        f"{reconstructed_results['accuracy']:.6%}"
+    )
+
+    print(
+        f"MLM accuracy difference:     "
+        f"{accuracy_difference:+.6%}"
+    )
+
+    print("\nDone.")

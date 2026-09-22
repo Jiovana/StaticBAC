@@ -1,0 +1,74 @@
+efficientnet b7 staticbac lambda 0.15 no buffer
+================================================================================
+CONDITION 2 INFERENCE RECONSTRUCTED WEIGHTS ONLY
+================================================================================
+StaticBAC reconstructed parameters:
+  Top-1: 17.246%
+  Top-5: 35.144%
+
+
+MSE quant
+Top-1:  83.906%
+Top-5:  96.802%
+
+almbda 0.075 no buffer
+StaticBAC reconstructed parameters:
+  Top-1: 66.154%
+  Top-5: 86.970%
+
+=========================================================================================
+VIT 
+Original pretrained model:
+  Top-1: 81.070%
+  Top-5: 95.320%
+
+StaticBAC reconstructed parameters: LAMBDA 0.075
+  Top-1: 80.648%
+  Top-5: 95.070%
+
+  Compressed size: 51.62542 Ratio: 1.5992
+  Bits/weight 8: 5.0025
+
+  StaticBAC reconstructed parameters: LAMBDA 0.15
+  Top-1: 80.146%
+  Top-5: 94.830%
+
+  =====================================================
+  GPT2 
+    Baseline perplexity:       29.55817551
+    Reconstructed perplexity:  56.30977344 MSE
+    Reconstructed perplexity:  235.29901430 0.15
+    Reconstructed perplexity: 140.68035458 0.075
+
+
+    Compression size: 74.4969   Ratio: 1.593
+    Bits/weight 8: 5.0219               These for 0.075
+
+
+    ================================================================
+    BERT
+    new evaluation using masked-language-modeling (MLM) performance on wikitext-2
+
+    original:
+    MLM loss:               2.14436584
+    MLM top1 accuracy:      61.920381%
+
+    MSE:
+    MLM loss:               2.19799913
+    MLM top1 accuracy:      61.065321%
+
+    0.075:
+    MLM loss:               2.25771966
+    MLM top1 accuracy:      59.806560%
+    Compression size: 65.5939   Ratio: 1.5923
+    Bits/weight 8: 5.02419            These for 0.075
+
+    0.15:
+    MLM loss:               2.34390766
+    MLM top1 accuracy:      58.357163%
+
+
+
+
+
+
