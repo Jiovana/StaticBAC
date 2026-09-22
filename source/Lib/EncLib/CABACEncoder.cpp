@@ -444,147 +444,258 @@ uint32_t BACEncoder::encodeWeightBAC( int32_t value, uint8_t pred){
 //   (e.g., Rice parameter k) and optional bypass of BAC
 //   coding when compression is predicted to be ineffective.
 //--------------------------------------------------------------
-uint64_t BACEncoder::encodeWeightsChunks( const int32_t* pWeights, uint32_t numWeights){
-   // LOG_LINE(g_logger, "=============> encodeWeightsChunks: numWeights=" + std::to_string(numWeights));
+uint64_t BACEncoder::encodeWeightsChunks(const int32_t* pWeights, uint32_t numWeights)
+{
     uint64_t scaledBits = 0;
     int width = getBitwidthFromEnum(m_tensorBitwidth);
 
-    //m_estimator.printTable();
+    // ============================================================
+    // Predictor ablation configuration
+    //
+    // 0 = NONE
+    // 1 = MEAN
+    // 2 = NEIGHBOR
+    //
+    // Select one of the 7 non-empty combinations:
+    //
+    //   0: NONE
+    //   1: MEAN
+    //   2: NEIGHBOR
+    //   3: NONE + MEAN
+    //   4: NONE + NEIGHBOR
+    //   5: MEAN + NEIGHBOR
+    //   6: NONE + MEAN + NEIGHBOR
+    //
+    // Predictor signaling remains fixed at 2 bits for all cases.
+    // ============================================================
 
-    const uint32_t chunkSize = 2048 ; // small chunk for low RAM = for 32bits =~ 65KB 
-    uint32_t numChunks = (numWeights + chunkSize - 1) >> 11; // shift for efficiency
+    constexpr int PREDICTOR_CONFIG = 6;
+
+    bool enabledPredictor[NUM_PRED] = {false, false, false};
+
+    switch (PREDICTOR_CONFIG) {
+        case 0: // NONE
+            enabledPredictor[PRED_NONE] = true;
+            break;
+
+        case 1: // MEAN
+            enabledPredictor[PRED_MEAN] = true;
+            break;
+
+        case 2: // NEIGHBOR
+            enabledPredictor[PRED_NEIGHBOR] = true;
+            break;
+
+        case 3: // NONE + MEAN
+            enabledPredictor[PRED_NONE] = true;
+            enabledPredictor[PRED_MEAN] = true;
+            break;
+
+        case 4: // NONE + NEIGHBOR
+            enabledPredictor[PRED_NONE] = true;
+            enabledPredictor[PRED_NEIGHBOR] = true;
+            break;
+
+        case 5: // MEAN + NEIGHBOR
+            enabledPredictor[PRED_MEAN] = true;
+            enabledPredictor[PRED_NEIGHBOR] = true;
+            break;
+
+        case 6: // NONE + MEAN + NEIGHBOR
+            enabledPredictor[PRED_NONE] = true;
+            enabledPredictor[PRED_MEAN] = true;
+            enabledPredictor[PRED_NEIGHBOR] = true;
+            break;
+
+        default:
+            // Should never happen.
+            enabledPredictor[PRED_NONE] = true;
+            break;
+    }
+
+    const uint32_t chunkSize = 2048;
+    uint32_t numChunks = (numWeights + chunkSize - 1) >> 11;
 
     bool skipChunk;
 
-    for (uint32_t c = 0; c < numChunks; c++){
-      m_CtxModeler.resetNeighborCtx();
+    for (uint32_t c = 0; c < numChunks; c++) {
 
-      uint32_t start = c * chunkSize;
-      uint32_t end   = std::min(start + chunkSize, numWeights);
-      uint32_t len   = end - start;
-
-
-      // ---- pass 1:compute local mean ----
-      int64_t sum = 0;
-      for (uint32_t i = start; i < end; i++)
-          sum += pWeights[i];
-
-     // uint32_t shift = std::ceil(std::log2(len));
-      int32_t localMean = sum / len;
-
-    
-      // ---------- pass 2: evaluate predictors -------------
-      double bestCost = std::numeric_limits<double>::max();
-      Predictor pred= PRED_NONE;
-
-      double predictorCost[3];
-      //uint8_t predictorK[3];
-
-      for(int predictor = PRED_NONE; predictor <= PRED_NEIGHBOR; predictor++){
         m_CtxModeler.resetNeighborCtx();
-        double cost = 0.0;
-        
-        for (uint32_t i = start; i < end; i++){
-          int32_t r;
 
-          switch (predictor){
-          case PRED_NONE:
-            r = pWeights[i];
-            break;
-          case PRED_MEAN:
-            r = pWeights[i] - localMean;
-            break;
-          case PRED_NEIGHBOR:
-            if (i == start)
-              r = pWeights[i];
-            else 
-              r = pWeights[i] - pWeights[i-1];
-            break;
-          }
-      
-          /// compute bins per element (rough bit estimation)
-          cost += estimateWeightBAC(r, predictor);
-          predictorCost[predictor] = cost;
-          m_CtxModeler.updateNeighborCtx(r);  
+        uint32_t start = c * chunkSize;
+        uint32_t end   = std::min(start + chunkSize, numWeights);
+        uint32_t len   = end - start;
+
+        // --------------------------------------------------------
+        // Pass 1: compute local mean
+        // --------------------------------------------------------
+        int64_t sum = 0;
+
+        for (uint32_t i = start; i < end; i++)
+            sum += pWeights[i];
+
+        int32_t localMean = sum / len;
+
+
+        // --------------------------------------------------------
+        // Pass 2: evaluate enabled predictors
+        // --------------------------------------------------------
+        double bestCost = std::numeric_limits<double>::max();
+        Predictor pred = PRED_NONE;
+
+        double predictorCost[NUM_PRED] = {
+            std::numeric_limits<double>::max(),
+            std::numeric_limits<double>::max(),
+            std::numeric_limits<double>::max()
+        };
+
+        for (int predictor = PRED_NONE;
+             predictor <= PRED_NEIGHBOR;
+             predictor++) {
+
+            // Skip predictors disabled by the ablation configuration.
+            if (!enabledPredictor[predictor])
+                continue;
+
+            m_CtxModeler.resetNeighborCtx();
+
+            double cost = 0.0;
+
+            for (uint32_t i = start; i < end; i++) {
+
+                int32_t r;
+
+                switch (predictor) {
+
+                    case PRED_NONE:
+                        r = pWeights[i];
+                        break;
+
+                    case PRED_MEAN:
+                        r = pWeights[i] - localMean;
+                        break;
+
+                    case PRED_NEIGHBOR:
+                        if (i == start)
+                            r = pWeights[i];
+                        else
+                            r = pWeights[i] - pWeights[i - 1];
+                        break;
+
+                    default:
+                        r = pWeights[i];
+                        break;
+                }
+
+                // Estimate coding cost using the
+                // context table associated with this predictor.
+                cost += estimateWeightBAC(r, (Predictor)predictor);
+
+                m_CtxModeler.updateNeighborCtx(r);
+            }
+
+            predictorCost[predictor] = cost;
+
+            if (cost < bestCost) {
+                bestCost = cost;
+                pred = (Predictor)predictor;
+            }
         }
 
-        if (cost < bestCost){
-          bestCost = cost;
-          pred = (Predictor)predictor;
+
+        double bitsPerElement = bestCost / len;
+        skipChunk = (bitsPerElement > (width * 0.98));
+
+
+        // --------------------------------------------------------
+        // Send skip flag
+        // --------------------------------------------------------
+        m_BinEncoder.encodeBinEP(skipChunk);
+        scaledBits += 1;
+
+
+        /*
+        LOG_LINE(
+            g_logger,
+            "bitwidth=" + std::to_string(width) +
+            ", predictor=" + std::to_string(pred) +
+            ", costNone=" + std::to_string(predictorCost[PRED_NONE]) +
+            ", costMean=" + std::to_string(predictorCost[PRED_MEAN]) +
+            ", costNeighbor=" + std::to_string(predictorCost[PRED_NEIGHBOR]) +
+            ", bitsPerElement=" + std::to_string(bitsPerElement) +
+            ", localMean=" + std::to_string(localMean) +
+            ", skip=" + std::to_string(skipChunk)
+        );
+        */
+
+
+        // --------------------------------------------------------
+        // Raw coding if BAC is not beneficial
+        // --------------------------------------------------------
+        if (skipChunk) {
+
+            for (uint32_t i = start; i < end; i++) {
+                iae_v(width, pWeights[i]);
+                scaledBits += width;
+            }
+
+            continue;
+        }
+
+
+        // --------------------------------------------------------
+        // Send predictor type
+        //
+        // Always use 2 bits, regardless of the ablation
+        // configuration, to preserve the existing bitstream format.
+        // --------------------------------------------------------
+        uae_v(2, pred);
+        scaledBits += 2;
+
+
+        // Mean predictor requires the local mean.
+        if (pred == PRED_MEAN) {
+            iae_v(width, localMean);
+            scaledBits += width;
+        }
+
+
+        // --------------------------------------------------------
+        // BAC encode using the selected predictor
+        // --------------------------------------------------------
+        m_CtxModeler.resetNeighborCtx();
+
+        for (uint32_t i = start; i < end; i++) {
+
+            int32_t value;
+
+            switch (pred) {
+
+                case PRED_NONE:
+                    value = pWeights[i];
+                    break;
+
+                case PRED_MEAN:
+                    value = pWeights[i] - localMean;
+                    break;
+
+                case PRED_NEIGHBOR:
+                    if (i == start)
+                        value = pWeights[i];
+                    else
+                        value = pWeights[i] - pWeights[i - 1];
+                    break;
+
+                default:
+                    value = pWeights[i];
+                    break;
+            }
+
+            scaledBits += encodeWeightBAC(value, pred);
+            m_CtxModeler.updateNeighborCtx(value);
         }
     }
 
-      double bitsPerElement = bestCost / len;
-      skipChunk = (bitsPerElement > (width*0.98)); // not sure
-
-      //send skip flag
-      m_BinEncoder.encodeBinEP(skipChunk);
-      scaledBits += 1;
-
-      /*
-      LOG_LINE(
-        g_logger,
-        "bitwidth=" + std::to_string(width) +
-        ", predictor=" + std::to_string(pred) +
-        ", costNone=" + std::to_string(predictorCost[PRED_NONE]) +
-        ", costMean=" + std::to_string(predictorCost[PRED_MEAN]) +
-        ", costNeighbor=" + std::to_string(predictorCost[PRED_NEIGHBOR]) +
-        ", bestK=" + std::to_string(bestK) +
-        ", bitsPerElement=" + std::to_string(bitsPerElement) +
-        ", localMean=" + std::to_string(localMean) +
-        ", skip=" + std::to_string(skipChunk)
-      );       */
-
-      if (skipChunk){
-        ////printf("Skipping BAC chunk encoding. Encoding as raw EP bins instead...\n");
-        for (uint32_t c = start; c < end; c++){
-          iae_v(width, pWeights[c]);
-          //m_BinEncoder.encodeBinsEP(pWeights[c], width);
-          scaledBits += width;
-        }
-        continue;
-      }
-
-      // send mean flag and mean value
-      //m_BinEncoder.encodeBinEP(useLocalMean ? 1 : 0);
-      //scaledBits += 1;
-      uae_v(2, pred); // send predictor type
-      scaledBits += 2;
-
-      if (pred == PRED_MEAN) {
-          iae_v(width, localMean);
-          scaledBits += width;
-      } 
-   
-
-      // ------------ BAC encode ----------------
-      m_CtxModeler.resetNeighborCtx();
-      for (uint32_t i = start; i < end; i++){
-         // LOG_LINE(g_logger, "Value for BAC before mean/neighbor:" + std::to_string(pWeights[i]));
-          int32_t value;
-          switch (pred){
-          case PRED_NONE:
-              value = pWeights[i];
-              break;
-          case PRED_MEAN:
-              value = pWeights[i] - localMean;
-              break;
-          case PRED_NEIGHBOR:
-              if (i == start)
-                  value = pWeights[i];
-              else
-                  value = pWeights[i] - pWeights[i - 1];
-              break;
-          default:
-              value = pWeights[i];
-              break;
-          }
-       //   LOG_LINE(g_logger, "Value for BAC AFTER mean/neighbor:" + std::to_string(value));
-          scaledBits += encodeWeightBAC(value, pred);
-          m_CtxModeler.updateNeighborCtx(value);
-      }
-    }
-  
     return scaledBits;
 }
 
