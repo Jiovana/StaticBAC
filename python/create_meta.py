@@ -5,19 +5,25 @@ Neural Network Tensor Export & Quantization Tool
 
 Description:
 ------------
-This script extracts tensors from deep learning models (PyTorch / Torchvision /
-HuggingFace), optionally quantizes them, and exports:
+This script extracts tensors from PyTorch, Torchvision, or Hugging Face
+models and exports:
 
-1. Binary tensor files (.bin, int32)
-2. A metadata file describing all tensors
+1. Binary tensor files (.bin), stored as int32
+2. A metadata file describing all exported tensors
 
-The output is designed to be consumed by the StaticBAC encoder/decoder pipeline.
+The output is designed to be consumed by the StaticBAC encoder/decoder
+pipeline.
+
+The script supports uniform 8-bit quantization of model parameters using
+either a reconstruction-error (MSE) objective or a rate-distortion (RD)
+objective. Non-parameter buffers are not quantized and are exported with
+32-bit representation.
 
 -------------------------------------------------------------------------------
 Supported Model Sources:
 -------------------------------------------------------------------------------
 
-1. HuggingFace (default)
+1. Hugging Face (default)
    - NLP / transformer models
    - Examples:
         bert-base-uncased
@@ -42,40 +48,53 @@ Usage:
         [--source hf|torchvision] \
         [--weights <weights_enum>] \
         [--quantized] \
-        [--no_quant]
+        [--no_quant] \
+        [--quantizer mse|rd] \
+        [--lambda_rd <value>]
 
 -------------------------------------------------------------------------------
 Arguments:
 -------------------------------------------------------------------------------
 
 --model <string>   (required)
-    Model name or path
+    Model name or path.
 
 --out_dir <path>   (required)
-    Output directory where binaries and metadata will be stored
+    Output directory where the binary tensors and metadata file are stored.
 
 --source <string>  (default: hf)
     Model source:
-        hf           → HuggingFace models
+        hf           → Hugging Face models
         torchvision  → Torchvision models
 
 --weights <string> (optional)
-    Torchvision weights enum
+    Torchvision weights enum.
+
     Example:
         ResNet50_Weights.DEFAULT
 
 --quantized (flag)
-    Load a pre-quantized torchvision model
-    (uses int_repr() internally)
+    Load a pre-quantized Torchvision model and extract its integer
+    representation using int_repr().
 
 --no_quant (flag)
-    Skip quantization (assumes tensors are already quantized)
+    Skip the quantization procedure and assume the parameter tensors are
+    already quantized. Parameters processed through this path are assigned
+    bitwidth=8 and qstep=1.0.
 
 --quantizer <string> (default: mse)
-    Selects quantization mode: mse or rd
+    Select the parameter quantization objective:
+
+        mse → minimize normalized mean-squared error
+        rd  → minimize normalized MSE + lambda_rd × normalized entropy
 
 --lambda_rd <value> (default: 0.15)
-    Degree of distortion for RD quantization. 0.0 = no distortion
+    Weight of the entropy term in the RD quantization objective.
+
+    lambda_rd = 0 corresponds to pure MSE optimization.
+    Increasing lambda_rd places greater emphasis on reducing the entropy
+    of the quantized representation and can therefore increase
+    reconstruction distortion.
 
 -------------------------------------------------------------------------------
 Outputs:
@@ -88,6 +107,9 @@ Outputs:
 │   └── ...
 └── tensor.meta
 
+All binary tensor files are stored as int32 values, regardless of the
+logical bitwidth specified in tensor.meta.
+
 -------------------------------------------------------------------------------
 Metadata Format:
 -------------------------------------------------------------------------------
@@ -99,66 +121,84 @@ Metadata Format:
 Example:
     0 conv1.weight weight 8 4 64 3 7 7 0.02
 
+The metadata records the logical bitwidth used by the StaticBAC coder and
+the quantization step required for reconstruction.
+
 -------------------------------------------------------------------------------
 Tensor Handling:
 -------------------------------------------------------------------------------
 
 1. Parameters (named_parameters):
-    - Weights → quantized to 8-bit
-    - Bias / norm → quantized to 12-bit
-    - Small tensors (<32 elements) → 12-bit
+    - Parameters are quantized to 8-bit signed integers by default.
+    - The quantization objective is selected with --quantizer.
+    - MSE quantization minimizes normalized reconstruction error.
+    - RD quantization minimizes normalized MSE plus an entropy term.
+    - Quantized integer values are stored as int32 in the output files.
 
 2. Buffers (named_buffers):
-    - NEVER quantized
-    - Always stored as int32
-    - Bitwidth = 32
+    - Buffers are not quantized.
+    - They are exported with bitwidth=32 and qstep=1.0.
+    - The current implementation converts the buffer values to float32 and
+      subsequently stores them as int32.
 
-3. Pre-quantized models:
-    - Uses int_repr()
-    - No additional quantization applied
+3. Pre-quantized Torchvision models:
+    - When --quantized is specified, integer tensor values are extracted
+      using int_repr().
+    - No additional quantization is applied to those values.
 
 -------------------------------------------------------------------------------
 Quantization:
 -------------------------------------------------------------------------------
 
-- Uniform symmetric quantization
-- Step size (qstep) optimized via golden-section search (MSE minimization)
-- Output stored as int32 regardless of bitwidth
-- Bitwidth used later for entropy coding (StaticBAC)
+For parameters processed by the standard quantization path:
+
+- Symmetric uniform quantization is used.
+- The quantization bitwidth is 8 bits.
+- The quantization step is searched using golden-section search.
+- MSE mode minimizes normalized mean-squared error.
+- RD mode minimizes:
+
+      J = D + lambda_rd * H
+
+  where D is normalized MSE and H is the empirical entropy of the
+  quantized representation, normalized by the quantization bitwidth.
+
+The final quantized values are stored as int32 for compatibility with the
+StaticBAC C++ pipeline. The logical bitwidth recorded in the metadata is
+used by the codec when processing the tensor.
 
 -------------------------------------------------------------------------------
-Notes:
+Examples:
 -------------------------------------------------------------------------------
 
-- All outputs are stored as int32 for compatibility with C++ pipeline
-- Bitwidth does NOT change storage format, only coding behavior
-- Tensor names are used as filenames
-- Buffers (e.g., BatchNorm stats) are preserved exactly
-
--------------------------------------------------------------------------------
-Example:
--------------------------------------------------------------------------------
-
-# HuggingFace model
+# Hugging Face model using the default MSE quantizer
 python create_meta.py \
     --model bert-base-uncased \
     --out_dir ./bert_export
 
-# Torchvision model with weights
+# Torchvision model with pretrained weights
 python create_meta.py \
     --model resnet50 \
     --source torchvision \
     --weights ResNet50_Weights.DEFAULT \
     --out_dir ./resnet_export
 
-# Quantized torchvision model
+# Torchvision model using RD quantization
+python create_meta.py \
+    --model resnet50 \
+    --source torchvision \
+    --weights ResNet50_Weights.DEFAULT \
+    --out_dir ./resnet_rd_export \
+    --quantizer rd \
+    --lambda_rd 0.15
+
+# Pre-quantized Torchvision model
 python create_meta.py \
     --model resnet50 \
     --source torchvision \
     --weights ResNet50_QuantizedWeights.DEFAULT \
     --quantized \
     --out_dir ./resnet_quant_export
-
 
 ===============================================================================
 """
@@ -544,7 +584,7 @@ def main():
     parser.add_argument("--model", required=True, help="Model name or path")
     parser.add_argument("--out_dir", required=True)
     parser.add_argument("--no_quant", action="store_true",
-                        help="Skip quantization (already quantized model)")
+                        help="Skip quantization for already-quantized 8-bit parameter tensors")
     
     parser.add_argument("--source", default="hf",
                     choices=["hf", "torchvision"])

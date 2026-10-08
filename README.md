@@ -111,7 +111,7 @@ The `create_meta.py` script extracts the model parameters, quantizes trainable p
 
 Trainable parameters are quantized to **8-bit signed integers**.
 
-Non-trainable buffers are retained as **32-bit integers** and are stored without quantization.
+Non-trainable buffers are not quantized by the uniform quantization procedure. They are exported with a logical bitwidth of 32 and stored as int32 values.
 
 ### MSE quantization
 
