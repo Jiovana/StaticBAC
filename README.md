@@ -329,7 +329,7 @@ If you use StaticBAC V2 in your work, please cite the associated publication:
 [Publication information to be added after publication]
 ```
 
-For the original StaticBAC V1 implementation, please refer to the corresponding conference publication.
+For the original StaticBAC V1 implementation, please refer to the corresponding [conference publication](https://ieeexplore.ieee.org/document/11706788).
 
 ---
 

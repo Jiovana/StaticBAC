@@ -51,4 +51,4 @@
 *.npz
 
 *_decoded/
-*decoded*
+*decoded*/
